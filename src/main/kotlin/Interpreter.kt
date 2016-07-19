@@ -13,17 +13,12 @@ class Interpreter(val read: InputStream = System.`in`, val write: PrintStream = 
      * Interprets tokens to Kotlin.
      */
 
-    fun interpret(arrayToken: Array<Token>) {
+    fun interpret(val String) {
         while (i != arrayToken.size) {
-            when (arrayToken[i]) {
-                Token.LEFT -> left()
-                Token.RIGHT -> right()
-                Token.MINUS -> array[current]--
-                Token.PLUS -> array[current]++
-                Token.READ -> array[current] = read.read().toByte()
-                Token.WRITE -> write.println(array[current].toChar())
-                Token.BEGIN -> begin(arrayToken)
-                Token.END -> end(arrayToken)
+            when{
+
+
+
             }
             i++
         }
