@@ -1,3 +1,4 @@
+
 import org.objectweb.asm.ClassWriter
 import org.objectweb.asm.Label
 import org.objectweb.asm.MethodVisitor
@@ -43,6 +44,7 @@ class TokenCompiler {
                     Token.READ -> readCompile()
                     Token.BEGIN -> beginCompile()
                     Token.END -> endCompile()
+
                 }
             }
             visitInsn(RETURN)

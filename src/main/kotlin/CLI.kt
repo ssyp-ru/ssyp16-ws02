@@ -1,3 +1,4 @@
+
 class CLI {
     private val brainfuckTranslator = BrainfuckTranslator()
     private val petoohTranslator = PetoohTranslator()
@@ -164,7 +165,7 @@ class CLI {
 
         val bool: Boolean
         if (validator.check(Tokens)) {
-            interpreter.interpret(Tokens)
+            interpreter.interpret("") // TODO: FIX THIS, WON'T WORK
             bool = false
         } else {
             println("Syntax error in $code code")

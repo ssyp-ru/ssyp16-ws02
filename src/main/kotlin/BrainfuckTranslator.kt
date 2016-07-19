@@ -1,3 +1,4 @@
+
 import java.io.File
 import java.io.FileNotFoundException
 import java.util.ArrayList
@@ -54,6 +55,8 @@ class BrainfuckTranslator {
                 Token.READ -> ","
                 Token.BEGIN -> "["
                 Token.END -> "]"
+                else -> { // TODO: fix
+                }
             })
         }
         file.writeText(stringBuilder.toString())

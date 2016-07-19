@@ -1,3 +1,4 @@
+
 enum class Token {
     LEFT,
     RIGHT,

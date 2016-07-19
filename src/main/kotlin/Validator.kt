@@ -1,3 +1,4 @@
+
 class Validator {
     fun check(srt: Array<Token>): Boolean {
         var v = 0

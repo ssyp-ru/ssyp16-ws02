@@ -1,3 +1,4 @@
+
 import org.junit.Test
 import java.io.File
 import kotlin.test.assertEquals
@@ -52,7 +53,8 @@ class InterpreterTest {
         val arrToken = bf.translateToTokens("test.txt")
         val write = MyPrintStream()}*/
 
-    @Test fun emptyFileTest() {
+    // TODO: uncomment, edit, test
+    /*@Test fun emptyFileTest() {
         val bf = BrainfuckTranslator()
         val testFile = File("test.txt")
         testFile.writeText("+>,+>,<[<+>>[<<->>->+>]>[<<+>>[<+>-]]<<<<[<]>>-]<-.")
@@ -64,6 +66,6 @@ class InterpreterTest {
         val interp = Interpreter(MyInputStream(strb.toString()), write)
         interp.interpret(arrToken)
         assertEquals(8.toChar().toString(), write.sb.toString())
-    }
+    }*/
 }
 

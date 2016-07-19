@@ -1,3 +1,4 @@
+
 import java.io.InputStream
 import java.io.PrintStream
 import java.util.*
@@ -9,12 +10,18 @@ class Interpreter(val read: InputStream = System.`in`, val write: PrintStream = 
     private var index = 0
     private var count = 0
 
+    internal fun pushValues(params: Array<Byte>) {
+        for (i in 0..params.size - 1) {
+            array[i] = params[i]
+        }
+    }
+
 
     /**
      * Interprets tokens to Kotlin.
      */
 
-    fun interpret(tokenString: String):ArrayList<NewToken> {
+    fun interpret(tokenString: String): ArrayList<NewToken> {
         var tokenStr = ArrayList<NewToken>()
         while (index != tokenString.length) {
             when {
@@ -29,18 +36,18 @@ class Interpreter(val read: InputStream = System.`in`, val write: PrintStream = 
                 tokenString.startsWith("Ke", index) -> tokenStr.add(InstructionToken(Token.KE))
                 tokenString.startsWith("Morning", index) -> {
                     tokenStr.add(InstructionToken(Token.BEGINFUN))
-                    tokenStr.add(StringToken(tokenString.substring(index+1, tokenString.indexOf(" "))))
-                    index = tokenString.indexOf(" ")-1
+                    tokenStr.add(StringToken(tokenString.substring(index + 1, tokenString.indexOf(" "))))
+                    index = tokenString.indexOf(" ") - 1
                 }
                 tokenString.startsWith("Evening", index) -> tokenStr.add(InstructionToken(Token.ENDFUN))
             }
             index++
         }
-        return(tokenStr)
+        return (tokenStr)
     }
 
 
-   /* /**
+    /* /**
      * Moves cursor left.
      */
 
@@ -69,7 +76,7 @@ class Interpreter(val read: InputStream = System.`in`, val write: PrintStream = 
     private fun begin(arrayToken: Array<Token>) {
         if (array[current].toInt() == 0) {
             while (!((arrayToken[i] == Token.END) && (count == 0))) {
-                when{
+                when {
                     arrayToken[i] == Token.END -> count--
                     arrayToken[i] == Token.BEGIN -> count++
                 }
@@ -87,7 +94,7 @@ class Interpreter(val read: InputStream = System.`in`, val write: PrintStream = 
     private fun end(arrayToken: Array<Token>) {
         if (array[current].toInt() != 0) {
             while (!((arrayToken[i] == Token.BEGIN) && (count == 0))) {
-                when{
+                when {
                     arrayToken[i] == Token.END -> count++
                     arrayToken[i] == Token.BEGIN -> count--
                 }
@@ -96,5 +103,6 @@ class Interpreter(val read: InputStream = System.`in`, val write: PrintStream = 
 
             }
         }
+<<<<<<< HEAD
     }*/
 }
