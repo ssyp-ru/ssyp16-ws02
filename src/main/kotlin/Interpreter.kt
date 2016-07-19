@@ -1,30 +1,46 @@
 import java.io.InputStream
 import java.io.PrintStream
+import java.util.*
 
 class Interpreter(val read: InputStream = System.`in`, val write: PrintStream = System.out) {
     private val const = 30000
     private var array = ByteArray (const, { 0 })
     private var current = 0
-    private var i = 0
-    private var count = i
+    private var index = 0
+    private var count = 0
 
 
     /**
      * Interprets tokens to Kotlin.
      */
 
-    fun interpret(val String) {
-        while (i != arrayToken.size) {
-            when{
-
-
-
+    fun interpret(tokenString: String):ArrayList<NewToken> {
+        var tokenStr = ArrayList<NewToken>()
+        while (index != tokenString.length) {
+            when {
+                tokenString.startsWith("kO", index) -> tokenStr.add(InstructionToken(Token.PLUS))
+                tokenString.startsWith("Ko", index) -> tokenStr.add(InstructionToken(Token.MINUS))
+                tokenString.startsWith("kudah", index) -> tokenStr.add(InstructionToken(Token.LEFT))
+                tokenString.startsWith("Kudah", index) -> tokenStr.add(InstructionToken(Token.RIGHT))
+                tokenString.startsWith("kud", index) -> tokenStr.add(InstructionToken(Token.END))
+                tokenString.startsWith("Kud", index) -> tokenStr.add(InstructionToken(Token.BEGIN))
+                tokenString.startsWith("kukarek", index) -> tokenStr.add(InstructionToken(Token.WRITE))
+                tokenString.startsWith("Kukarek", index) -> tokenStr.add(InstructionToken(Token.READ))
+                tokenString.startsWith("Ke", index) -> tokenStr.add(InstructionToken(Token.KE))
+                tokenString.startsWith("Morning", index) -> {
+                    tokenStr.add(InstructionToken(Token.BEGINFUN))
+                    tokenStr.add(StringToken(tokenString.substring(index+1, tokenString.indexOf(" "))))
+                    index = tokenString.indexOf(" ")-1
+                }
+                tokenString.startsWith("Evening", index) -> tokenStr.add(InstructionToken(Token.ENDFUN))
             }
-            i++
+            index++
         }
+        return(tokenStr)
     }
 
-    /**
+
+   /* /**
      * Moves cursor left.
      */
 
@@ -80,5 +96,5 @@ class Interpreter(val read: InputStream = System.`in`, val write: PrintStream = 
 
             }
         }
-    }
+    }*/
 }
