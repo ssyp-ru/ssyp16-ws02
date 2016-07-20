@@ -9,5 +9,6 @@ enum class Token {
     END,
     KE,
     BEGINFUN,
-    ENDFUN
+    ENDFUN,
+    PAR
 }
