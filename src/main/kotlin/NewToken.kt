@@ -2,4 +2,7 @@ abstract class NewToken()
 
 class InstructionToken(val instr: Token) : NewToken()
 
-class StringToken(val string: String) : NewToken()
+class FunDefToken(val name: String, val paramsCount: Int) : NewToken()
+
+class FunCallToken(val name: String): NewToken()
+
