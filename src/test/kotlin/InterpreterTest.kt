@@ -1,6 +1,7 @@
 
 import org.junit.Test
 import java.io.File
+import java.util.*
 import kotlin.test.assertEquals
 
 class InterpreterTest {
@@ -51,10 +52,10 @@ class InterpreterTest {
         val testFile = File("test.txt")
         testFile.writeText("")
         val arrToken = bf.translateToTokens("test.txt")
-        val write = MyPrintStream()}*/
+        val write = MyPrintStream()}
 
     // TODO: uncomment, edit, test
-    /*@Test fun emptyFileTest() {
+    @Test fun emptyFileTest() {
         val bf = BrainfuckTranslator()
         val testFile = File("test.txt")
         testFile.writeText("+>,+>,<[<+>>[<<->>->+>]>[<<+>>[<+>-]]<<<<[<]>>-]<-.")
@@ -67,5 +68,18 @@ class InterpreterTest {
         interp.interpret(arrToken)
         assertEquals(8.toChar().toString(), write.sb.toString())
     }*/
+
+    @Test fun NewFunInterpretTest(){
+        val inter = Interpreter()
+        val pars = Parser()
+        val bfTranslator = BrainfuckTranslator()
+        val petoohTranslator = PetoohTranslator()
+        //val arrayToken = ArrayList<NewToken>()
+        var stringWhithKoKoKoo = "Morning Hellow"
+        //stringWhithKoKoKoo += petoohTranslator.translateToKoko(bfTranslator.translateToTokens("kukarek.txt"))
+        stringWhithKoKoKoo +=  "Evening PAR Hellow PAR Hellow"
+        val array = pars.petoohTranslator(stringWhithKoKoKoo) //pars.petoohTranslator("Morning Hellow kudahKudahkudahKudahkudahKudahkudahKokukarekkokokukarekKoKoKudahkudahKokukarekKudahkudahKokukarekKudahkudahKokukarekkukarekKudahkudahKudahkudahKudahkudahKudahkudahKudah Evening PAR Hellow PAR Hellow ")
+        inter.interpret(array)
+    }
 }
 
