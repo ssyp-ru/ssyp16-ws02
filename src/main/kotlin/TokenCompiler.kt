@@ -13,7 +13,10 @@ class TokenCompiler {
      */
     private val beginLabelStack = Stack<Label>()
     private val endLabelStack = Stack<Label>()
-    private var tokens = Array(0, { Token.PLUS }) // FIXME: отделить от метода, что ниже, пустой строкой
+    private val SIZEARRAY = 30000
+
+    private var tokens = Array(0, { Token.PLUS })
+
     fun compile(tokens: Array<Token>, output: String): ByteArray? {
         if(!SourceVersion.isIdentifier(output) || SourceVersion.isKeyword(output)){
             println("Your name of class is invalid.")
@@ -27,7 +30,7 @@ class TokenCompiler {
         with(vm) {
             visitCode()
             //Make array[30000]
-            visitIntInsn(SIPUSH, 30000) // FIXME: вынести магическое число в константу
+            visitIntInsn(SIPUSH, SIZEARRAY)
             visitIntInsn(NEWARRAY, T_CHAR)
             visitVarInsn(ASTORE, 0)
             //Make cursor
@@ -55,7 +58,7 @@ class TokenCompiler {
     }
 
     /**
-     * Add 1 to current element of array // FIXME: javadoc - хорошо, но приведите в соответствие. У вас то начинается с инфинитива, то с 3 л. ед.ч. Лучше 3 л. ед.ч.
+     * Adds 1 to current element of array
      */
     private fun MethodVisitor.sumCompile() {
         visitVarInsn(ALOAD, 0)
@@ -69,21 +72,20 @@ class TokenCompiler {
     }
 
     /**
-     * Sub 1 from current element of array
+     * Subs 1 from current element of array
      */
     private fun MethodVisitor.subCompile() {
         visitVarInsn(ALOAD, 0)
         visitVarInsn(ILOAD, 1)
         visitInsn(DUP2)
         visitInsn(CALOAD)
-        //visitIntInsn(BIPUSH, -1) // FIXME: закомментированного кода не должно быть
         visitInsn(ICONST_M1)
         visitInsn(IADD)
         visitInsn(CASTORE)
     }
 
     /**
-     * Move cursor left
+     * Moves cursor to the left
      */
     private fun MethodVisitor.leftCompile() {
         visitVarInsn(ILOAD, 1)
@@ -93,14 +95,14 @@ class TokenCompiler {
         val label = Label()
         visitJumpInsn(IFGE, label)
         visitInsn(POP)
-        visitIntInsn(SIPUSH, 29999) // FIXME: магическое число
+        visitIntInsn(SIPUSH, SIZEARRAY - 1)
         visitLabel(label)
         visitFrame(F_FULL, 2, arrayOf("[C", INTEGER), 1, arrayOf(INTEGER))
         visitVarInsn(ISTORE, 1)
     }
 
     /**
-     * Move cursor right
+     * Moves cursor to the right
      */
     private fun MethodVisitor.rightCompile() {
         visitVarInsn(ILOAD, 1)
@@ -108,7 +110,7 @@ class TokenCompiler {
         visitInsn(IADD)
         val label = Label()
         visitInsn(DUP)
-        visitIntInsn(SIPUSH, 29999) // FIXME: магическое число
+        visitIntInsn(SIPUSH, SIZEARRAY - 1)
         visitJumpInsn(IF_ICMPLE, label)
         visitInsn(POP)
         visitInsn(ICONST_0)
@@ -118,7 +120,7 @@ class TokenCompiler {
     }
 
     /**
-     * Read byte from input
+     * Reads byte from input
      */
     private fun MethodVisitor.readCompile() {
         visitVarInsn(ALOAD, 0)
@@ -130,7 +132,7 @@ class TokenCompiler {
     }
 
     /**
-     * Write char to output
+     * Writes char to output
      */
     private fun MethodVisitor.writeCompile() {
         visitFieldInsn(GETSTATIC, "java/lang/System", "out", "Ljava/io/PrintStream;")
@@ -142,7 +144,7 @@ class TokenCompiler {
     }
 
     /**
-     * Compiles beginning of loop and maybe going to end // FIXME: maybe? иногда компилирует, иногда не компилирует?
+     * Compiles beginning of loop
      */
     private fun MethodVisitor.beginCompile() {
         beginLabelStack.push(Label())
