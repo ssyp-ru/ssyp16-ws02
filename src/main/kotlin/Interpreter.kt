@@ -3,9 +3,9 @@ import java.io.PrintStream
 import java.util.*
 
 class Interpreter(val read: InputStream = System.`in`, val write: PrintStream = System.out) {
-    private val const = 30000
-    private var workArray = ByteArray (const, { 0 })
-    private var keeperArr = ByteArray (const, { 0 })
+    private val memorySize = 30000
+    private var workArray = ByteArray (memorySize, { 0 })
+    private var memory = ByteArray (memorySize, { 0 })
     private var flag = true
     private var parIndex = 0
     private var workArrIndex = 0
@@ -98,15 +98,15 @@ class Interpreter(val read: InputStream = System.`in`, val write: PrintStream = 
         tokenIndex = 0
         while (tokenIndex != tokenArray.size) {
             if (!flag) {
-                keeperArr = workArray
-                workArray = ByteArray (const, { 0 })
+                memory = workArray
+                workArray = ByteArray (memorySize, { 0 })
                 for (i in 1..keCount) {
-                    workArray[i - 1] = keeperArr[workArrIndex - keCount]
+                    workArray[i - 1] = memory[workArrIndex - keCount]
                 }
                 parIndex = workArrIndex
                 workArrIndex = 0
             } else {
-                workArray = keeperArr
+                workArray = memory
                 workArrIndex = parIndex
             }
             when (tokenArray[tokenIndex]) {
@@ -124,7 +124,7 @@ class Interpreter(val read: InputStream = System.`in`, val write: PrintStream = 
                 }
                 InstructionToken(Token.ENDFUN) -> {
                     flag = true
-                    keeperArr[parIndex] = workArray[workArrIndex]
+                    memory[parIndex] = workArray[workArrIndex]
                     while (tokenIndex != funNameIndex)
                         tokenIndex++
 
@@ -157,7 +157,6 @@ class Interpreter(val read: InputStream = System.`in`, val write: PrintStream = 
     /**
      * checks if function name consist of key words
      */
-
     private fun checkFunName(funName: String): Boolean {
         var flagFunNameChecker = false
         var nameIterator = 0
@@ -186,29 +185,28 @@ class Interpreter(val read: InputStream = System.`in`, val write: PrintStream = 
 
 
     /**
-     * Moves cursor left.
+     * Moves cursor to the left.
      */
-
     fun left() {
         if (workArrIndex != 0) {
             workArrIndex--
         } else
-            workArrIndex = const - 1
+            workArrIndex = memorySize - 1
     }
 
     /**
-     * Moves cursor right
+     * Moves cursor to the right
      */
 
     fun right() {
-        if (workArrIndex != const - 1) {
+        if (workArrIndex != memorySize - 1) {
             workArrIndex++
         } else
             workArrIndex = 0
     }
 
     /**
-     * Starts loop if arrayToken[workArrIndex] = 0
+     * Starts loop if arrayToken[workArrIndex] != 0
      */
     private fun begin(arrayToken: Array<NewToken>) {
         if (workArray[workArrIndex].toInt() == 0) {
