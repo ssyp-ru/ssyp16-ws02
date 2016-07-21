@@ -7,5 +7,5 @@ enum class Token {
     READ,
     BEGIN,
     END,
-    ENDFUN,
+    ENDFUN
 }

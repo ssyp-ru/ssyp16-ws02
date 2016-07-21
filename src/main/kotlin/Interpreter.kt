@@ -1,5 +1,6 @@
 import java.io.InputStream
 import java.io.PrintStream
+import java.util.*
 
 class Interpreter(val read: InputStream = System.`in`, val write: PrintStream = System.out) {
     private val memorySize = 30000
@@ -143,6 +144,3 @@ class Interpreter(val read: InputStream = System.`in`, val write: PrintStream = 
         }
     }
 }
-
-
-
