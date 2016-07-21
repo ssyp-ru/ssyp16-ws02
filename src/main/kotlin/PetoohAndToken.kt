@@ -1,4 +1,6 @@
+import sun.invoke.empty.Empty
 import java.io.File
+import java.io.FileNotFoundException
 import java.util.*
 
 
@@ -6,8 +8,18 @@ class PetoohAndToken {
 
 
     fun setFileToToken(fileKoko: String): Array<Token> { //Petooh -> Token
+        val strToToken : String
+        try {
 
-        val strToToken = File(fileKoko).readText()//string with Koko
+            strToToken = File(fileKoko).readText()//string with Koko
+
+        }
+        catch (exc:FileNotFoundException){
+
+            println("File not found!")
+            return emptyArray()
+
+        }
         val tokenArray = ArrayList<Token>()//return
 
         for (index in 0..strToToken.length) {

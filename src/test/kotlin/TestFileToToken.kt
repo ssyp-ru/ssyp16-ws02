@@ -2,12 +2,12 @@ import org.junit.Test
 import kotlin.test.assertEquals
 
 
-class TestFileToToken {
+open class TestFileToToken {
 
     @Test fun testAllMethod() {
 
-        val TestObj = PetoohAndToken()
-        val arrToken = TestObj.setFileToToken("Petooh.txt")
+        val testObj = PetoohAndToken()
+        val arrToken = testObj.setFileToToken("Petooh.txt")
 
         var bool = false
 
