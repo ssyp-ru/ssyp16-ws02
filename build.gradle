@@ -1,6 +1,7 @@
 group 'ssyp.ws02'
 version '0.1'
 
+
 buildscript {
     repositories {
         mavenCentral()
@@ -16,7 +17,6 @@ apply plugin: 'kotlin'
 sourceCompatibility = 1.5
 
 defaultTasks 'test'
-
 repositories {
     mavenCentral()
 }
