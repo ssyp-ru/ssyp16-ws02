@@ -66,7 +66,7 @@ class Interpreter(val read: InputStream = System.`in`, val write: PrintStream = 
     }
 
     /**
-     * Ends loop if array[curMemoryIndex] != 0
+     * Ends loop if array[curMemoryIndex] = 0
      */
     private fun end(arrayToken: Array<Token>) {
         if (memory[curMemoryIndex].toInt() != 0) {
