@@ -1,9 +1,7 @@
 import java.io.File
 import java.util.*
 
-/**
- * Created by Vedrovski on 21.07.2016.
- */
+
 class PetoohAndToken {
 
 
@@ -73,45 +71,48 @@ class PetoohAndToken {
 
     fun setFileToKoko(arrToken: Array<Token>, output: String) { // Token -> Petooh
 
-        val strToToken = File(output)//output File
+        val endFile = File(output)//output File
+        var timeStr = StringBuilder()
         for (index in 0 until arrToken.size) {
             if (arrToken[index] == Token.PLUS) {
-                strToToken.appendText("ko")
+                timeStr.append("ko")
                 continue
             }
             if (arrToken[index] == Token.MINUS) {
-                strToToken.appendText("Ko")
+                timeStr.append("Ko")
                 continue
             }
             if (arrToken[index] == Token.READ) {
-                strToToken.appendText("Kukarek")
+                timeStr.append("Kukarek")
                 continue
             }
             if (arrToken[index] == Token.END) {
-                strToToken.appendText("kud")
+                timeStr.append("kud")
                 continue
             }
             if (arrToken[index] == Token.BEGIN) {
-                strToToken.appendText("Kud")
+                timeStr.append("Kud")
                 continue
             }
             if (arrToken[index] == Token.LEFT) {
-                strToToken.appendText("kudah")
+                timeStr.append("kudah")
                 continue
             }
             if (arrToken[index] == Token.RIGHT) {
-                strToToken.appendText("Kudah")
+                timeStr.append("Kudah")
                 continue
             }
             if (arrToken[index] == Token.WRITE) {
-                strToToken.appendText("kukarek")
+                timeStr.append("kukarek")
                 continue
             }
 
 
         }
 
+         val endStr = timeStr.toString()
 
+         endFile.appendText(endStr)
 
     }
 

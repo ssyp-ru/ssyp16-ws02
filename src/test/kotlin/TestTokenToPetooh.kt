@@ -1,8 +1,12 @@
-/**
- * Created by Vedrovski on 21.07.2016.
- */
+import org.junit.Test
+import kotlin.test.assertEquals
+
 class TestTokenToPetooh {
 
+    fun testAllMethod() {
+
+
+    }
 
 
 }
