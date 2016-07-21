@@ -65,13 +65,52 @@ class PetoohAndToken {
 
         }
 
-        val retArray:Array<Token> = tokenArray.toTypedArray()
+        val retArray: Array<Token> = tokenArray.toTypedArray()
 
-        return retArray
+        return retArray//arr
     }
 
 
     fun setFileToKoko(arrToken: Array<Token>, output: String) { // Token -> Petooh
+
+        val strToToken = File(output)//output File
+        for (index in 0 until arrToken.size) {
+            if (arrToken[index] == Token.PLUS) {
+                strToToken.appendText("ko")
+                continue
+            }
+            if (arrToken[index] == Token.MINUS) {
+                strToToken.appendText("Ko")
+                continue
+            }
+            if (arrToken[index] == Token.READ) {
+                strToToken.appendText("Kukarek")
+                continue
+            }
+            if (arrToken[index] == Token.END) {
+                strToToken.appendText("kud")
+                continue
+            }
+            if (arrToken[index] == Token.BEGIN) {
+                strToToken.appendText("Kud")
+                continue
+            }
+            if (arrToken[index] == Token.LEFT) {
+                strToToken.appendText("kudah")
+                continue
+            }
+            if (arrToken[index] == Token.RIGHT) {
+                strToToken.appendText("Kudah")
+                continue
+            }
+            if (arrToken[index] == Token.WRITE) {
+                strToToken.appendText("kukarek")
+                continue
+            }
+
+
+        }
+
 
 
     }
