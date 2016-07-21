@@ -4,7 +4,7 @@ import java.util.*
 import kotlin.test.assertEquals
 
 class translatorAndTokenTest {
-    /*@Test fun translatorTest(){
+    @Test fun translatorTest(){
         val arr = Interpreter()
         val arrayToken = ArrayList<NewToken>()
         arrayToken.add(InstructionToken(Token.MINUS))
@@ -20,13 +20,13 @@ class translatorAndTokenTest {
 
     }
 
-    //TODO: uncomment, fix, debug
+
 
     @Test fun funTest(){
         val arr = Interpreter()
         val arrayToken = ArrayList<NewToken>()
         val array = arr.petoohTranslator("Morning Hellow kudahKudahkudahKudahkudahKudahkudahKokukarekkokokukarekKoKoKudahkudahKokukarekKudahkudahKokukarekKudahkudahKokukarekkukarekKudahkudahKudahkudahKudahkudahKudahkudahKudah Evening PAR Hellow PAR Hellow ")
         arr.interpret(array)
-    }*/
+    }
 
 }

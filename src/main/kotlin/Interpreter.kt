@@ -73,7 +73,7 @@ class Interpreter(val read: InputStream = System.`in`, val write: PrintStream = 
                         tokenIndex = cursorSpace
                         flagFunNameChecker = checkFunName(funName)
                         if (!flagFunNameChecker)
-                            println("Name of function cannot contain key words")
+                            println("Name of function cannot be a key word")
                         if (flagFunNameChecker) {
                             tokenArray.add(InstructionToken(Token.PAR))
                             tokenArray.add(FunCallToken(funName))
@@ -133,10 +133,18 @@ class Interpreter(val read: InputStream = System.`in`, val write: PrintStream = 
                     flag = false
                     val funName = tokenArray[tokenIndex + 1]
                     funNameIndex = tokenIndex
-                    while (tokenArray[funNameIndex] != funName) {//TODO: it don't work! Fixmeeeeeeeeee. out of bound
+                    while (tokenArray[funNameIndex] != funName) {
                         if(tokenArray[funNameIndex] is FunDefToken) {
                             if (tokenArray[funNameIndex] != funName) {
+                                funNameIndex--
                             }
+                            else
+                                tokenIndex = funNameIndex
+                        }
+                        else
+                            funNameIndex --
+
+
                         }
                         funNameIndex--
                     }
@@ -144,7 +152,7 @@ class Interpreter(val read: InputStream = System.`in`, val write: PrintStream = 
             }
             tokenIndex++
         }
-    }
+
 
     /**
      * checks if function name consist of key words
@@ -234,7 +242,6 @@ class Interpreter(val read: InputStream = System.`in`, val write: PrintStream = 
         }
     }
 }
-
 
 
 
