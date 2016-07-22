@@ -1,12 +1,12 @@
 import java.io.Writer
 
-class MyWriter(): Writer() {
+class MyWriter() : Writer() {
     override fun write(cbuf: CharArray?, off: Int, len: Int) {
 
     }
 
     override fun write(str: String) {
-        r = str
+        myReturn = str
     }
 
     override fun flush() {
@@ -15,5 +15,5 @@ class MyWriter(): Writer() {
     override fun close() {
     }
 
-   var r : String? = null
+    var myReturn: String? = null
 }

@@ -1,12 +1,16 @@
 import java.io.Reader
 import java.io.Writer
-import java.util.*
 
 class Interpreter(var arrayToken: Array<Token>, val read: Reader, val write: Writer) {
     var array = Array<Byte> (30000, { 0 })
     var current = 0
     var i = 0
-    val k = i
+    var count = i
+
+    /**
+     * this fun interprets tokens to Kotlin
+     */
+
     fun interpret() {
         while (i != arrayToken.size) {
             when (arrayToken[i]) {
@@ -50,7 +54,18 @@ class Interpreter(var arrayToken: Array<Token>, val read: Reader, val write: Wri
                 }
                 Token.END -> {
                     if (array[current].toInt() != 0) {
-                        i = k
+                        while (!((arrayToken[i] == Token.BEGIN)&&(count == 0))) {
+                            if(arrayToken[i] == Token.END){
+                                count++
+                            }
+                            if((arrayToken[i] == Token.BEGIN)&&(count > 0)){
+                                count--
+                            }
+                            if((arrayToken[i] == Token.BEGIN)&&(count == 0)){
+                                break
+                            }
+                            i--
+                        }
                     }
                 }
             }
