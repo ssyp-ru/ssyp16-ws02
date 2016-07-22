@@ -7,7 +7,7 @@ import java.util.*
 
 
 class TokenCompiler{
-    fun compile(tokens: Array<Token>){
+    fun compile(tokens: Array<Token>): ByteArray{
         val writer = File("MyClass.class")
         val cw = ClassWriter(0)
         cw.visit(V1_7, ACC_PUBLIC, "MyClass", null, "java/lang/Object", null)
@@ -15,11 +15,11 @@ class TokenCompiler{
         with(vm) {
             visitCode()
             //Make Scanner
-            visitTypeInsn(NEW, "java/util/Scanner")
+            /*visitTypeInsn(NEW, "java/util/Scanner")
             visitInsn(DUP)
             visitFieldInsn(GETSTATIC, "java/lang/System", "in", "Ljava/io/InputStream;")
             visitMethodInsn(INVOKESPECIAL, "java/util/Scanner", "<init>", "(Ljava/io/InputStream;)V", false)
-            visitVarInsn(ASTORE, 2)
+            visitVarInsn(ASTORE, 2)*/
             //Make array[30000]
             visitIntInsn(SIPUSH, 30000)
             visitIntInsn(NEWARRAY, T_BYTE)
@@ -43,6 +43,7 @@ class TokenCompiler{
         }
         cw.visitEnd()
         writer.writeBytes(cw.toByteArray())
+        return cw.toByteArray()
     }
 
     /**
@@ -95,10 +96,17 @@ class TokenCompiler{
      * Read byte from input
      */
     fun MethodVisitor.readCompile() {
+        /*
         visitVarInsn(ALOAD, 0)
         visitVarInsn(ILOAD, 1)
         visitVarInsn(ALOAD, 2)
         visitMethodInsn(INVOKEVIRTUAL, "java/util/Scanner", "nextByte", "()B", false)
+        visitInsn(BASTORE)*/
+        visitVarInsn(ALOAD, 0)
+        visitVarInsn(ILOAD, 1)
+        visitFieldInsn(GETSTATIC, "java/lang/System", "in", "Ljava/io/InputStream;")
+        visitMethodInsn(INVOKEVIRTUAL, "java/io/InputStream", "read", "()I", false)
+        visitInsn(I2B)
         visitInsn(BASTORE)
     }
 
