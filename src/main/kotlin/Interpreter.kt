@@ -5,10 +5,10 @@ class Interpreter(var arrayToken: Array<Token>, val read: Reader, val write: Wri
     var array = Array<Byte> (30000, { 0 })
     var current = 0
     var i = 0
-    var count = i
+    private var count = i
 
     /**
-     * this fun interprets tokens to Kotlin
+     * This fun interprets tokens to Kotlin.
      */
 
     fun interpret() {
@@ -28,21 +28,17 @@ class Interpreter(var arrayToken: Array<Token>, val read: Reader, val write: Wri
                         current = 0
                 }
 
-                Token.MINUS -> {
-                    array[current]--
-                }
+                Token.MINUS -> array[current]--
 
-                Token.PLUS -> {
-                    array[current]++
-                }
 
-                Token.READ -> {
-                    array[current] = read.read().toByte()
-                }
+                Token.PLUS -> array[current]++
 
-                Token.WRITE -> {
-                    write.write(array[current].toString())
-                }
+
+                Token.READ -> array[current] = read.read().toByte()
+
+
+                Token.WRITE -> write.write(array[current].toString())
+
 
                 Token.BEGIN -> {
                     if (array[current].toInt() == 0) {
@@ -54,14 +50,14 @@ class Interpreter(var arrayToken: Array<Token>, val read: Reader, val write: Wri
                 }
                 Token.END -> {
                     if (array[current].toInt() != 0) {
-                        while (!((arrayToken[i] == Token.BEGIN)&&(count == 0))) {
-                            if(arrayToken[i] == Token.END){
+                        while (!((arrayToken[i] == Token.BEGIN) && (count == 0))) {
+                            if (arrayToken[i] == Token.END) {
                                 count++
                             }
-                            if((arrayToken[i] == Token.BEGIN)&&(count > 0)){
+                            if ((arrayToken[i] == Token.BEGIN) && (count > 0)) {
                                 count--
                             }
-                            if((arrayToken[i] == Token.BEGIN)&&(count == 0)){
+                            if ((arrayToken[i] == Token.BEGIN) && (count == 0)) {
                                 break
                             }
                             i--
