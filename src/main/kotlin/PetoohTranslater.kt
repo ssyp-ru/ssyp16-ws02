@@ -28,12 +28,12 @@ class PetoohTranslater {
         for (index in 0..strWithTokens.length) {
 
             when {
-                strWithTokens.startsWith("ko", index) -> tokenArray.add(Token.PLUS)
+                strWithTokens.startsWith("kO", index) -> tokenArray.add(Token.PLUS)
                 strWithTokens.startsWith("Ko", index) -> tokenArray.add(Token.MINUS)
-                strWithTokens.startsWith("kud", index) -> tokenArray.add(Token.END)
-                strWithTokens.startsWith("Kud", index) -> tokenArray.add(Token.BEGIN)
                 strWithTokens.startsWith("kudah", index) -> tokenArray.add(Token.LEFT)
                 strWithTokens.startsWith("Kudah", index) -> tokenArray.add(Token.RIGHT)
+                strWithTokens.startsWith("kud", index) -> tokenArray.add(Token.END)
+                strWithTokens.startsWith("Kud", index) -> tokenArray.add(Token.BEGIN)
                 strWithTokens.startsWith("kukarek", index) -> tokenArray.add(Token.WRITE)
                 strWithTokens.startsWith("Kukarek", index) -> tokenArray.add(Token.READ)
             }
