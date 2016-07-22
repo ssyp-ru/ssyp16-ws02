@@ -11,14 +11,6 @@ class MyClassLoader: ClassLoader() {
 
 class MyInputStream(val str: String): InputStream() {
     var count = 0
-    /*override fun read(): Int{
-        val sb = StringBuilder()
-        while(str[count] != ' '){
-            sb.append(str[count])
-            count++
-        }
-        return sb.toString().toInt()
-    }*/
 
     override fun read(): Int{
         count++
