@@ -1,8 +1,8 @@
 import org.objectweb.asm.ClassWriter
+import org.objectweb.asm.Label
 import org.objectweb.asm.MethodVisitor
 import org.objectweb.asm.Opcodes.*
 import java.io.File
-import java.io.PrintStream
 import java.util.*
 
 class TokenCompiler{
@@ -10,7 +10,12 @@ class TokenCompiler{
      * Compiles tokensArray
      * @returns byte-code of the class
      */
+    private val beginLabelStack = Stack<Label>()
+    private val endLabelStack = Stack<Label>()
+    private var i = 0
+    private var tokens = Array<Token>(0, {Token.PLUS})
     fun compile(tokens: Array<Token>): ByteArray{
+        this.tokens = tokens
         val writer = File("MyClass.class")
         val cw = ClassWriter(0)
         cw.visit(V1_7, ACC_PUBLIC, "MyClass", null, "java/lang/Object", null)
@@ -24,18 +29,20 @@ class TokenCompiler{
             //Make cursor
             visitInsn(ICONST_0)
             visitVarInsn(ISTORE, 1)
-            for (i in tokens) {
-                when (i) {
+            for (i in 0..tokens.size - 1) {
+                when (tokens[i]) {
                     Token.PLUS -> sumCompile()
                     Token.MINUS -> subCompile()
                     Token.LEFT -> leftCompile()
                     Token.RIGHT -> rightCompile()
                     Token.WRITE -> writeCompile()
                     Token.READ -> readCompile()
+                    Token.BEGIN -> beginCompile()
+                    Token.END -> endCompile()
                 }
             }
             visitInsn(RETURN)
-            visitMaxs(5, 3)
+            visitMaxs(4, 2)
             visitEnd()
         }
         cw.visitEnd()
@@ -113,4 +120,23 @@ class TokenCompiler{
         visitMethodInsn(INVOKEVIRTUAL, "java/io/PrintStream", "println", "(C)V", false)
     }
 
+    /**
+     * Compiles beginning of loop and maybe going to end
+     */
+    private fun MethodVisitor.beginCompile(){
+        beginLabelStack.push(Label())
+        endLabelStack.push(Label())
+        visitLabel(beginLabelStack.lastElement())
+        visitFrame(F_FULL, 2, arrayOf("[B", INTEGER), 0, null)
+        visitVarInsn(ALOAD, 0)
+        visitVarInsn(ILOAD, 1)
+        visitInsn(BALOAD)
+        visitJumpInsn(IFEQ, endLabelStack.lastElement())
+    }
+
+    private fun MethodVisitor.endCompile(){
+        visitLabel(endLabelStack.lastElement())
+        visitFrame(F_FULL, 2, arrayOf("[B", INTEGER), 0, null)
+
+    }
 }
