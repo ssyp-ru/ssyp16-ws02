@@ -10,15 +10,7 @@ class MyClassLoader: ClassLoader() {
 }
 
 class MyInputStream(val str: String): InputStream() {
-    var count = 0
-    /*override fun read(): Int{
-        val sb = StringBuilder()
-        while(str[count] != ' '){
-            sb.append(str[count])
-            count++
-        }
-        return sb.toString().toInt()
-    }*/
+    private var count = 0
 
     override fun read(): Int{
         count++
@@ -27,16 +19,24 @@ class MyInputStream(val str: String): InputStream() {
 }
 
 class MyPrintStream(a:StringBuilder): PrintStream(EmptyStream()) {
-    val sb = a
+    private val sb = a
     override fun println(x: Char) {
         sb.append(x)
     }
 }
 
+/**
+ * Makes EmptyStream which helps MyPrintStream
+ * with interface PrintStream and goes like
+ * parameter(unusable)
+ */
 class EmptyStream(): OutputStream() {
     override fun write(b: Int) { }
 }
 
+/**
+ * Compiles, loads and runs byte-code, tests it
+ */
 fun testClass(code: Array<Token>, input: String, output: String){
     val tokenCompiler = TokenCompiler()
     val classLoader = MyClassLoader()
@@ -50,7 +50,6 @@ fun testClass(code: Array<Token>, input: String, output: String){
             if(i.name == "main"){
                 i.invoke(null, arrayOf<String>())
                 assertEquals(output, sb.toString())
-
                 break
             }
         }
