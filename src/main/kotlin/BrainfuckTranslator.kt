@@ -2,8 +2,16 @@ import java.io.File
 import java.io.FileNotFoundException
 import java.util.ArrayList
 
+/**
+Class BrainfuckTranslator translate Brainfuck to Tokens and vice versa.
+ */
+
 class BrainfuckTranslator {
-    fun translatorToken(fileName: String): Array<Token> {
+    /**
+    translatorToken is function which take file with brainfuck code and return Token's array
+    if file not found
+     */
+    fun translateToTokens(fileName: String): Array<Token> {
         val code: String
         try {
             code = File(fileName).readText()
@@ -30,7 +38,10 @@ class BrainfuckTranslator {
         return retArray
     }
 
-    fun translatorBrainfuck(tokens: Array<Token>, outFileName: String) {
+    /**
+    translatorBrainfuck is function which take Token array and safe in file
+     */
+    fun translateToBrainfuck(tokens: Array<Token>, outFileName: String) {
         val file = File(outFileName)
         val stringBuilder = StringBuilder()
         for (c in tokens) {
