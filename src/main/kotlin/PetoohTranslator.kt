@@ -1,22 +1,22 @@
-import sun.invoke.empty.Empty
+
 import java.io.File
 import java.io.FileNotFoundException
 import java.util.*
 
 /**
-Class PetoohTranslater have two method: setFileToToken and setFileToKoko
+Class PetoohTranslator have two method: translateToToken and translateToKoko
  */
 
-class PetoohTranslater {
+class PetoohTranslator {
 
     /**
-    setFileToToken - method which take file with Petooh code and return array with Tokens.
+    translateToToken - method which take file with Petooh code and return array with Tokens.
     If file not founded, returned emtpy array type Token.
     @param fileKoko name of file
     @returns array of Tokens
      */
 
-    fun setFileToToken(fileKoko: String): Array<Token> { //Petooh -> Token
+    fun translateToToken(fileKoko: String): Array<Token> { //Petooh -> Token
         val strWithTokens: String
         try {                                                             ////
             strWithTokens = File(fileKoko).readText()//string with Koko  ////
@@ -45,14 +45,14 @@ class PetoohTranslater {
     }
 
     /**
-    setFileToKoko - method which take array with Tokens and write in output file.
+    translateToKoko - method which take array with Tokens and write in output file.
     If file not found , created new file (mention).
     @param arrToken:Array<Token> array of Token
     @param output:String name of output file
     @returns file with Petooh code
      */
 
-    fun setFileToKoko(arrToken: Array<Token>, output: String) { // Token -> Petooh
+    fun translateToKoko(arrToken: Array<Token>, output: String) { // Token -> Petooh
         val endFile = File(output)//output File
         val timeStr = StringBuilder()
 
