@@ -24,7 +24,7 @@ class TokenCompiler{
             visitIntInsn(SIPUSH, 30000)
             visitIntInsn(NEWARRAY, T_BYTE)
             visitVarInsn(ASTORE, 0)
-            //Make counter
+            //Make cursor
             visitInsn(ICONST_0)
             visitVarInsn(ISTORE, 1)
             for (i in tokens) {
@@ -71,6 +71,9 @@ class TokenCompiler{
         visitInsn(BASTORE)
     }
 
+    /**
+     * Move cursor left
+     */
     fun MethodVisitor.leftCompile(){
         visitVarInsn(ILOAD, 1)
         visitInsn(ICONST_M1)
@@ -78,6 +81,9 @@ class TokenCompiler{
         visitVarInsn(ISTORE, 1)
     }
 
+    /**
+     * Move cursor right
+     */
     fun MethodVisitor.rightCompile(){
         visitVarInsn(ILOAD, 1)
         visitInsn(ICONST_1)
@@ -85,6 +91,9 @@ class TokenCompiler{
         visitVarInsn(ISTORE, 1)
     }
 
+    /**
+     * Read byte from input
+     */
     fun MethodVisitor.readCompile() {
         visitVarInsn(ALOAD, 0)
         visitVarInsn(ILOAD, 1)
@@ -93,6 +102,9 @@ class TokenCompiler{
         visitInsn(BASTORE)
     }
 
+    /**
+     * Write char to output
+     */
     fun MethodVisitor.writeCompile() {
         visitFieldInsn(GETSTATIC, "java/lang/System", "out", "Ljava/io/PrintStream;")
         visitVarInsn(ALOAD, 0)
