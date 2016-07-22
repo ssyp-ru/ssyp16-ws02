@@ -2,70 +2,124 @@ import org.objectweb.asm.ClassWriter
 import org.objectweb.asm.MethodVisitor
 import org.objectweb.asm.Opcodes.*
 import java.io.File
+import java.io.PrintStream
+import java.util.*
 
 
 class TokenCompiler{
-    fun compile(tokens: Array<Token>){
+    fun compile(tokens: Array<Token>): ByteArray{
         val writer = File("MyClass.class")
         val cw = ClassWriter(0)
         cw.visit(V1_7, ACC_PUBLIC, "MyClass", null, "java/lang/Object", null)
-        val vm = cw.visitMethod(ACC_PUBLIC + ACC_STATIC, "main", "(Ljava/lang/String;)V", null, null)
-        vm.visitCode()
-        vm.visitIntInsn(SIPUSH, 30000)
-        vm.visitIntInsn(NEWARRAY, T_INT)
-        vm.visitVarInsn(ASTORE, 0)
-        vm.visitInsn(ICONST_0)
-        vm.visitVarInsn(ISTORE, 1)
-        for(i in tokens){
-            when(i){
-                Token.PLUS -> sumCompile(vm)
-                Token.MINUS -> subCompile(vm)
-                Token.LEFT -> leftCompile(vm)
-                Token.RIGHT -> rightCompile(vm)
+        val vm = cw.visitMethod(ACC_PUBLIC + ACC_STATIC, "main", "([Ljava/lang/String;)V", null, null)
+        with(vm) {
+            visitCode()
+            //Make Scanner
+            /*visitTypeInsn(NEW, "java/util/Scanner")
+            visitInsn(DUP)
+            visitFieldInsn(GETSTATIC, "java/lang/System", "in", "Ljava/io/InputStream;")
+            visitMethodInsn(INVOKESPECIAL, "java/util/Scanner", "<init>", "(Ljava/io/InputStream;)V", false)
+            visitVarInsn(ASTORE, 2)*/
+            //Make array[30000]
+            visitIntInsn(SIPUSH, 30000)
+            visitIntInsn(NEWARRAY, T_BYTE)
+            visitVarInsn(ASTORE, 0)
+            //Make cursor
+            visitInsn(ICONST_0)
+            visitVarInsn(ISTORE, 1)
+            for (i in tokens) {
+                when (i) {
+                    Token.PLUS -> sumCompile()
+                    Token.MINUS -> subCompile()
+                    Token.LEFT -> leftCompile()
+                    Token.RIGHT -> rightCompile()
+                    Token.WRITE -> writeCompile()
+                    Token.READ -> readCompile()
+                }
             }
+            visitInsn(RETURN)
+            visitMaxs(5, 3)
+            visitEnd()
         }
-        vm.visitInsn(RETURN)
-        vm.visitMaxs(4, 2)
-        vm.visitEnd()
         cw.visitEnd()
         writer.writeBytes(cw.toByteArray())
+        return cw.toByteArray()
     }
 
-    fun sumCompile(vm: MethodVisitor){
-        vm.visitVarInsn(ALOAD, 0)
-        vm.visitVarInsn(ILOAD, 1)
-        vm.visitInsn(DUP2)
-        vm.visitInsn(IALOAD)
-        vm.visitInsn(ICONST_1)
-        vm.visitInsn(IADD)
-        vm.visitInsn(IASTORE)
+    /**
+     * Add 1 to current element of array
+     */
+    fun MethodVisitor.sumCompile(){
+        visitVarInsn(ALOAD, 0)
+        visitVarInsn(ILOAD, 1)
+        visitInsn(DUP2)
+        visitInsn(BALOAD)
+        visitInsn(ICONST_1)
+        visitInsn(IADD)
+        visitInsn(BASTORE)
     }
 
-    fun subCompile(vm: MethodVisitor){
-        vm.visitVarInsn(ALOAD, 0)
-        vm.visitVarInsn(ILOAD, 1)
-        vm.visitInsn(DUP2)
-        vm.visitInsn(IALOAD)
-        vm.visitInsn(ICONST_M1)
-        vm.visitInsn(IADD)
-        vm.visitInsn(IASTORE)
+    /**
+     * Sub 1 from current element of array
+     */
+    fun MethodVisitor.subCompile(){
+        visitVarInsn(ALOAD, 0)
+        visitVarInsn(ILOAD, 1)
+        visitInsn(DUP2)
+        visitInsn(BALOAD)
+        visitInsn(ICONST_M1)
+        visitInsn(IADD)
+        visitInsn(BASTORE)
     }
 
-    fun leftCompile(vm :MethodVisitor){
-        vm.visitVarInsn(ILOAD, 1)
-        vm.visitInsn(ICONST_M1)
-        vm.visitInsn(IADD)
-        vm.visitVarInsn(ISTORE, 1)
+    /**
+     * Move cursor left
+     */
+    fun MethodVisitor.leftCompile(){
+        visitVarInsn(ILOAD, 1)
+        visitInsn(ICONST_M1)
+        visitInsn(IADD)
+        visitVarInsn(ISTORE, 1)
     }
 
-    fun rightCompile(vm :MethodVisitor){
-        vm.visitVarInsn(ILOAD, 1)
-        vm.visitInsn(ICONST_1)
-        vm.visitInsn(IADD)
-        vm.visitVarInsn(ISTORE, 1)
+    /**
+     * Move cursor right
+     */
+    fun MethodVisitor.rightCompile(){
+        visitVarInsn(ILOAD, 1)
+        visitInsn(ICONST_1)
+        visitInsn(IADD)
+        visitVarInsn(ISTORE, 1)
     }
 
-    fun readCompile(vm :MethodVisitor) {
-
+    /**
+     * Read byte from input
+     */
+    fun MethodVisitor.readCompile() {
+        /*
+        visitVarInsn(ALOAD, 0)
+        visitVarInsn(ILOAD, 1)
+        visitVarInsn(ALOAD, 2)
+        visitMethodInsn(INVOKEVIRTUAL, "java/util/Scanner", "nextByte", "()B", false)
+        visitInsn(BASTORE)*/
+        visitVarInsn(ALOAD, 0)
+        visitVarInsn(ILOAD, 1)
+        visitFieldInsn(GETSTATIC, "java/lang/System", "in", "Ljava/io/InputStream;")
+        visitMethodInsn(INVOKEVIRTUAL, "java/io/InputStream", "read", "()I", false)
+        visitInsn(I2B)
+        visitInsn(BASTORE)
     }
+
+    /**
+     * Write char to output
+     */
+    fun MethodVisitor.writeCompile() {
+        visitFieldInsn(GETSTATIC, "java/lang/System", "out", "Ljava/io/PrintStream;")
+        visitVarInsn(ALOAD, 0)
+        visitVarInsn(ILOAD, 1)
+        visitInsn(BALOAD)
+        visitInsn(I2C)
+        visitMethodInsn(INVOKEVIRTUAL, "java/io/PrintStream", "println", "(C)V", false)
+    }
+
 }
