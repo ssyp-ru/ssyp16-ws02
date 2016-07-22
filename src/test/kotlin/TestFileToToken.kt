@@ -12,7 +12,7 @@ open class TestFileToToken {
 
     /**
     TEST METHOD: setFileToToken
-    This test uses setFileToToken with normal parameters(file found) and checks whether the answer is Array<Token>
+    This test uses setFileToToken with normal parameters(file found) and checks whether the answer is Array<Token>.
      */
     @Test fun testFileToToken() {
         File(fileKo).writeText("Kk koKuduhkoKokuKud ko KO 099991d dsv shdb Kudah kukarek ku ko KOd Ko")
@@ -35,7 +35,7 @@ open class TestFileToToken {
 
     /**
     TEST METHOD: setFileToToken
-    This test uses setFileTiToken and call ecs:NotFoundFile, check answer on empty array
+    This test uses setFileTiToken and call ecs:NotFoundFile, check answer on empty array.
      */
     @Test fun returnNotFoundFile() {
         val arrToken = testObj.setFileToToken("NotFile.not")
@@ -44,7 +44,7 @@ open class TestFileToToken {
 
     /**
     TEST METHOD: setFileToKoko
-    This test uses setFileToKoko with normal parameters and checks whether the answer is Array<Token>
+    This test uses setFileToKoko with normal parameters and checks whether the answer is Array<Token>.
      */
     @Test fun testFileToKoko() {
         val testObj = PetoohTranslater()
@@ -61,7 +61,7 @@ open class TestFileToToken {
 
     /**
     TEST METHOD: setFileToKoko
-    This test uses setFileToKoko with empty array and check output file on empty or not empty
+    This test uses setFileToKoko with empty array and check output file on empty or not empty.
      */
     @Test fun emptyArrayTokens() {
         val arrEmpty = emptyArray<Token>()
