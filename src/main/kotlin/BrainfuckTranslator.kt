@@ -8,7 +8,7 @@ Class BrainfuckTranslator translate Brainfuck to Tokens and vice versa.
 
 class BrainfuckTranslator {
     /**
-    translatorToken is function which take file with brainfuck code and return Token's array
+    translatorToken is function which take file with brainfuck code and return Token array
     if file not found
      */
     fun translateToTokens(fileName: String): Array<Token> {
