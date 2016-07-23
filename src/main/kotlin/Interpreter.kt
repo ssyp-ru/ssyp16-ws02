@@ -57,8 +57,15 @@ class Interpreter(val read: InputStream = System.`in`, val write: PrintStream = 
 
     private fun begin(arrayToken: Array<Token>) {
         if (array[current].toInt() == 0) {
-            while (arrayToken[i] != Token.END) i++
-            i++
+            while (!((arrayToken[i] == Token.END) && (count == 0))) {
+                when{
+                    arrayToken[i] == Token.END -> count--
+                    arrayToken[i] == Token.BEGIN -> count++
+                }
+                if ((arrayToken[i] == Token.END) && (count == 0)) break
+                i++
+
+            }
         }
     }
 
