@@ -24,20 +24,20 @@ class CLI {
                             if (validator.check(arrBFTokens)) {
                                 interpreter.interpret(arrBFTokens)
                                 again = 2
+                            } else {
+                                println("Syntax error in BF code")
+                                print("--> Error. Please enter the name of file again: ")
                             }
-                            else
-                            {println("Syntax error in BF code")
-                                print("--> Error. Please enter the name of file again: ")}
                         }
                         fileName.endsWith(".koko") -> {
                             val arrPTokens = petoohTranslator.translateToToken(fileName)
                             if (validator.check(arrPTokens)) {
                                 interpreter.interpret(arrPTokens)
                                 again = 2
+                            } else {
+                                println("Syntax error in PETOOH code")
+                                print("--> Error. Please enter the name of file again: ")
                             }
-                            else
-                            {println("Syntax error in PETOOH code")
-                                print("--> Error. Please enter the name of file again: ")}
                         }
                         else ->
                             print("--> Error. Please enter the name of file again: ")
@@ -92,20 +92,20 @@ class CLI {
                             if (validator.check(arrBFTokens)) {
                                 compiler.compile(arrBFTokens)
                                 again = 2
+                            } else {
+                                println("Syntax error in BF code")
+                                print("--> Error. Please enter the name of file again: ")
                             }
-                            else
-                            {println("Syntax error in BF code")
-                                print("--> Error. Please enter the name of file again: ")}
                         }
                         fileName.endsWith(".koko") -> {
                             val arrPTokens = petoohTranslator.translateToToken(fileName)
                             if (validator.check(arrPTokens)) {
                                 compiler.compile(arrPTokens)
                                 again = 2
+                            } else {
+                                println("Syntax error in PETOOH code")
+                                print("--> Error. Please enter the name of file again: ")
                             }
-                            else
-                            {println("Syntax error in PETOOH code")
-                                print("--> Error. Please enter the name of file again: ")}
                         }
                         else ->
                             print("--> Error. Please enters the name of file again: ")
@@ -115,7 +115,6 @@ class CLI {
             }
             else -> {
                 println("No such command.")
-                this.MainMenu()
             }
         }
     }
