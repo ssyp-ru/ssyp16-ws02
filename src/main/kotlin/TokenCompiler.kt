@@ -1,6 +1,7 @@
 import org.objectweb.asm.ClassWriter
 import org.objectweb.asm.Label
 import org.objectweb.asm.MethodVisitor
+import org.objectweb.asm.Opcodes
 import org.objectweb.asm.Opcodes.*
 import java.io.File
 import java.util.*
@@ -24,7 +25,7 @@ class TokenCompiler{
             visitCode()
             //Make array[30000]
             visitIntInsn(SIPUSH, 30000)
-            visitIntInsn(NEWARRAY, T_BYTE)
+            visitIntInsn(NEWARRAY, T_CHAR)
             visitVarInsn(ASTORE, 0)
             //Make cursor
             visitInsn(ICONST_0)
@@ -57,10 +58,11 @@ class TokenCompiler{
         visitVarInsn(ALOAD, 0)
         visitVarInsn(ILOAD, 1)
         visitInsn(DUP2)
-        visitInsn(BALOAD)
+        visitInsn(CALOAD)
+        //visitIntInsn(BIPUSH, 1)
         visitInsn(ICONST_1)
         visitInsn(IADD)
-        visitInsn(BASTORE)
+        visitInsn(CASTORE)
     }
 
     /**
@@ -70,10 +72,11 @@ class TokenCompiler{
         visitVarInsn(ALOAD, 0)
         visitVarInsn(ILOAD, 1)
         visitInsn(DUP2)
-        visitInsn(BALOAD)
+        visitInsn(CALOAD)
+        //visitIntInsn(BIPUSH, -1)
         visitInsn(ICONST_M1)
         visitInsn(IADD)
-        visitInsn(BASTORE)
+        visitInsn(CASTORE)
     }
 
     /**
@@ -83,6 +86,13 @@ class TokenCompiler{
         visitVarInsn(ILOAD, 1)
         visitInsn(ICONST_M1)
         visitInsn(IADD)
+        visitInsn(DUP)
+        val label = Label()
+        visitJumpInsn(IFGE, label)
+        visitInsn(POP)
+        visitIntInsn(SIPUSH, 29999)
+        visitLabel(label)
+        visitFrame(F_FULL, 2, arrayOf("[C", INTEGER), 1, arrayOf(INTEGER))
         visitVarInsn(ISTORE, 1)
     }
 
@@ -93,7 +103,15 @@ class TokenCompiler{
         visitVarInsn(ILOAD, 1)
         visitInsn(ICONST_1)
         visitInsn(IADD)
-        visitVarInsn(ISTORE, 1)
+        val label = Label()
+        visitInsn(DUP)
+        visitIntInsn(SIPUSH, 29999)
+        visitJumpInsn(IF_ICMPLE, label)
+        visitInsn(POP)
+        visitInsn(ICONST_0)
+        visitLabel(label)
+        visitFrame(F_FULL, 2, arrayOf("[C", INTEGER), 1, arrayOf(INTEGER))
+        visitIntInsn(ISTORE, 1)
     }
 
     /**
@@ -105,7 +123,7 @@ class TokenCompiler{
         visitFieldInsn(GETSTATIC, "java/lang/System", "in", "Ljava/io/InputStream;")
         visitMethodInsn(INVOKEVIRTUAL, "java/io/InputStream", "read", "()I", false)
         visitInsn(I2B)
-        visitInsn(BASTORE)
+        visitInsn(CASTORE)
     }
 
     /**
@@ -115,7 +133,7 @@ class TokenCompiler{
         visitFieldInsn(GETSTATIC, "java/lang/System", "out", "Ljava/io/PrintStream;")
         visitVarInsn(ALOAD, 0)
         visitVarInsn(ILOAD, 1)
-        visitInsn(BALOAD)
+        visitInsn(CALOAD)
         visitInsn(I2C)
         visitMethodInsn(INVOKEVIRTUAL, "java/io/PrintStream", "println", "(C)V", false)
     }
@@ -127,16 +145,21 @@ class TokenCompiler{
         beginLabelStack.push(Label())
         endLabelStack.push(Label())
         visitLabel(beginLabelStack.lastElement())
-        visitFrame(F_FULL, 2, arrayOf("[B", INTEGER), 0, null)
+        visitFrame(F_FULL, 2, arrayOf("[C", INTEGER), 0, null)
         visitVarInsn(ALOAD, 0)
         visitVarInsn(ILOAD, 1)
-        visitInsn(BALOAD)
+        visitInsn(CALOAD)
         visitJumpInsn(IFEQ, endLabelStack.lastElement())
     }
 
+    /**
+     * Compiles exit from loop or going to beginningof loop
+     */
     private fun MethodVisitor.endCompile(){
+        visitJumpInsn(GOTO, beginLabelStack.lastElement())
         visitLabel(endLabelStack.lastElement())
-        visitFrame(F_FULL, 2, arrayOf("[B", INTEGER), 0, null)
-
+        visitFrame(F_FULL, 2, arrayOf("[C", INTEGER), 0, null)
+        beginLabelStack.pop()
+        endLabelStack.pop()
     }
 }
