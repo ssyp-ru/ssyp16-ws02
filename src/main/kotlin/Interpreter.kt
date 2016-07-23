@@ -69,15 +69,11 @@ class Interpreter(val read: InputStream = System.`in`, val write: PrintStream = 
     private fun end(arrayToken: Array<Token>) {
         if (array[current].toInt() != 0) {
             while (!((arrayToken[i] == Token.BEGIN) && (count == 0))) {
-                if (arrayToken[i] == Token.END) {
-                    count++
+                when{
+                    arrayToken[i] == Token.END -> count++
+                    arrayToken[i] == Token.BEGIN -> count--
                 }
-                if ((arrayToken[i] == Token.BEGIN) && (count > 0)) {
-                    count--
-                }
-                if ((arrayToken[i] == Token.BEGIN) && (count == 0)) {
-                    break
-                }
+                if ((arrayToken[i] == Token.BEGIN) && (count == 0)) break
                 i--
 
             }
