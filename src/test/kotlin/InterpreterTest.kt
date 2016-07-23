@@ -4,6 +4,7 @@ import kotlin.test.assertEquals
 
 class InterpreterTest {
 
+
     @Test fun multiplyingTest() {
         val bf = BrainfuckTranslator()
         val testFile = File("test.txt")
@@ -55,5 +56,6 @@ class InterpreterTest {
         interp.interpret(arrToken)
         assertEquals("", write.sb.toString())
     }
+
 }
 

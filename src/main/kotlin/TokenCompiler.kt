@@ -1,7 +1,6 @@
 import org.objectweb.asm.ClassWriter
 import org.objectweb.asm.Label
 import org.objectweb.asm.MethodVisitor
-import org.objectweb.asm.Opcodes
 import org.objectweb.asm.Opcodes.*
 import java.io.File
 import java.util.*
@@ -13,8 +12,7 @@ class TokenCompiler{
      */
     private val beginLabelStack = Stack<Label>()
     private val endLabelStack = Stack<Label>()
-    private var i = 0
-    private var tokens = Array<Token>(0, {Token.PLUS})
+    private var tokens = Array(0, {Token.PLUS})
     fun compile(tokens: Array<Token>): ByteArray{
         this.tokens = tokens
         val writer = File("MyClass.class")

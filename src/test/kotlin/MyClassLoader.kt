@@ -9,8 +9,10 @@ class MyClassLoader : ClassLoader() {
     }
 }
 
+
 class MyInputStream(val str: String) : InputStream() {
     private var count = 0
+
 
     override fun read(): Int {
         count++
@@ -18,13 +20,13 @@ class MyInputStream(val str: String) : InputStream() {
     }
 }
 
+
 class MyPrintStream() : PrintStream(EmptyStream()) {
     val sb = StringBuilder()
     override fun println(x: Char) {
         sb.append(x)
     }
 }
-
 /**
  * Makes EmptyStream which helps MyPrintStream
  * with interface PrintStream and goes like
@@ -34,7 +36,6 @@ class EmptyStream() : OutputStream() {
     override fun write(b: Int) {
     }
 }
-
 /**
  * Compiles, loads and runs byte-code, tests it
  */
