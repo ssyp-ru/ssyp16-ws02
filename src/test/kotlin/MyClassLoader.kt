@@ -8,6 +8,8 @@ class MyClassLoader : ClassLoader() {
         return super.defineClass(name, barr, 0, barr.size)
     }
 }
+
+
 class MyInputStream(val str: String) : InputStream() {
     private var count = 0
 
@@ -17,6 +19,8 @@ class MyInputStream(val str: String) : InputStream() {
         return str[count - 1].toInt()
     }
 }
+
+
 class MyPrintStream() : PrintStream(EmptyStream()) {
     val sb = StringBuilder()
     override fun println(x: Char) {
