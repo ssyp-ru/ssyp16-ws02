@@ -26,7 +26,8 @@ class CLI {
                                 again = 2
                             }
                             else
-                                println("Syntax error in BF code")
+                            {println("Syntax error in BF code")
+                                print("--> Error. Please enter the name of file again: ")}
                         }
                         fileName.endsWith(".koko") -> {
                             val arrPTokens = petoohTranslator.translateToToken(fileName)
@@ -35,7 +36,8 @@ class CLI {
                                 again = 2
                             }
                             else
-                                println("Syntax error in PETOOH code")
+                            {println("Syntax error in PETOOH code")
+                                print("--> Error. Please enter the name of file again: ")}
                         }
                         else ->
                             print("--> Error. Please enter the name of file again: ")
@@ -92,7 +94,8 @@ class CLI {
                                 again = 2
                             }
                             else
-                                println("Syntax error in BF code")
+                            {println("Syntax error in BF code")
+                                print("--> Error. Please enter the name of file again: ")}
                         }
                         fileName.endsWith(".koko") -> {
                             val arrPTokens = petoohTranslator.translateToToken(fileName)
@@ -101,7 +104,8 @@ class CLI {
                                 again = 2
                             }
                             else
-                                println("Syntax error in PETOOH code")
+                            {println("Syntax error in PETOOH code")
+                                print("--> Error. Please enter the name of file again: ")}
                         }
                         else ->
                             print("--> Error. Please enters the name of file again: ")
