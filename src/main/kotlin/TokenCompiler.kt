@@ -13,8 +13,7 @@ class TokenCompiler{
      */
     private val beginLabelStack = Stack<Label>()
     private val endLabelStack = Stack<Label>()
-    private var i = 0
-    private var tokens = Array<Token>(0, {Token.PLUS})
+    private var tokens = Array(0, {Token.PLUS})
     fun compile(tokens: Array<Token>): ByteArray{
         this.tokens = tokens
         val writer = File("MyClass.class")

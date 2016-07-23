@@ -1,7 +1,6 @@
 class CLI {
 
-    //val againMenu = CLI()
-    private var flag = 1
+
     private val brainfuckTranslator = BrainfuckTranslator()
     private val petoohTranslator = PetoohTranslator()
     private val interpreter = Interpreter()
@@ -9,7 +8,7 @@ class CLI {
 
     fun MainMenu() {
 
-        println("PetooKahn version 1.0.1")
+        println("PetooKhan version 1.0.1")
         println("--> 1. Run Petooh or BF file")
         println("--> 2. Petooh translate to BF")
         println("--> 3. BF translate to Petooh")
@@ -41,7 +40,7 @@ class CLI {
             "2" -> {
                 var again = 1
                 while(again != 2) {
-                    println("Plese enter the name of Petooh file and name of output file (BF)")
+                    println("Please enter the name of Petooh file and name of output file (BF)")
                     print("Petooh file: ")
                     val fileName = readLine() ?: ""
                     println()
