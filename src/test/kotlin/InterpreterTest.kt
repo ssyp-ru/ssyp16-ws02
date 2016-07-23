@@ -4,7 +4,7 @@ import kotlin.test.assertEquals
 
 class InterpreterTest {
 
-
+/*
     @Test fun multiplyingTest() {
         val bf = BrainfuckTranslator()
         val testFile = File("test.txt")
@@ -45,17 +45,25 @@ class InterpreterTest {
         assertEquals("Hello World!\n", write.sb.toString())
     }
 
-    @Test fun emptyFileTest(){
+    *@Test fun emptyFileTest(){
         val bf = BrainfuckTranslator()
         val testFile = File("test.txt")
         testFile.writeText("")
         val arrToken = bf.translateToTokens("test.txt")
+        val write = MyPrintStream()}*/
+
+    @Test fun emptyFileTest() {
+        val bf = BrainfuckTranslator()
+        val testFile = File("test.txt")
+        testFile.writeText("+>,+>,<[<+>>[<<->>->+>]>[<<+>>[<+>-]]<<<<[<]>>-]<-.")
+        val arrToken = bf.translateToTokens("test.txt")
         val write = MyPrintStream()
         val strb = StringBuilder()
+        strb.append(80.toChar())
+        strb.append(10.toChar())
         val interp = Interpreter(MyInputStream(strb.toString()), write)
         interp.interpret(arrToken)
-        assertEquals("", write.sb.toString())
+        assertEquals(8.toChar().toString(), write.sb.toString())
     }
-
 }
 
