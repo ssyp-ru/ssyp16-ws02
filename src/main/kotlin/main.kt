@@ -13,4 +13,10 @@ fun main(args: Array<String>){
 //    val interp = Interpreter(arrToken, read, write)
 //    interp.interpret()
 //    println(write.myReturn)
+
+    val againMenu = CLI()
+    againMenu.MainMenu()
+
+
+
 }

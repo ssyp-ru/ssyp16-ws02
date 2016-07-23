@@ -12,7 +12,8 @@ class PetoohTranslator {
     /**
     translateToToken - method which take file with Petooh code and return array with Tokens.
     If file not founded, returned emtpy array type Token.
-    @param fileKoko name of file
+    @param fileKoko name of
+    file
     @returns array of Tokens
      */
 
@@ -70,7 +71,7 @@ class PetoohTranslator {
             }
         }
         val endStr = timeStr.toString()
-        endFile.appendText(endStr)// write if output file
+        endFile.writeText(endStr)// write if output file
     }
 
 }

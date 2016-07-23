@@ -21,8 +21,8 @@ class PetoohTranslatorTest {
         }
         assertEquals(true, bool)
 
-        File(fileKo + "2").writeText("Ko kO Kud Kudah 0kkkukarek")
-        val actualTokens = testObj.translateToToken(fileKo + "2")
+        File("Petooh2.txt").writeText("Ko kO Kud Kudah 0kkkukarek")
+        val actualTokens = testObj.translateToToken("Petooh2.txt")
         val expectedTokens = arrayOf(Token.MINUS, Token.PLUS, Token.BEGIN, Token.RIGHT, Token.WRITE)
 
         Assert.assertArrayEquals(expectedTokens, actualTokens)
