@@ -1,75 +1,89 @@
-import java.io.Reader
-import java.io.Writer
+import java.io.InputStream
+import java.io.PrintStream
 
-class Interpreter(var arrayToken: Array<Token>, val read: Reader, val write: Writer) {
-    var array = Array<Byte> (30000, { 0 })
-    var current = 0
-    var i = 0
-    var count = i
+class Interpreter(val read: InputStream = System.`in`, val write: PrintStream = System.out) {
+    private val const = 30000
+    private var array = ByteArray (const, { 0 })
+    private var current = 0
+    private var i = 0
+    private var count = i
+
 
     /**
-     * this fun interprets tokens to Kotlin
+     * This fun interprets tokens to Kotlin.
      */
 
-    fun interpret() {
+    fun interpret(arrayToken: Array<Token>) {
         while (i != arrayToken.size) {
             when (arrayToken[i]) {
-                Token.LEFT -> {
-                    if (current != 0) {
-                        current--
-                    } else
-                        current = 29999
-                }
-
-                Token.RIGHT -> {
-                    if (current != 29999) {
-                        current++
-                    } else
-                        current = 0
-                }
-
-                Token.MINUS -> {
-                    array[current]--
-                }
-
-                Token.PLUS -> {
-                    array[current]++
-                }
-
-                Token.READ -> {
-                    array[current] = read.read().toByte()
-                }
-
-                Token.WRITE -> {
-                    write.write(array[current].toString())
-                }
-
-                Token.BEGIN -> {
-                    if (array[current].toInt() == 0) {
-                        while (arrayToken[i] != Token.END) {
-                            i++
-                        }
-                        i++
-                    }
-                }
-                Token.END -> {
-                    if (array[current].toInt() != 0) {
-                        while (!((arrayToken[i] == Token.BEGIN)&&(count == 0))) {
-                            if(arrayToken[i] == Token.END){
-                                count++
-                            }
-                            if((arrayToken[i] == Token.BEGIN)&&(count > 0)){
-                                count--
-                            }
-                            if((arrayToken[i] == Token.BEGIN)&&(count == 0)){
-                                break
-                            }
-                            i--
-                        }
-                    }
-                }
+                Token.LEFT -> left()
+                Token.RIGHT -> right()
+                Token.MINUS -> array[current]--
+                Token.PLUS -> array[current]++
+                Token.READ -> array[current] = read.read().toByte()
+                Token.WRITE -> write.println(array[current].toChar())
+                Token.BEGIN -> begin(arrayToken)
+                Token.END -> end(arrayToken)
             }
             i++
+        }
+    }
+
+    /**
+     * Moves cursor left.
+     */
+
+    fun left() {
+        if (current != 0) {
+            current--
+        } else
+            current = const - 1
+    }
+
+    /**
+     * Moves cursor right
+     */
+
+    fun right() {
+        if (current != const - 1) {
+            current++
+        } else
+            current = 0
+    }
+
+    /**
+     * Starts loop if array[current] = 0
+     */
+
+    private fun begin(arrayToken: Array<Token>) {
+        if (array[current].toInt() == 0) {
+            while (!((arrayToken[i] == Token.END) && (count == 0))) {
+                when{
+                    arrayToken[i] == Token.END -> count--
+                    arrayToken[i] == Token.BEGIN -> count++
+                }
+                if ((arrayToken[i] == Token.END) && (count == 0)) break
+                i++
+
+            }
+        }
+    }
+
+    /**
+     * Ends loop if array[current] = 0
+     */
+
+    private fun end(arrayToken: Array<Token>) {
+        if (array[current].toInt() != 0) {
+            while (!((arrayToken[i] == Token.BEGIN) && (count == 0))) {
+                when{
+                    arrayToken[i] == Token.END -> count++
+                    arrayToken[i] == Token.BEGIN -> count--
+                }
+                if ((arrayToken[i] == Token.BEGIN) && (count == 0)) break
+                i--
+
+            }
         }
     }
 }

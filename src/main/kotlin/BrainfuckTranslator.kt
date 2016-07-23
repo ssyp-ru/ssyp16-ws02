@@ -15,6 +15,7 @@ class BrainfuckTranslator {
         try {
             code = File(fileName).readText()
         } catch(exc: FileNotFoundException) {
+            println("File not found!")
             return emptyArray()
         }
         val list = ArrayList<Token>()

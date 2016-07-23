@@ -4,8 +4,11 @@ import java.io.File
 import kotlin.test.assertEquals
 
 /**
-Class BrainfuckTranslatorTests tests functions from BrinfuckTranslator.
+
+Class BrainfuckTranslatorTests tests functions from BrinfuckTranslator
  */
+
+
 class BrainfuckTranslatorTests {
     private val brainfuckTranslator = BrainfuckTranslator()
     private val testTokens = arrayOf(Token.PLUS, Token.MINUS, Token.RIGHT, Token.LEFT, Token.WRITE, Token.READ, Token.BEGIN, Token.END)
@@ -20,7 +23,6 @@ class BrainfuckTranslatorTests {
         Assert.assertArrayEquals(testTokens, brainfuckTranslator.translateToTokens(name)
         )
     }
-
     /**
     returnFileNotfound tests the case when the file does not exist.
      */
@@ -35,8 +37,8 @@ class BrainfuckTranslatorTests {
     @Test fun testTokenToBrainfuck() {
         brainfuckTranslator.translateToBrainfuck(testTokens, name)
         assertEquals("+-><.,[]", testFile.readText())
-    }
 
+    }
     /**
      testEmptyArray tests the case when the array is empty.
      */
