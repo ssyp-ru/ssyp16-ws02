@@ -8,8 +8,7 @@ Class BrainfuckTranslator translate Brainfuck to Tokens and vice versa.
 
 class BrainfuckTranslator {
     /**
-    translatorToken is function which take file with brainfuck code and return Token array
-    if file not found
+    translatorToken is function which take file with brainfuck code and return Token array.
      */
     fun translateToTokens(fileName: String): Array<Token> {
         val code: String
@@ -40,7 +39,7 @@ class BrainfuckTranslator {
     }
 
     /**
-    translatorBrainfuck is function which take Token array and safe in file
+    translatorBrainfuck is function which take Token array and safe in file.
      */
     fun translateToBrainfuck(tokens: Array<Token>, outFileName: String) {
         val file = File(outFileName)
