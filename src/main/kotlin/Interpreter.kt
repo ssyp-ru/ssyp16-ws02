@@ -1,12 +1,11 @@
 import java.io.InputStream
 import java.io.PrintStream
-import java.io.Reader
-import java.io.Writer
 
 class Interpreter(var arrayToken: Array<Token>, val read: InputStream, val write: PrintStream) {
-    var array = ByteArray (30000, {0})
-    var current = 0
-    var i = 0
+    private val const = 30000
+    private var array = ByteArray (const, { 0 })
+    private var current = 0
+    private var i = 0
     private var count = i
 
     /**
@@ -20,11 +19,11 @@ class Interpreter(var arrayToken: Array<Token>, val read: InputStream, val write
                     if (current != 0) {
                         current--
                     } else
-                        current = 29999
+                        current = const - 1
                 }
 
                 Token.RIGHT -> {
-                    if (current != 29999) {
+                    if (current != const - 1) {
                         current++
                     } else
                         current = 0
@@ -39,9 +38,7 @@ class Interpreter(var arrayToken: Array<Token>, val read: InputStream, val write
                 Token.READ -> array[current] = read.read().toByte()
 
 
-                Token.WRITE -> {
-                    write.print(array[current].toChar())
-                }
+                Token.WRITE -> write.print(array[current].toChar())
 
 
                 Token.BEGIN -> {
