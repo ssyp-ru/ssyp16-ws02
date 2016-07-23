@@ -1,11 +1,14 @@
 import org.junit.Test
+import java.io.File
 import kotlin.test.assertEquals
 
 class InterpreterTest {
 
     @Test fun multiplyingTest() {
         val bf = BrainfuckTranslator()
-        val arrToken = bf.translateToTokens("kukarek.txt")
+        val testFile = File("test.txt")
+        testFile.writeText(",>,<[>[>+>+<<-]>[<+>-]<<-]>>>.")
+        val arrToken = bf.translateToTokens("test.txt")
         val write = MyPrintStream()
         val strb = StringBuilder()
         strb.append(" ")
@@ -17,7 +20,9 @@ class InterpreterTest {
 
     @Test fun secondMultiplyingTest() {
         val bf = BrainfuckTranslator()
-        val arrToken = bf.translateToTokens("secondTest.txt")
+        val testFile = File("test.txt")
+        testFile.writeText("+++>+[<[>++<-]>-<]>.")
+        val arrToken = bf.translateToTokens("test.txt")
         val write = MyPrintStream()
         val strb = StringBuilder()
         strb.append(" ")
@@ -29,7 +34,9 @@ class InterpreterTest {
 
     @Test fun helloWorldTest() {
         val bf = BrainfuckTranslator()
-        val arrToken = bf.translateToTokens("thirdTest.txt")
+        val testFile = File("test.txt")
+        testFile.writeText("++++++++++[>+++++++>++++++++++>+++>+<<<<-]>++.>+.+++++++..+++.>++.<<+++++++++++++++.>.+++.------.--------.>+.>.")
+        val arrToken = bf.translateToTokens("test.txt")
         val write = MyPrintStream()
         val strb = StringBuilder()
         val interp = Interpreter(MyInputStream(strb.toString()), write)
@@ -39,7 +46,9 @@ class InterpreterTest {
 
     @Test fun emptyFileTest(){
         val bf = BrainfuckTranslator()
-        val arrToken = bf.translateToTokens("emptyFile.txt")
+        val testFile = File("test.txt")
+        testFile.writeText("")
+        val arrToken = bf.translateToTokens("test.txt")
         val write = MyPrintStream()
         val strb = StringBuilder()
         val interp = Interpreter(MyInputStream(strb.toString()), write)
