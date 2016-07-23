@@ -24,13 +24,27 @@ class InterpreterTest {
         strb.append(33.toChar())
         val interp = Interpreter(MyInputStream(strb.toString()), write)
         interp.interpret(arrToken)
-        println(write.sb.toString())
         assertEquals(6.toChar().toString(), write.sb.toString())
     }
 
-    @Test fun anTest(){
+    @Test fun helloWorldTest() {
         val bf = BrainfuckTranslator()
+        val arrToken = bf.translateToTokens("thirdTest.txt")
+        val write = MyPrintStream()
+        val strb = StringBuilder()
+        val interp = Interpreter(MyInputStream(strb.toString()), write)
+        interp.interpret(arrToken)
+        assertEquals("Hello World!\n", write.sb.toString())
+    }
 
+    @Test fun emptyFileTest(){
+        val bf = BrainfuckTranslator()
+        val arrToken = bf.translateToTokens("emptyFile.txt")
+        val write = MyPrintStream()
+        val strb = StringBuilder()
+        val interp = Interpreter(MyInputStream(strb.toString()), write)
+        interp.interpret(arrToken)
+        assertEquals("", write.sb.toString())
     }
 }
 
