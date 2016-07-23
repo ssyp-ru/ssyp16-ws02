@@ -1,12 +1,11 @@
-/**
- * Created by Vedrovski on 22.07.2016.
- */
 class CLI {
 
     //val againMenu = CLI()
     private var flag = 1
     private val brainfuckTranslator = BrainfuckTranslator()
     private val petoohTranslator = PetoohTranslator()
+    private val interpreter = Interpreter()
+    private val compiler = TokenCompiler()
 
     fun MainMenu() {
 
@@ -23,14 +22,16 @@ class CLI {
                     val fileName = readLine() ?: ""
                     println()
                     when {
-                        fileName.startsWith(".bf", fileName.length - 2) -> {
-                            val arrBfTokens = brainfuckTranslator.translateToTokens(fileName)
-                            //... work interpreter
+                        fileName.endsWith(".bf") -> {
+                            val arrBFTokens = brainfuckTranslator.translateToTokens(fileName)
+                            //validator
+                            interpreter.interpret(arrBFTokens)
                             again = 2
                         }
-                        fileName.startsWith(".koko", fileName.length - 3) -> {
-                           val arrPTokens = petoohTranslator.translateToToken(fileName)
-                            //...work interpreter
+                        fileName.endsWith(".koko") -> {
+                            val arrPTokens = petoohTranslator.translateToToken(fileName)
+                            //validator
+                            interpreter.interpret(arrPTokens)
                             again = 2
                         }
                         else -> print("--> Error. Please enters the name of file again:")
@@ -38,14 +39,63 @@ class CLI {
                 }
             }
             "2" -> {
+                var again = 1
+                while(again != 2) {
+                    println("Plese enters the name of Petooh file and name of output file(BF)")
+                    print("Petooh file:")
+                    val fileName = readLine() ?: ""
+                    println()
+                    print("Output file:")
+                    val output = readLine() + ".bf"
+                    println()
+                    if (fileName.endsWith(".koko")) {
+                        val arrBFTokens = brainfuckTranslator.translateToTokens(fileName)
+                        val filePetooh = petoohTranslator.translateToKoko(arrBFTokens, output)
+                        again = 2
+                    } else println("--> Error. Please enters the name of file again!")
+
+                }
 
             }
             "3" -> {
-                flag = 0
-
+                var again = 1
+                while(again != 2) {
+                    println("Plese enters the name of BF file and name of output file(Petooh)")
+                    print("BF file:")
+                    val fileName = readLine() ?: ""
+                    println()
+                    print("Output file:")
+                    val output = readLine() + ".koko"
+                    println()
+                    if (fileName.endsWith(".bf")) {
+                        val arrPTokens = petoohTranslator.translateToToken(fileName)
+                        val fileBF = brainfuckTranslator.translateToBrainfuck(arrPTokens, output)
+                        again = 2
+                    }else println("--> Error. Please enters the name of file again!")
+                }
             }
             "4" -> {
-                flag = 0
+                var again = 1
+                print("--> Please enter the name of file:")
+                while (again != 2) {
+                    val fileName = readLine() ?: ""
+                    println()
+                    when {
+                        fileName.endsWith(".bf") -> {
+                            val arrBFTokens = brainfuckTranslator.translateToTokens(fileName)
+                            //validator
+                            compiler.compile(arrBFTokens)
+                            again = 2
+                        }
+                        fileName.endsWith(".koko") -> {
+                            val arrPTokens = petoohTranslator.translateToToken(fileName)
+                            //validator
+                            compiler.compile(arrPTokens)
+                            again = 2
+                        }
+                        else -> print("--> Error. Please enters the name of file again:")
+                    }
+                }
 
             }
             else
