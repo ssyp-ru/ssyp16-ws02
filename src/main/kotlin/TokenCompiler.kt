@@ -16,7 +16,7 @@ class TokenCompiler {
     private var tokens = Array(0, { Token.PLUS })
     fun compile(tokens: Array<Token>, output: String): ByteArray? {
         if(!SourceVersion.isIdentifier(output) || SourceVersion.isKeyword(output)){
-            println("Your name of class is so bad!!!11!!1!!")
+            println("Your name of class is invalid.")
             return null
         }
         this.tokens = tokens
