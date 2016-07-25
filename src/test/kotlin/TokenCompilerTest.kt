@@ -1,3 +1,4 @@
+package ssyp.ws02.petooh
 import org.junit.Test
 import java.io.File
 

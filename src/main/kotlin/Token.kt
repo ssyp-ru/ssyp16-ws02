@@ -1,3 +1,4 @@
+package ssyp.ws02.petooh
 enum class Token {
     LEFT,
     RIGHT,

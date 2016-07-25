@@ -1,3 +1,4 @@
+package ssyp.ws02.petooh
 import java.io.InputStream
 import java.io.PrintStream
 
@@ -7,6 +8,12 @@ class Interpreter(val read: InputStream = System.`in`, val write: PrintStream = 
     private var current = 0
     private var i = 0
     private var count = i
+
+    internal fun pushValues(params: Array<Byte>) {
+        for (i in 0..params.size - 1) {
+            array[i] = params[i]
+        }
+    }
 
 
     /**
@@ -24,6 +31,7 @@ class Interpreter(val read: InputStream = System.`in`, val write: PrintStream = 
                 Token.WRITE -> write.println(array[current].toChar())
                 Token.BEGIN -> begin(arrayToken)
                 Token.END -> end(arrayToken)
+            //morning()
             }
             i++
         }
@@ -58,7 +66,7 @@ class Interpreter(val read: InputStream = System.`in`, val write: PrintStream = 
     private fun begin(arrayToken: Array<Token>) {
         if (array[current].toInt() == 0) {
             while (!((arrayToken[i] == Token.END) && (count == 0))) {
-                when{
+                when {
                     arrayToken[i] == Token.END -> count--
                     arrayToken[i] == Token.BEGIN -> count++
                 }
@@ -76,7 +84,7 @@ class Interpreter(val read: InputStream = System.`in`, val write: PrintStream = 
     private fun end(arrayToken: Array<Token>) {
         if (array[current].toInt() != 0) {
             while (!((arrayToken[i] == Token.BEGIN) && (count == 0))) {
-                when{
+                when {
                     arrayToken[i] == Token.END -> count++
                     arrayToken[i] == Token.BEGIN -> count--
                 }
@@ -85,5 +93,13 @@ class Interpreter(val read: InputStream = System.`in`, val write: PrintStream = 
 
             }
         }
+    }
+
+    private fun defFunction(name: String, params: Int, code: Array<Token>) {
+
+    }
+
+    internal fun getReturnValue(): Byte {
+        return array[current]
     }
 }

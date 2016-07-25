@@ -1,3 +1,4 @@
+package ssyp.ws02.petooh
 import java.io.InputStream
 import java.io.OutputStream
 import java.io.PrintStream
