@@ -4,6 +4,7 @@ import org.objectweb.asm.MethodVisitor
 import org.objectweb.asm.Opcodes.*
 import java.io.File
 import java.util.*
+import javax.lang.model.SourceVersion
 
 class TokenCompiler {
     /**
@@ -13,7 +14,11 @@ class TokenCompiler {
     private val beginLabelStack = Stack<Label>()
     private val endLabelStack = Stack<Label>()
     private var tokens = Array(0, { Token.PLUS })
-    fun compile(tokens: Array<Token>, output: String): ByteArray {
+    fun compile(tokens: Array<Token>, output: String): ByteArray? {
+        if(!SourceVersion.isIdentifier(output) || SourceVersion.isKeyword(output)){
+            println("Your name of class is so bad!!!11!!1!!")
+            return null
+        }
         this.tokens = tokens
         val writer = File(output + ".class")
         val cw = ClassWriter(0)
