@@ -13,102 +13,45 @@ class CLI {
         println("--> 4. Compile BF or PETOOH file \n")
         when (readLine()) {
             "1" -> {
-                var again = 1
+                var bool = true
                 print("--> Please enter the name of file: ")
-                while (again != 2) {
+                while (bool != false) {
                     val fileName = readLine() ?: ""
+                    val isPetooh: Boolean
                     println()
                     when {
                         fileName.endsWith(".bf") -> {
-                            val arrBFTokens = brainfuckTranslator.translateToTokens(fileName)
-                            if (validator.check(arrBFTokens)) {
-                                interpreter.interpret(arrBFTokens)
-                                again = 2
-                            } else {
-                                println("Syntax error in BF code")
-                                print("--> Error. Please enter the name of file again: ")
-                            }
+                            bool = interpreter(false, fileName)
                         }
                         fileName.endsWith(".koko") -> {
-                            val arrPTokens = petoohTranslator.translateToToken(fileName)
-                            if (validator.check(arrPTokens)) {
-                                interpreter.interpret(arrPTokens)
-                                again = 2
-                            } else {
-                                println("Syntax error in PETOOH code")
-                                print("--> Error. Please enter the name of file again: ")
-                            }
+                            bool = interpreter(true, fileName)
                         }
                         else ->
-                            print("--> Error. Please enter the name of file again: ")
+                            print("--> Error. Please enter the name of file bool: ")
                     }
                 }
             }
             "2" -> {
-                var again = 1
-                while (again != 2) {
-                    println("Please enter the name of PETOOH file and name of output file (BF)")
-                    print("PETOOH file: ")
-                    val fileName = readLine() ?: ""
-                    println()
-                    if (fileName.endsWith(".koko")) {
-                        print("Output file: ")
-                        val output = readLine() + ".bf"
-                        println()
-                        val arrBFTokens = petoohTranslator.translateToToken(fileName)
-                        petoohTranslator.translateToKoko(arrBFTokens, output)
-                        again = 2
-                    } else
-                        println("--> Error. Please enter the name of file again!")
-                }
+                translate(true)
             }
             "3" -> {
-                var again = 1
-                while (again != 2) {
-                    println("Plese enter the name of BF file and name of output file (PETOOH)")
-                    print("BF file: ")
-                    val fileName = readLine() ?: ""
-                    println()
-                    if (fileName.endsWith(".bf")) {
-                        print("Output file: ")
-                        val output = readLine() + ".koko"
-                        println()
-                        val arrPTokens = brainfuckTranslator.translateToTokens(fileName)
-                        brainfuckTranslator.translateToBrainfuck(arrPTokens, output)
-                        again = 2
-                    } else
-                        println("--> Error. Please enters the name of file again!")
-                }
+                translate(false)
             }
             "4" -> {
-                var again = 1
-                print("--> Please enter the name of file: ")
-                while (again != 2) {
+                var bool = true
+                while (bool != false) {
+                    print("--> Please enter the name of file: ")
+                    val isPetooh: Boolean
                     val fileName = readLine() ?: ""
                     println()
                     when {
                         fileName.endsWith(".bf") -> {
-                            val arrBFTokens = brainfuckTranslator.translateToTokens(fileName)
-                            if (validator.check(arrBFTokens)) {
-                                compiler.compile(arrBFTokens)
-                                again = 2
-                            } else {
-                                println("Syntax error in BF code")
-                                print("--> Error. Please enter the name of file again: ")
-                            }
+                            bool = compiler(false, fileName)
                         }
                         fileName.endsWith(".koko") -> {
-                            val arrPTokens = petoohTranslator.translateToToken(fileName)
-                            if (validator.check(arrPTokens)) {
-                                compiler.compile(arrPTokens)
-                                again = 2
-                            } else {
-                                println("Syntax error in PETOOH code")
-                                print("--> Error. Please enter the name of file again: ")
-                            }
+                            bool = compiler(true, fileName)
                         }
-                        else ->
-                            print("--> Error. Please enters the name of file again: ")
+
                     }
                 }
 
@@ -118,4 +61,121 @@ class CLI {
             }
         }
     }
+
+    private fun translate(isPetooh: Boolean) {
+        val enterFile: String
+        val output: String
+        val endsWith: String
+        val endsPlus: String
+        val boolType: Boolean
+        when (isPetooh) {
+            true -> {
+                enterFile = "PETOOH"
+                output = "(BF)"
+                endsWith = ".koko"
+                endsPlus = ".bf"
+                boolType = true
+            }
+            false -> {
+                enterFile = "BF"
+                output = "(PETOOH)"
+                endsWith = ".bf"
+                endsPlus = ".koko"
+                boolType = false
+            }
+            else -> {
+                println("Translate error")
+                return
+            }
+        }
+        var bool = true
+        while (bool != false) {
+            println("Please enter the name of $enterFile file and name of output file $output")
+            print(enterFile + " file: ")
+            val fileName = readLine() ?: ""
+            println()
+            if (fileName.endsWith(endsWith)) {
+                print("Output file: ")
+                val outputFile = readLine() + endsPlus
+                println()
+                if (boolType) {
+                    val tokens = petoohTranslator.translateToToken(fileName)
+                    if (tokens.isEmpty()) {
+                        return
+                    }
+                    brainfuckTranslator.translateToBrainfuck(tokens, outputFile)
+                } else {
+                    val tokens = brainfuckTranslator.translateToTokens(fileName)
+                    if (tokens.isEmpty()) {
+                        return
+                    }
+                    petoohTranslator.translateToKoko(tokens, outputFile)
+                }
+                bool = false
+            }
+        }
+    }
+
+    private fun compiler(isPetooh: Boolean, fileName: String): Boolean {
+        val shouldAskAgain: Boolean
+        val tokens: Array<Token>
+        val code: String
+        if (!isPetooh) {
+            tokens = brainfuckTranslator.translateToTokens(fileName)
+            code = "BF"
+        } else {
+            tokens = petoohTranslator.translateToToken(fileName)
+            code = "PETOOH"
+        }
+        if (tokens.isEmpty()) {
+            println("Error")
+            return true
+        }
+        if (validator.check(tokens)) {
+            println()
+            print("--> Please enter the name of class: ")
+            val outputClass = readLine() ?: ""
+            compiler.compile(tokens, outputClass)
+            shouldAskAgain = false
+        } else {
+            println("Syntax error in $code code")
+            print("--> Error. Please enter the name of file again: ")
+            shouldAskAgain = true
+        }
+        return shouldAskAgain
+    }
+
+
+    private fun interpreter(isPetooh: Boolean, fileName: String): Boolean {
+        val Tokens: Any
+        val code: String
+        when (isPetooh) {
+            true -> {
+                Tokens = petoohTranslator.translateToToken(fileName)
+                code = "PETOOH"
+            }
+            false -> {
+                Tokens = brainfuckTranslator.translateToTokens(fileName)
+                code = "BF"
+            }
+            else -> {
+                println("Interpreter error")
+                return true
+            }
+        }
+
+        val bool: Boolean
+        if (validator.check(Tokens)) {
+            interpreter.interpret(Tokens)
+            bool = false
+        } else {
+            println("Syntax error in $code code")
+            print("--> Error. Please enter the name of file file: ")
+            bool = true
+        }
+        return bool
+    }
+
+
 }
+

@@ -1,30 +1,27 @@
-
 import java.io.File
 import java.io.FileNotFoundException
 import java.util.*
 
 /**
-Class PetoohTranslator have two method: translateToToken and translateToKoko
+Class PetoohTranslator has two methods: translateToToken and translateToKoko
  */
 
 class PetoohTranslator {
 
     /**
-    translateToToken - method which take file with Petooh code and return array with Tokens.
-    If file not founded, returned emtpy array type Token.
-    @param fileKoko name of
-    file
+    Takes a file with Petooh code and returns array with Tokens.
+    If file not found, returns empty array.
+    @param fileKoko name of file
     @returns array of Tokens
      */
-
     fun translateToToken(fileKoko: String): Array<Token> { //Petooh -> Token
         val strWithTokens: String
-        try {                                                             ////
-            strWithTokens = File(fileKoko).readText()//string with Koko  ////
-        } catch (exc: FileNotFoundException) {                          ////       catch(exc: FileNotFoundException)
-            println("File not found!")                                   ////
-            return emptyArray()                                         ////
-        }                                                               ///
+        try {
+            strWithTokens = File(fileKoko).readText()
+        } catch (exc: FileNotFoundException) {
+            println("File not found!")
+            return emptyArray()
+        }
         val tokenArray = ArrayList<Token>()//return
         for (index in 0..strWithTokens.length) {
 
@@ -46,8 +43,8 @@ class PetoohTranslator {
     }
 
     /**
-    translateToKoko - method which take array with Tokens and write in output file.
-    If file not found , created new file (mention).
+    Takes an array of Tokens and writes PETOOH code to output file.
+    If file not found, creates a new file.
     @param arrToken:Array<Token> array of Token
     @param output:String name of output file
     @returns file with Petooh code
