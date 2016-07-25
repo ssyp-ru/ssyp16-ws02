@@ -17,7 +17,6 @@ class CLI {
                 print("--> Please enter the name of file: ")
                 while (bool != false) {
                     val fileName = readLine() ?: ""
-                    val isPetooh: Boolean
                     println()
                     when {
                         fileName.endsWith(".bf") -> {
@@ -41,7 +40,6 @@ class CLI {
                 var bool = true
                 while (bool != false) {
                     print("--> Please enter the name of file: ")
-                    val isPetooh: Boolean
                     val fileName = readLine() ?: ""
                     println()
                     when {
