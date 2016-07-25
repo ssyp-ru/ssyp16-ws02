@@ -1,4 +1,4 @@
-package ssyp.ws02.petooh
+
 import java.io.InputStream
 import java.io.PrintStream
 
@@ -31,7 +31,6 @@ class Interpreter(val read: InputStream = System.`in`, val write: PrintStream = 
                 Token.WRITE -> write.println(array[current].toChar())
                 Token.BEGIN -> begin(arrayToken)
                 Token.END -> end(arrayToken)
-            //morning()
             }
             i++
         }

@@ -1,4 +1,4 @@
-package ssyp.ws02.petooh
+
 class CLI {
     private val brainfuckTranslator = BrainfuckTranslator()
     private val petoohTranslator = PetoohTranslator()
