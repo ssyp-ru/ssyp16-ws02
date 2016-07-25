@@ -6,7 +6,7 @@ class CLI {
     private val validator = Validator()
 
     fun MainMenu() {
-        println("PetooKhan version 1.0.1")
+        println("PetooKhan version 0.1")
         println("--> 1. Run PETOOH or BF file")
         println("--> 2. PETOOH translate to BF")
         println("--> 3. BF translate to PETOOH")
@@ -26,7 +26,7 @@ class CLI {
                             bool = interpreter(true, fileName)
                         }
                         else ->
-                            print("--> Error. Please enter the name of file bool: ")
+                            print("--> Error. Please enter the name of an existing PETOOH or BF file: ")
                     }
                 }
             }
