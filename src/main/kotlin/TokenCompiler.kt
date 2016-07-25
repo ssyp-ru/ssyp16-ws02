@@ -4,20 +4,25 @@ import org.objectweb.asm.MethodVisitor
 import org.objectweb.asm.Opcodes.*
 import java.io.File
 import java.util.*
+import javax.lang.model.SourceVersion
 
-class TokenCompiler{
+class TokenCompiler {
     /**
      * Compiles tokensArray
      * @returns byte-code of the class
      */
     private val beginLabelStack = Stack<Label>()
     private val endLabelStack = Stack<Label>()
-    private var tokens = Array(0, {Token.PLUS})
-    fun compile(tokens: Array<Token>): ByteArray{
+    private var tokens = Array(0, { Token.PLUS })
+    fun compile(tokens: Array<Token>, output: String): ByteArray? {
+        if(!SourceVersion.isIdentifier(output) || SourceVersion.isKeyword(output)){
+            println("Your name of class is invalid.")
+            return null
+        }
         this.tokens = tokens
-        val writer = File("MyClass.class")
+        val writer = File(output + ".class")
         val cw = ClassWriter(0)
-        cw.visit(V1_7, ACC_PUBLIC, "MyClass", null, "java/lang/Object", null)
+        cw.visit(V1_7, ACC_PUBLIC, output, null, "java/lang/Object", null)
         val vm = cw.visitMethod(ACC_PUBLIC + ACC_STATIC, "main", "([Ljava/lang/String;)V", null, null)
         with(vm) {
             visitCode()
@@ -52,7 +57,7 @@ class TokenCompiler{
     /**
      * Add 1 to current element of array
      */
-    private fun MethodVisitor.sumCompile(){
+    private fun MethodVisitor.sumCompile() {
         visitVarInsn(ALOAD, 0)
         visitVarInsn(ILOAD, 1)
         visitInsn(DUP2)
@@ -66,7 +71,7 @@ class TokenCompiler{
     /**
      * Sub 1 from current element of array
      */
-    private fun MethodVisitor.subCompile(){
+    private fun MethodVisitor.subCompile() {
         visitVarInsn(ALOAD, 0)
         visitVarInsn(ILOAD, 1)
         visitInsn(DUP2)
@@ -80,7 +85,7 @@ class TokenCompiler{
     /**
      * Move cursor left
      */
-    private fun MethodVisitor.leftCompile(){
+    private fun MethodVisitor.leftCompile() {
         visitVarInsn(ILOAD, 1)
         visitInsn(ICONST_M1)
         visitInsn(IADD)
@@ -97,7 +102,7 @@ class TokenCompiler{
     /**
      * Move cursor right
      */
-    private fun MethodVisitor.rightCompile(){
+    private fun MethodVisitor.rightCompile() {
         visitVarInsn(ILOAD, 1)
         visitInsn(ICONST_1)
         visitInsn(IADD)
@@ -139,7 +144,7 @@ class TokenCompiler{
     /**
      * Compiles beginning of loop and maybe going to end
      */
-    private fun MethodVisitor.beginCompile(){
+    private fun MethodVisitor.beginCompile() {
         beginLabelStack.push(Label())
         endLabelStack.push(Label())
         visitLabel(beginLabelStack.lastElement())
@@ -153,7 +158,7 @@ class TokenCompiler{
     /**
      * Compiles exit from loop or going to beginningof loop
      */
-    private fun MethodVisitor.endCompile(){
+    private fun MethodVisitor.endCompile() {
         visitJumpInsn(GOTO, beginLabelStack.lastElement())
         visitLabel(endLabelStack.lastElement())
         visitFrame(F_FULL, 2, arrayOf("[C", INTEGER), 0, null)
