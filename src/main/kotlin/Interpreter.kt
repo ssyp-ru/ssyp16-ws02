@@ -10,7 +10,7 @@ class Interpreter(val read: InputStream = System.`in`, val write: PrintStream = 
 
 
     /**
-     * This fun interprets tokens to Kotlin.
+     * Interprets tokens to Kotlin.
      */
 
     fun interpret(arrayToken: Array<Token>) {
