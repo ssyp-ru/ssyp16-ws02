@@ -9,17 +9,17 @@ class PetoohTranslatorTest {
     private val fileOut = "output.txt"
 
     /**
-    TEST METHOD: translateToToken
-    This test uses translateToToken with normal parameters(file found) and checks whether the answer is Array<Token>.
+    TEST METHOD: translateToToken // FIXME: ясное дело, что это ТЕСТЪ МЕТОДЪ. Удали во всех подписях
+    This test uses translateToToken with normal parameters(file found) and checks whether the answer is Array<Token>. // FIXME: у тебя уже нормальная проверка, исправь подпись
      */
     @Test fun testFileToToken() {
         File(fileKo).writeText("Kk koKuduhkoKokuKud ko KO 099991d dsv shdb Kudah kukarek ku ko KOd Ko")
         val arrToken = testObj.translateToToken(fileKo)
-        var bool = false
+        var bool = false // FIXME: уже не смешно; +2
         if (arrToken is Array<Token>) {
             bool = true
         }
-        assertEquals(true, bool)
+        assertEquals(true, bool) // FIXME: assert(имяПеременной)
 
         File("Petooh2.txt").writeText("Ko kO Kud Kudah 0kkkukarek")
         val actualTokens = testObj.translateToToken("Petooh2.txt")
@@ -30,7 +30,7 @@ class PetoohTranslatorTest {
 
     /**
     TEST METHOD: translateToToken
-    This test uses setFileTiToken and call ecs:NotFoundFile, check answer on empty array.
+    This test uses setFileTiToken and call ecs:NotFoundFile, check answer on empty array. // FIXME: какой ecs?
      */
     @Test fun returnNotFoundFile() {
         val arrToken = testObj.translateToToken("NotFile.not")

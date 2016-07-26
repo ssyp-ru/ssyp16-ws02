@@ -2,7 +2,7 @@ import org.junit.Test
 import java.io.File
 import kotlin.test.assertEquals
 
-class InterpreterTest {
+class InterpreterTest { // FIXME: почему у вас тесты закомментированы? Не палитесь, что там всё сломано? Раскомментировать или удалить
 
 /*
     @Test fun multiplyingTest() {

@@ -13,8 +13,8 @@ class CLI {
         println("--> 4. Compile BF or PETOOH file \n")
         when (readLine()) {
             "1" -> {
-                var bool = true
-                print("--> Please enter the name of file: ")
+                var bool = true // FIXME: переименовать; +2
+                print("--> Please enter the name of file: ") // FIXME: указать требуемые расширения файлов
                 while (bool != false) {
                     val fileName = readLine() ?: ""
                     println()
@@ -37,7 +37,7 @@ class CLI {
                 translate(false)
             }
             "4" -> {
-                var bool = true
+                var bool = true // FIXME: переимновать; +2
                 while (bool != false) {
                     print("--> Please enter the name of file: ")
                     val fileName = readLine() ?: ""
@@ -54,14 +54,14 @@ class CLI {
                 }
 
             }
-            else -> {
-                println("No such command.")
+            else -> { // FIXME: поддержать команду exit
+                println("No such command.") // FIXME: не вылетать после этого
             }
         }
     }
 
     private fun translate(isPetooh: Boolean) {
-        val enterFile: String
+        val enterFile: String // FIXME: избавиться от этой паскалевской простыни и when; например, каждую переменную присваивать с if-ом (тернарником)
         val output: String
         val endsWith: String
         val endsPlus: String
@@ -81,12 +81,12 @@ class CLI {
                 endsPlus = ".koko"
                 boolType = false
             }
-            else -> {
+            else -> { // FIXME: много ещё вариантов у Boolean переменной, кроме true и false? +4
                 println("Translate error")
                 return
             }
         }
-        var bool = true
+        var bool = true // FIXME: переименовать; +2
         while (bool != false) {
             println("Please enter the name of $enterFile file and name of output file $output")
             print(enterFile + " file: ")
@@ -114,10 +114,10 @@ class CLI {
         }
     }
 
-    private fun compiler(isPetooh: Boolean, fileName: String): Boolean {
+    private fun compiler(isPetooh: Boolean, fileName: String): Boolean { // FIXME: переименовать в глагол (compile)
         val shouldAskAgain: Boolean
-        val tokens: Array<Token>
-        val code: String
+        val tokens: Array<Token> // FIXME: убрать паскалевскую простыню
+        val code: String // FIXME: переименовать
         if (!isPetooh) {
             tokens = brainfuckTranslator.translateToTokens(fileName)
             code = "BF"
@@ -126,7 +126,7 @@ class CLI {
             code = "PETOOH"
         }
         if (tokens.isEmpty()) {
-            println("Error")
+            println("Error") // FIXME: какой именно Error? сделать понятнее
             return true
         }
         if (validator.check(tokens)) {
@@ -144,8 +144,8 @@ class CLI {
     }
 
 
-    private fun interpreter(isPetooh: Boolean, fileName: String): Boolean {
-        val Tokens: Any
+    private fun interpreter(isPetooh: Boolean, fileName: String): Boolean { // FIXME: переименовать в глагол
+        val Tokens: Any // FIXME: 1) убрать паскалевскую простыню; 2) переменные называем с маленькой буквы; 3) Any?! +4
         val code: String
         when (isPetooh) {
             true -> {
@@ -162,7 +162,7 @@ class CLI {
             }
         }
 
-        val bool: Boolean
+        val bool: Boolean // FIXME: переименовать; +2
         if (validator.check(Tokens)) {
             interpreter.interpret(Tokens)
             bool = false

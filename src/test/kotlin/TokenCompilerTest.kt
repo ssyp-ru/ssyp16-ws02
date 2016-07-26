@@ -47,6 +47,7 @@ class TokenCompilerTest {
         testClass(arrayOf(Token.READ, Token.WRITE, Token.WRITE), "g", "gg")
     }
 
+    // FIXME: допишите javadoc
     @Test fun testToZero() {
         testClass(arrayOf(Token.READ, Token.BEGIN, Token.MINUS, Token.END, Token.WRITE), "8", 0.toChar().toString())
     }

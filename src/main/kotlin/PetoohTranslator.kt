@@ -3,16 +3,15 @@ import java.io.FileNotFoundException
 import java.util.*
 
 /**
-Class PetoohTranslator has two methods: translateToToken and translateToKoko
+ * Class PetoohTranslator has two methods: translateToToken and translateToKoko
  */
-
 class PetoohTranslator {
 
     /**
-    Takes a file with Petooh code and returns array with Tokens.
-    If file not found, returns empty array.
-    @param fileKoko name of file
-    @returns array of Tokens
+     * Takes a file with Petooh code and returns array with Tokens.
+     * If file not found, returns empty array.
+     * @param fileKoko name of file
+     * @returns array of Tokens
      */
     fun translateToToken(fileKoko: String): Array<Token> { //Petooh -> Token
         val strWithTokens: String
@@ -42,6 +41,7 @@ class PetoohTranslator {
         return retArray//arr
     }
 
+    // FIXME: 1) в javadoc-подписях строки должны начинаться с '*' (см. как выше), 2) javadoc-подписи не отделяются от подписываемой функции или класса
     /**
     Takes an array of Tokens and writes PETOOH code to output file.
     If file not found, creates a new file.
@@ -51,7 +51,7 @@ class PetoohTranslator {
      */
 
     fun translateToKoko(arrToken: Array<Token>, output: String) { // Token -> Petooh
-        val endFile = File(output)//output File
+        val endFile = File(output) //output File
         val timeStr = StringBuilder()
 
         for (index in 0 until arrToken.size) {
@@ -68,7 +68,7 @@ class PetoohTranslator {
             }
         }
         val endStr = timeStr.toString()
-        endFile.writeText(endStr)// write if output file
+        endFile.writeText(endStr) // write if output file  // FIXME: чего? комментарии должны вносить понятность, а не выносить
     }
 
 }

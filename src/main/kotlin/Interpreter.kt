@@ -2,17 +2,17 @@ import java.io.InputStream
 import java.io.PrintStream
 
 class Interpreter(val read: InputStream = System.`in`, val write: PrintStream = System.out) {
-    private val const = 30000
-    private var array = ByteArray (const, { 0 })
-    private var current = 0
+    private val const = 30000 // FIXME: переименовать
+    private var array = ByteArray (const, { 0 }) // FIXME: перед конструктором нет пробела. Вы хотя бы Ctrl+Alt+L нажимайте перед коммитом
+    private var current = 0 // FIXME: какая разница между current и i? Что такое count? Переименовать, чтобы было понятно
     private var i = 0
     private var count = i
 
 
     /**
-     * This fun interprets tokens to Kotlin.
+     * This fun interprets tokens to Kotlin. // FIXME: это веселье (fun)! Начинать javadoc-подпись с глагола, как у вас ниже
      */
-
+    // FIXME: javadoc-подписи не отделяются пустой строкой от подписываемой функции; починить во всём файле
     fun interpret(arrayToken: Array<Token>) {
         while (i != arrayToken.size) {
             when (arrayToken[i]) {
@@ -30,7 +30,7 @@ class Interpreter(val read: InputStream = System.`in`, val write: PrintStream = 
     }
 
     /**
-     * Moves cursor left.
+     * Moves cursor left. // FIXME: to the left
      */
 
     fun left() {
@@ -52,7 +52,7 @@ class Interpreter(val read: InputStream = System.`in`, val write: PrintStream = 
     }
 
     /**
-     * Starts loop if array[current] = 0
+     * Starts loop if array[current] = 0 // FIXME: цикл начинается, если ячейка НЕ равна нулю. Найс комментируете.
      */
 
     private fun begin(arrayToken: Array<Token>) {
