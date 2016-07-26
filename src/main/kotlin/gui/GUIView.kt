@@ -1,6 +1,6 @@
 package gui
 
-import javafx.scene.control.Label
+import javafx.scene.control.Label // FIXME: эх, сейчас бы варнингов пооставлять в коммите
 import javafx.scene.control.TextArea
 import javafx.scene.control.TextField
 import javafx.scene.layout.HBox
@@ -15,7 +15,8 @@ import TokenCompiler
 import Interpreter
 import java.io.FileNotFoundException
 
-var lastTextArea = TextArea()
+// FIXME: никаких var, никаких глобальных переменных на уровне пакета; можно использовать lateinit
+var lastTextArea = TextArea()  // FIXME: переименовать. Какой ещё last?
 var workTextArea = TextArea()
 var inputTextArea = TextArea()
 var curFile = ""
@@ -25,7 +26,7 @@ val brainfuck = BrainfuckTranslator()
 val compile = TokenCompiler()
 val interp = Interpreter()
 
-//var createForm = Form()
+//var createForm = Form()  // FIXME: закомментированного кода быть не должно, на то тебе даны коммиты
 
 
 class GUIView : View() {
@@ -47,7 +48,7 @@ class GUIView : View() {
                 setPrefSize(100.0, 100.0)
                 textProperty()
             }
-        inputTextArea =textarea {
+        inputTextArea =textarea { // FIXME: код должен быть выровнен нормально (Ctrl+Alt+L)
             setPrefSize(100.0, 1.0)
         }
         }
@@ -56,9 +57,9 @@ class GUIView : View() {
 
 }
 
-class ButtonHBox : View() {
+class ButtonHBox : View() { // FIXME: текущий режим (BF или PETOOH) должен где-то отображаться
     override val root = HBox()
-    val cont = CodeController()
+    val cont = CodeController() // FIXME: переименовать
     var fragmentCompile = ClassName()
 
 
@@ -86,7 +87,7 @@ class ButtonHBox : View() {
 
                 }
             }
-            button("Save") {
+            button("Save") { // FIXME: валится с исключением, чини
                 setOnAction {
                     File(curFile).writeText(workTextArea.text)
                     lastTextArea.appendText("Saved!\n")
@@ -108,16 +109,16 @@ class ButtonHBox : View() {
             button("BF -> Petooh") {
                 setOnAction {
                     if(isPetooh)
-                        lastTextArea.appendText("Sorry, you have a PETOOH code \n")
-                    else{
+                        lastTextArea.appendText("Sorry, you have a PETOOH code \n") // FIXME: изменить на "You already have PETOOH code". Старайся делать сообщения положительными. А это вообще звучит как смертельный диагноз от врача.
+                    else{ // FIXME: код должен быть выровнен по-людски
                     File(curFile).writeText(workTextArea.text)
-                    val arrChoser = arrayOf(FileChooser.ExtensionFilter("Koko file", "*.koko"))
+                    val arrChoser = arrayOf(FileChooser.ExtensionFilter("Koko file", "*.koko")) // FIXME: какой ещё коко файл?
                     try {
                         val saveFile = chooseFile("Save file", arrChoser, mode = FileChooserMode.Save)
                         val fileName = saveFile[0].toString()
                         val tokens = brainfuck.translateToTokens(curFile)
                         petooh.translateToKoko(tokens, fileName)
-                    } catch(exc: IndexOutOfBoundsException) {
+                    } catch(exc: IndexOutOfBoundsException) { // FIXME: поймал исключение и забил на него?
                     }}
                 }
             }
@@ -155,11 +156,11 @@ class ButtonHBox : View() {
     }
 }
 
-class CodeController : Controller() {
+class CodeController : Controller() { // FIXME: вынести в отдельный файл
 
     fun getFile() {
 
-        val arrChoser = arrayOf(FileChooser.ExtensionFilter("Koko file", "*.koko"), FileChooser.ExtensionFilter("Brainfuck file", "*.bf"))
+        val arrChoser = arrayOf(FileChooser.ExtensionFilter("Koko file", "*.koko"), FileChooser.ExtensionFilter("Brainfuck file", "*.bf")) // FIXME: слишком длинная строка, разбей
         try {
             val files = chooseFile("Choose FILE", arrChoser, mode = FileChooserMode.Single)
             val fileName = files[0].toString()
@@ -179,7 +180,7 @@ class CodeController : Controller() {
                 workTextArea.appendText(listText[i])
                 workTextArea.appendText("\r\n")
             }
-        } catch (exc: IndexOutOfBoundsException) {
+        } catch (exc: IndexOutOfBoundsException) { // FIXME: забиваем на исключение?
         } catch (exc: FileNotFoundException) {
             lastTextArea.appendText("File not found \n")
         }
@@ -187,7 +188,7 @@ class CodeController : Controller() {
 
     fun saveFile() {
         try {
-            val arrChoser = arrayOf(FileChooser.ExtensionFilter("Koko file", "*.koko"), FileChooser.ExtensionFilter("Brainfuck file", "*.bf"))
+            val arrChoser = arrayOf(FileChooser.ExtensionFilter("Koko file", "*.koko"), FileChooser.ExtensionFilter("Brainfuck file", "*.bf")) // FIXME: слишком длинная строка
             val saveFile = chooseFile("Save file", arrChoser, mode = FileChooserMode.Save)
             val fileName = saveFile[0]
             curFile = fileName.toString()
@@ -197,7 +198,7 @@ class CodeController : Controller() {
 }
 
 
-class ClassName : Fragment() {
+class ClassName : Fragment() { // FIXME: вынести в отдельный файл; переименовать. ClassName? Серьёзно?
     override val root = VBox()
 
     init {
@@ -211,7 +212,7 @@ class ClassName : Fragment() {
                     if (isPetooh) {
                         val tokens = petooh.translateToToken(curFile)
                         compile.compile(tokens, className)
-                        lastTextArea.appendText(className + " Class compile! \n")
+                        lastTextArea.appendText(className + " Class compile! \n") // FIXME: продолжение фразы - с маленькой буквы; "compiled"
                     } else {
                         val tokens = brainfuck.translateToTokens(curFile)
                         compile.compile(tokens, className)
