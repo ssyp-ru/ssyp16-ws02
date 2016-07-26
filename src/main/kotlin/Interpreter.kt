@@ -1,4 +1,3 @@
-
 import java.io.InputStream
 import java.io.PrintStream
 import java.util.*
@@ -37,7 +36,7 @@ class Interpreter(val read: InputStream = System.`in`, val write: PrintStream = 
                 tokenString.startsWith("Morning", index) -> {
                     tokenStr.add(InstructionToken(Token.BEGINFUN))
                     tokenStr.add(StringToken(tokenString.substring(index + 1, tokenString.indexOf(" "))))
-                    index = tokenString.indexOf(" ") - 1
+                    index = tokenString.indexOf(" ")
                 }
                 tokenString.startsWith("Evening", index) -> tokenStr.add(InstructionToken(Token.ENDFUN))
             }

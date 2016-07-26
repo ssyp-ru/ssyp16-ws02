@@ -1,4 +1,3 @@
-
 class PetoohFunction(val name: String, val params: Int, val code: Array<Token>) {
     fun run(arr: Array<Byte>, cur: Int): Byte {
         val interpreter = Interpreter()
