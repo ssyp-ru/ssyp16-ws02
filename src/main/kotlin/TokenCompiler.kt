@@ -1,7 +1,8 @@
-
+import jdk.internal.org.objectweb.asm.util.ASMifier
 import org.objectweb.asm.ClassWriter
 import org.objectweb.asm.Label
 import org.objectweb.asm.MethodVisitor
+import org.objectweb.asm.Opcodes
 import org.objectweb.asm.Opcodes.*
 import java.io.File
 import java.util.*
@@ -14,43 +15,106 @@ class TokenCompiler {
      */
     private val beginLabelStack = Stack<Label>()
     private val endLabelStack = Stack<Label>()
-    private var tokens = Array(0, { Token.PLUS })
-    fun compile(tokens: Array<Token>, output: String): ByteArray? {
-        if(!SourceVersion.isIdentifier(output) || SourceVersion.isKeyword(output)){
+    private val cw = ClassWriter(ClassWriter.COMPUTE_MAXS)
+
+    fun compile(tokens: Array<NewToken>, className: String): ByteArray? {
+        if (!SourceVersion.isIdentifier(className) || SourceVersion.isKeyword(className)) {
             println("Your name of class is invalid.")
             return null
         }
-        this.tokens = tokens
-        val writer = File(output + ".class")
-        val cw = ClassWriter(0)
-        cw.visit(V1_7, ACC_PUBLIC, output, null, "java/lang/Object", null)
-        val vm = cw.visitMethod(ACC_PUBLIC + ACC_STATIC, "main", "([Ljava/lang/String;)V", null, null)
-        with(vm) {
+        val writer = File(className + ".class")
+        val map = HashMap<String, String>()
+        cw.visit(V1_7, ACC_PUBLIC, className, null, "java/lang/Object", null)
+
+        val vmMain = cw.visitMethod(ACC_PUBLIC + ACC_STATIC, "main", "([Ljava/lang/String;)V", null, null)
+        with(vmMain) {
             visitCode()
-            //Make array[30000]
+            // Make array[30000]
             visitIntInsn(SIPUSH, 30000)
             visitIntInsn(NEWARRAY, T_CHAR)
             visitVarInsn(ASTORE, 0)
-            //Make cursor
+            // Make cursor
             visitInsn(ICONST_0)
             visitVarInsn(ISTORE, 1)
-            for (i in 0..tokens.size - 1) {
-                when (tokens[i]) {
-                    Token.PLUS -> sumCompile()
-                    Token.MINUS -> subCompile()
-                    Token.LEFT -> leftCompile()
-                    Token.RIGHT -> rightCompile()
-                    Token.WRITE -> writeCompile()
-                    Token.READ -> readCompile()
-                    Token.BEGIN -> beginCompile()
-                    Token.END -> endCompile()
-
+            var isFun = false
+            var isFirst = true
+            for (token in tokens) {
+                if (!isFun && (token is InstructionToken)) {
+                    when (token.instr) {
+                        Token.PLUS -> sumCompile()
+                        Token.MINUS -> subCompile()
+                        Token.LEFT -> leftCompile()
+                        Token.RIGHT -> rightCompile()
+                        Token.WRITE -> writeCompile()
+                        Token.READ -> readCompile()
+                        Token.BEGIN -> beginCompile()
+                        Token.END -> endCompile()
+                        else -> {
+                        }
+                    }
+                } else if (token is FunDefToken) {
+                    isFun = true
+                    map.put(token.name, signatureBuild(token.paramsCount))
+                } else if (!isFun && (token is FunCallToken)) {
+                    visitFrame(F_FULL, 2, arrayOf("[C", INTEGER), 0, null)
+                    visitMethodInsn(INVOKESTATIC, className, token.name, map.get(token.name), false)
+                    //visitFrame(F_FULL, 2, arrayOf("[C", INTEGER), 0, null)
+                } else if ((token is InstructionToken) && (token.instr == Token.ENDFUN)) {
+                    isFun = false
                 }
+
             }
             visitInsn(RETURN)
-            visitMaxs(4, 2)
+            visitMaxs(5, 2)
             visitEnd()
         }
+
+        var vmFun: MethodVisitor? = null
+        var isFun = false
+        for (token in tokens) {
+            if (token is FunDefToken) {
+                vmFun = cw.visitMethod(ACC_PUBLIC + ACC_STATIC, token.name, map[token.name], null, null)
+                vmFun.visitCode()
+                for (i in token.paramsCount - 1 downTo 0) {
+                    vmFun.visitVarInsn(ILOAD, i)
+                    vmFun.visitVarInsn(ISTORE, i + 2)
+                }
+                // Make array[30000]
+                vmFun.visitIntInsn(SIPUSH, 30000)
+                vmFun.visitIntInsn(NEWARRAY, T_CHAR)
+                vmFun.visitVarInsn(ASTORE, 0)
+                for (i in token.paramsCount - 1 downTo 0) {
+                    vmFun.visitVarInsn(ALOAD, 0)
+                    vmFun.visitIntInsn(SIPUSH, i)
+                    vmFun.visitVarInsn(ILOAD, i + 2)
+                    vmFun.visitInsn(CASTORE)
+                }
+                // Make cursor
+                vmFun.visitIntInsn(SIPUSH, token.paramsCount)
+                vmFun.visitVarInsn(ISTORE, 1)
+                isFun = true
+
+            }
+            if (isFun && (token is InstructionToken) && (vmFun != null)) {
+                when (token.instr) {
+                    Token.PLUS -> vmFun.sumCompile()
+                    Token.MINUS -> vmFun.subCompile()
+                    Token.LEFT -> vmFun.leftCompile()
+                    Token.RIGHT -> vmFun.rightCompile()
+                    Token.WRITE -> vmFun.writeCompile()
+                    Token.READ -> vmFun.readCompile()
+                    Token.BEGIN -> vmFun.beginCompile()
+                    Token.END -> vmFun.endCompile()
+                    Token.ENDFUN -> {
+                        isFun = false
+                        vmFun.funEndingCompile()
+                    }
+                    else -> {
+                    }
+                }
+            }
+        }
+
         cw.visitEnd()
         writer.writeBytes(cw.toByteArray())
         return cw.toByteArray()
@@ -166,5 +230,24 @@ class TokenCompiler {
         visitFrame(F_FULL, 2, arrayOf("[C", INTEGER), 0, null)
         beginLabelStack.pop()
         endLabelStack.pop()
+    }
+
+    private fun MethodVisitor.signatureBuild(paramsCount: Int): String {
+        val sb = StringBuilder()
+        sb.append("(")
+        for (i in 1..paramsCount)
+            sb.append("C")
+        sb.append(")I")
+        return sb.toString()
+    }
+
+    private fun MethodVisitor.funEndingCompile() {
+        visitVarInsn(ALOAD, 0)
+        visitVarInsn(ILOAD, 1)
+        visitInsn(CALOAD)
+        visitFrame(F_FULL, 2, arrayOf("[C", INTEGER), 1, arrayOf(INTEGER))
+        visitInsn(IRETURN)
+        visitMaxs(10, 10)
+        visitEnd()
     }
 }

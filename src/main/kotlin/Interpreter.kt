@@ -35,7 +35,7 @@ class Interpreter(val read: InputStream = System.`in`, val write: PrintStream = 
                 tokenString.startsWith("Ke", index) -> tokenStr.add(InstructionToken(Token.KE))
                 tokenString.startsWith("Morning", index) -> {
                     tokenStr.add(InstructionToken(Token.BEGINFUN))
-                    tokenStr.add(StringToken(tokenString.substring(index + 1, tokenString.indexOf(" "))))
+                    tokenStr.add(FunDefToken(tokenString.substring(index + 1, tokenString.indexOf(" ")), 3))
                     index = tokenString.indexOf(" ")
                 }
                 tokenString.startsWith("Evening", index) -> tokenStr.add(InstructionToken(Token.ENDFUN))

@@ -1,4 +1,4 @@
-
+/*
 class CLI {
     private val brainfuckTranslator = BrainfuckTranslator()
     private val petoohTranslator = PetoohTranslator()
@@ -117,7 +117,7 @@ class CLI {
 
     private fun compiler(isPetooh: Boolean, fileName: String): Boolean {
         val shouldAskAgain: Boolean
-        val tokens: Array<Token>
+        val tokens: Array<NewToken>
         val code: String
         if (!isPetooh) {
             tokens = brainfuckTranslator.translateToTokens(fileName)
@@ -178,3 +178,4 @@ class CLI {
 
 }
 
+*/

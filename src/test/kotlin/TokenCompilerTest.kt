@@ -3,7 +3,7 @@ import org.junit.Test
 import java.io.File
 
 class TokenCompilerTest {
-
+/*
     /**
      * Tests simple read and write
      */
@@ -68,5 +68,12 @@ class TokenCompilerTest {
         val testFile = File("test.txt")
         testFile.writeText("+>,+>,<[<+>>[<<->>->+>]>[<<+>>[<+>-]]<<<<[<]>>-]<-.")
         testClass(BrainfuckTranslator().translateToTokens("test.txt"), 6.toChar().toString() + 2.toChar().toString(), 3.toChar().toString())
+    }*/
+
+    @Test fun s1mpleFunction() {
+        val testFile = File("test.txt")
+        testFile.writeText("")
+        testClass(arrayOf(FunDefToken("myFunction", 3), InstructionToken(Token.PLUS), InstructionToken(Token.ENDFUN), FunCallToken("myFunction")), "", "")
+//        testClass(arrayOf(InstructionToken(Token.PLUS)), "", "")
     }
 }
