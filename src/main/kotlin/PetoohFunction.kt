@@ -5,7 +5,7 @@ class PetoohFunction(val name: String, val params: Int, val code: Array<Token>) 
         for(i in 0..params - 1){
             arrayOfParams[i] = arr[cur - 1 - i]
         }
-        interpreter.pushValues(arrayOfParams)
+        //interpreter.pushValues(arrayOfParams)
         // TODO: fix below
 //        interpreter.interpret(code)
 //        return interpreter.getReturnValue()

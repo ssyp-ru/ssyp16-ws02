@@ -46,7 +46,7 @@ class InterpreterTest {
         assertEquals("Hello World!\n", write.sb.toString())
     }
 
-    *@Test fun emptyFileTest(){
+    @Test fun emptyFileTest(){
         val bf = BrainfuckTranslator()
         val testFile = File("test.txt")
         testFile.writeText("")

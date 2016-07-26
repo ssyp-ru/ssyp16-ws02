@@ -165,7 +165,7 @@ class CLI {
 
         val bool: Boolean
         if (validator.check(Tokens)) {
-            interpreter.interpret("") // TODO: FIX THIS, WON'T WORK
+         //   interpreter.interpret("") // TODO: FIX THIS, WON'T WORK
             bool = false
         } else {
             println("Syntax error in $code code")
