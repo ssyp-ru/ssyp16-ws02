@@ -2,7 +2,7 @@ package gui
 
 import tornadofx.App
 
-class GUIApp: App() {
+class GUIApp : App() {
     override val primaryView=GUIView::class
 
 }

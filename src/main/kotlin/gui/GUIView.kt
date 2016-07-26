@@ -13,9 +13,11 @@ import PetoohTranslator
 import BrainfuckTranslator
 import TokenCompiler
 import Interpreter
+import java.io.FileNotFoundException
 
 var lastTextArea = TextArea()
 var workTextArea = TextArea()
+var inputTextArea = TextArea()
 var curFile = ""
 var isPetooh = true
 val petooh = PetoohTranslator()
@@ -45,8 +47,11 @@ class GUIView : View() {
                 setPrefSize(100.0, 100.0)
                 textProperty()
             }
+        inputTextArea =textarea {
+            setPrefSize(100.0, 1.0)
         }
-        root += TextField()
+        }
+
     }
 
 }
@@ -65,7 +70,7 @@ class ButtonHBox : View() {
                     workTextArea.clear()
                     isPetooh = false
                     lastTextArea.appendText("Create BF file \n")
-                }//createTempDir()
+                }
 
             }
             button("Create PETOOH file") {
@@ -73,7 +78,7 @@ class ButtonHBox : View() {
                     workTextArea.clear()
                     isPetooh = true
                     lastTextArea.appendText("Create PETOOH file \n")
-                }//createTempDir()
+                }
             }
             button("Open file") {
                 setOnAction {
@@ -84,7 +89,7 @@ class ButtonHBox : View() {
             button("Save") {
                 setOnAction {
                     File(curFile).writeText(workTextArea.text)
-                    lastTextArea.appendText("Save complate! \n")
+                    lastTextArea.appendText("Saved!\n")
                 }
             }
             hbox() {
@@ -102,24 +107,45 @@ class ButtonHBox : View() {
             }
             button("BF -> Petooh") {
                 setOnAction {
-                  File(curFile).writeText(workTextArea.text)
-                    val fileBF = cont.saveFile()
-
+                    if(isPetooh)
+                        lastTextArea.appendText("Sorry, you have a PETOOH code \n")
+                    else{
+                    File(curFile).writeText(workTextArea.text)
+                    val arrChoser = arrayOf(FileChooser.ExtensionFilter("Koko file", "*.koko"))
+                    try {
+                        val saveFile = chooseFile("Save file", arrChoser, mode = FileChooserMode.Save)
+                        val fileName = saveFile[0].toString()
+                        val tokens = brainfuck.translateToTokens(curFile)
+                        petooh.translateToKoko(tokens, fileName)
+                    } catch(exc: IndexOutOfBoundsException) {
+                    }}
                 }
             }
             button("Petooh -> BF") {
                 setOnAction {
+                    if(isPetooh){
                     File(curFile).writeText(workTextArea.text)
-                    val fileBF = cont.saveFile()
+                    val arrChoser = arrayOf(FileChooser.ExtensionFilter("Brainfuck file", "*.bf"))
+                    try {
+                        val saveFile = chooseFile("Save file", arrChoser, mode = FileChooserMode.Save)
+                        val fileName = saveFile[0].toString()
+                        val tokens = petooh.translateToToken(curFile)
+                        brainfuck.translateToBrainfuck(tokens, fileName)
+                    } catch(exc: IndexOutOfBoundsException) {
+                    }}
+                    else
+                        lastTextArea.appendText("Sorry, you have a BF code \n")
+
+
                 }
             }
             button("Run") {
                 setOnAction {
-                    if(isPetooh){
+                    val interp = Interpreter()
+                    if (isPetooh) {
                         val tokens = petooh.translateToToken(curFile)
                         interp.interpret(tokens)
-                    }
-                    else {
+                    } else {
                         val tokens = brainfuck.translateToTokens(curFile)
                         interp.interpret(tokens)
                     }
@@ -130,25 +156,32 @@ class ButtonHBox : View() {
 }
 
 class CodeController : Controller() {
-    
+
     fun getFile() {
 
         val arrChoser = arrayOf(FileChooser.ExtensionFilter("Koko file", "*.koko"), FileChooser.ExtensionFilter("Brainfuck file", "*.bf"))
         try {
             val files = chooseFile("Choose FILE", arrChoser, mode = FileChooserMode.Single)
-            val fileName = files[0]
-            if (fileName.endsWith(".koko"))
+            val fileName = files[0].toString()
+            var file = files[0]
+            curFile = fileName
+            if (fileName.endsWith(".koko")) {
                 isPetooh = true
-            else
+                lastTextArea.appendText("PETOOH file \n")
+            } else {
                 isPetooh = false
+                lastTextArea.appendText("BF file \n")
+            }
 
             workTextArea.clear()
-            val listText = fileName.readLines()
+            val listText = file.readLines()
             for (i in 0 until listText.size) {
                 workTextArea.appendText(listText[i])
                 workTextArea.appendText("\r\n")
             }
         } catch (exc: IndexOutOfBoundsException) {
+        } catch (exc: FileNotFoundException) {
+            lastTextArea.appendText("File not found \n")
         }
     }
 
