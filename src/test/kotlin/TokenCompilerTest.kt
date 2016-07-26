@@ -73,7 +73,7 @@ class TokenCompilerTest {
     @Test fun s1mpleFunction() {
         val testFile = File("test.txt")
         testFile.writeText("")
-        testClass(arrayOf(FunDefToken("myFunction", 3), InstructionToken(Token.PLUS), InstructionToken(Token.ENDFUN), FunCallToken("myFunction")), "", "")
+        testClass(arrayOf(FunDefToken("myFunction", 62), InstructionToken(Token.PLUS), InstructionToken(Token.ENDFUN), FunCallToken("myFunction")), "", "")
 //        testClass(arrayOf(InstructionToken(Token.PLUS)), "", "")
     }
 }

@@ -23,9 +23,10 @@ class TokenCompiler {
             return null
         }
         val writer = File(className + ".class")
-        val map = HashMap<String, String>()
+        val map = HashMap<String, Pair<String, Int>>()
         cw.visit(V1_7, ACC_PUBLIC, className, null, "java/lang/Object", null)
 
+        // Write main method
         val vmMain = cw.visitMethod(ACC_PUBLIC + ACC_STATIC, "main", "([Ljava/lang/String;)V", null, null)
         with(vmMain) {
             visitCode()
@@ -54,10 +55,59 @@ class TokenCompiler {
                     }
                 } else if (token is FunDefToken) {
                     isFun = true
-                    map.put(token.name, signatureBuild(token.paramsCount))
+                    map.put(token.name, Pair(signatureBuild(token.paramsCount), token.paramsCount))
                 } else if (!isFun && (token is FunCallToken)) {
-                    visitFrame(F_FULL, 2, arrayOf("[C", INTEGER), 0, null)
-                    visitMethodInsn(INVOKESTATIC, className, token.name, map.get(token.name), false)
+                    var stackTypes = LinkedList<Any>()
+                    stackTypes.addLast("[C")
+                    stackTypes.addLast(INTEGER)
+                    visitIntInsn(SIPUSH, map[token.name]!!.second)
+                    visitVarInsn(NEWARRAY, T_CHAR)
+                    visitVarInsn(ASTORE, 2)
+                    for (i in 1..map[token.name]!!.second) {
+                        visitIntInsn(ILOAD, 1)
+                        visitIntInsn(SIPUSH, i)
+                        visitInsn(ISUB)
+                        visitInsn(DUP)
+                        val label = Label()
+                        visitJumpInsn(IFGE, label)
+                        visitIntInsn(SIPUSH, 30000)
+                        visitInsn(IADD)
+                        visitLabel(label)
+                        visitFrame(F_FULL, 3, arrayOf("[C", INTEGER, "[C"), 1, arrayOf(INTEGER))
+
+                        visitVarInsn(ALOAD, 2)
+                        visitInsn(SWAP)
+                        visitIntInsn(SIPUSH, i - 1)
+                        visitInsn(SWAP)
+                        visitVarInsn(ALOAD, 0)
+                        visitInsn(SWAP)
+                        visitInsn(CALOAD)
+                        visitInsn(CASTORE)
+
+/*                        visitVarInsn(ALOAD, 2)
+                        visitIntInsn(SIPUSH, i - 1)
+                        visitVarInsn(ALOAD, 0)
+                        visitIntInsn(ILOAD, 1)
+                        visitIntInsn(SIPUSH, i)
+                        visitInsn(ISUB)
+                        visitInsn(DUP)
+                        val label = Label()
+                        visitJumpInsn(IFGE, label)
+                        visitIntInsn(SIPUSH, 30000)
+                        visitInsn(IADD)
+                        visitLabel(label)
+                        visitFrame(F_FULL, 3, arrayOf("[C", INTEGER, "[C"), 5, arrayOf("[C", INTEGER, "[C", INTEGER, INTEGER))
+                        visitInsn(CALOAD)
+                        visitInsn(CASTORE)
+*/
+
+                    }
+                    for(i in 1..map[token.name]!!.second){
+                        visitVarInsn(ALOAD, 2)
+                        visitIntInsn(SIPUSH, i - 1)
+                        visitInsn(CALOAD)
+                    }
+                    visitMethodInsn(INVOKESTATIC, className, token.name, map[token.name]?.first, false)
                     //visitFrame(F_FULL, 2, arrayOf("[C", INTEGER), 0, null)
                 } else if ((token is InstructionToken) && (token.instr == Token.ENDFUN)) {
                     isFun = false
@@ -73,7 +123,7 @@ class TokenCompiler {
         var isFun = false
         for (token in tokens) {
             if (token is FunDefToken) {
-                vmFun = cw.visitMethod(ACC_PUBLIC + ACC_STATIC, token.name, map[token.name], null, null)
+                vmFun = cw.visitMethod(ACC_PUBLIC + ACC_STATIC, token.name, map[token.name]?.first, null, null)
                 vmFun.visitCode()
                 for (i in token.paramsCount - 1 downTo 0) {
                     vmFun.visitVarInsn(ILOAD, i)
@@ -153,8 +203,8 @@ class TokenCompiler {
      */
     private fun MethodVisitor.leftCompile() {
         visitVarInsn(ILOAD, 1)
-        visitInsn(ICONST_M1)
-        visitInsn(IADD)
+        visitInsn(ICONST_1)
+        visitInsn(ISUB)
         visitInsn(DUP)
         val label = Label()
         visitJumpInsn(IFGE, label)
@@ -237,7 +287,7 @@ class TokenCompiler {
         sb.append("(")
         for (i in 1..paramsCount)
             sb.append("C")
-        sb.append(")I")
+        sb.append(")C")
         return sb.toString()
     }
 
