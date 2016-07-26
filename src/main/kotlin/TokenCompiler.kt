@@ -38,7 +38,6 @@ class TokenCompiler {
             visitInsn(ICONST_0)
             visitVarInsn(ISTORE, 1)
             var isFun = false
-            var isFirst = true
             for (token in tokens) {
                 if (!isFun && (token is InstructionToken)) {
                     when (token.instr) {
@@ -83,24 +82,6 @@ class TokenCompiler {
                         visitInsn(SWAP)
                         visitInsn(CALOAD)
                         visitInsn(CASTORE)
-
-/*                        visitVarInsn(ALOAD, 2)
-                        visitIntInsn(SIPUSH, i - 1)
-                        visitVarInsn(ALOAD, 0)
-                        visitIntInsn(ILOAD, 1)
-                        visitIntInsn(SIPUSH, i)
-                        visitInsn(ISUB)
-                        visitInsn(DUP)
-                        val label = Label()
-                        visitJumpInsn(IFGE, label)
-                        visitIntInsn(SIPUSH, 30000)
-                        visitInsn(IADD)
-                        visitLabel(label)
-                        visitFrame(F_FULL, 3, arrayOf("[C", INTEGER, "[C"), 5, arrayOf("[C", INTEGER, "[C", INTEGER, INTEGER))
-                        visitInsn(CALOAD)
-                        visitInsn(CASTORE)
-*/
-
                     }
                     for(i in 1..map[token.name]!!.second){
                         visitVarInsn(ALOAD, 2)
@@ -163,6 +144,7 @@ class TokenCompiler {
                     }
                 }
             }
+
         }
 
         cw.visitEnd()
