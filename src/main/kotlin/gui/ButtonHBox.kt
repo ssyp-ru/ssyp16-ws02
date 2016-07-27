@@ -206,7 +206,7 @@ class ButtonHBox(
                 val fileName = saveFile[0].toString()
                 val tokens = CoreUtils.petooh.translateToToken(curFile)
                 CoreUtils.brainfuck.translateToBrainfuck(tokens, fileName)
-            } catch(exc: IndexOutOfBoundsException) {
+            } catch(exc: IndexOutOfBoundsException) { // FIXME: не надо забивать на исключения. Или обрабатывай, или убери
             } catch (exc: PrivilegedActionException) {
             } catch(exc: FileNotFoundException) {
             }
@@ -224,7 +224,7 @@ class ButtonHBox(
         val interp = Interpreter(read = input, write = output)
         if (isPetooh) {
             val tokens = CoreUtils.petooh.translateToToken(curFile)
-            interp.interpret(tokens)
+            interp.interpret(tokens) // FIXME: вынести из if-а эту строку, val tokens присваивать через тернарник
         } else {
             val tokens = CoreUtils.brainfuck.translateToTokens(curFile)
             interp.interpret(tokens)

@@ -18,7 +18,7 @@ import tornadofx.*
  */
 class MainView : View() {
     override val root = VBox()
-    val codeControl: CodeController by inject()
+    val codeControl: CodeController by inject() // FIXME: не используется же. Или удали, или используй
     val workTextArea = TextArea()
     val consoleTextArea = TextArea()
     val inputTextField = TextField()
@@ -60,7 +60,7 @@ class MainView : View() {
 
 }
 
-class ClassNameDialog(private val doCompile: (String) -> Unit) : Fragment() {
+class ClassNameDialog(private val doCompile: (String) -> Unit) : Fragment() { // FIXME: вынеси в отдельный файл
     override val root = VBox()
 
     init {
