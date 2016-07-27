@@ -54,7 +54,6 @@ class InterpreterTest {
         val arrToken = bf.translateToTokens("test.txt")
         val write = MyPrintStream()}
 
-    // TODO: uncomment, edit, test
     @Test fun emptyFileTest() {
         val bf = BrainfuckTranslator()
         val testFile = File("test.txt")
@@ -77,7 +76,8 @@ class InterpreterTest {
         //val arrayToken = ArrayList<NewToken>()
         var stringWhithKoKoKoo = "Morning Hellow"
         //stringWhithKoKoKoo += petoohTranslator.translateToKoko(bfTranslator.translateToTokens("kukarek.txt"))
-        stringWhithKoKoKoo +=  "Evening PAR Hellow PAR Hellow"
+        stringWhithKoKoKoo += " KoKoKo"
+        stringWhithKoKoKoo +=  "Evening PAR Hellow PAR Hellow Kukarek"
         val array = pars.petoohTranslator(stringWhithKoKoKoo) //pars.petoohTranslator("Morning Hellow kudahKudahkudahKudahkudahKudahkudahKokukarekkokokukarekKoKoKudahkudahKokukarekKudahkudahKokukarekKudahkudahKokukarekkukarekKudahkudahKudahkudahKudahkudahKudahkudahKudah Evening PAR Hellow PAR Hellow ")
         inter.interpret(array)
     }
