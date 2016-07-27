@@ -47,23 +47,34 @@ class TokenCompilerTest {
         testClass(arrayOf(Token.READ, Token.WRITE, Token.WRITE), "g", "gg")
     }
 
-    // FIXME: допишите javadoc
+    /**
+     * Tests simple loop
+     */
     @Test fun testToZero() {
         testClass(arrayOf(Token.READ, Token.BEGIN, Token.MINUS, Token.END, Token.WRITE), "8", 0.toChar().toString())
     }
 
+    /**
+     * Tests factorial
+     */
     @Test fun testFactorial() {
         val testFile = File("test.txt")
         testFile.writeText(",>>>>+<<<<[->+[->+>+<<]>[-<+>]>[->[->+>+<<]>[-<+>]<<]>[-]>>[-<<+>>]<<<<<<]>>>>.")
         testClass(BrainfuckTranslator().translateToTokens("test.txt"), 5.toChar().toString(), 120.toChar().toString())
     }
 
+    /**
+     * Tests writing "Hello World!"
+     */
     @Test fun testHelloWorld() {
         val testFile = File("test.txt")
         testFile.writeText("++++++++++[>+++++++>++++++++++>+++>+<<<<-]>++.>+.+++++++..+++.>++.<<+++++++++++++++.>.+++.------.--------.>+.>.")
         testClass(BrainfuckTranslator().translateToTokens("test.txt"), "", "Hello World!\n")
     }
 
+    /**
+     * Tests div
+     */
     @Test fun testDiv() {
         val testFile = File("test.txt")
         testFile.writeText("+>,+>,<[<+>>[<<->>->+>]>[<<+>>[<+>-]]<<<<[<]>>-]<-.")

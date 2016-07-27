@@ -2,86 +2,81 @@ import java.io.InputStream
 import java.io.PrintStream
 
 class Interpreter(val read: InputStream = System.`in`, val write: PrintStream = System.out) {
-    private val const = 30000 // FIXME: переименовать
-    private var array = ByteArray (const, { 0 }) // FIXME: перед конструктором нет пробела. Вы хотя бы Ctrl+Alt+L нажимайте перед коммитом
-    private var current = 0 // FIXME: какая разница между current и i? Что такое count? Переименовать, чтобы было понятно
-    private var i = 0
-    private var count = i
+    private val memorySize = 30000
+    private var memory = ByteArray (memorySize, { 0 })
+    private var curMemoryIndex = 0
+    private var tokenIndex = 0
+    private var beginEndCounter = tokenIndex
 
 
     /**
-     * This fun interprets tokens to Kotlin. // FIXME: это веселье (fun)! Начинать javadoc-подпись с глагола, как у вас ниже
+     * Interprets tokens to Kotlin.
      */
-    // FIXME: javadoc-подписи не отделяются пустой строкой от подписываемой функции; починить во всём файле
     fun interpret(arrayToken: Array<Token>) {
-        while (i != arrayToken.size) {
-            when (arrayToken[i]) {
+        while (tokenIndex != arrayToken.size) {
+            when (arrayToken[tokenIndex]) {
                 Token.LEFT -> left()
                 Token.RIGHT -> right()
-                Token.MINUS -> array[current]--
-                Token.PLUS -> array[current]++
-                Token.READ -> array[current] = read.read().toByte()
-                Token.WRITE -> write.println(array[current].toChar())
+                Token.MINUS -> memory[curMemoryIndex]--
+                Token.PLUS -> memory[curMemoryIndex]++
+                Token.READ -> memory[curMemoryIndex] = read.read().toByte()
+                Token.WRITE -> write.println(memory[curMemoryIndex].toChar())
                 Token.BEGIN -> begin(arrayToken)
                 Token.END -> end(arrayToken)
             }
-            i++
+            tokenIndex++
         }
     }
 
     /**
-     * Moves cursor left. // FIXME: to the left
+     * Moves cursor to the left.
      */
-
     fun left() {
-        if (current != 0) {
-            current--
+        if (curMemoryIndex != 0) {
+            curMemoryIndex--
         } else
-            current = const - 1
+            curMemoryIndex = memorySize - 1
     }
 
     /**
-     * Moves cursor right
+     * Moves cursor to the right
      */
-
     fun right() {
-        if (current != const - 1) {
-            current++
+        if (curMemoryIndex != memorySize - 1) {
+            curMemoryIndex++
         } else
-            current = 0
+            curMemoryIndex = 0
     }
 
     /**
-     * Starts loop if array[current] = 0 // FIXME: цикл начинается, если ячейка НЕ равна нулю. Найс комментируете.
+     * Starts loop if array[curMemoryIndex] != 0
      */
-
     private fun begin(arrayToken: Array<Token>) {
-        if (array[current].toInt() == 0) {
-            while (!((arrayToken[i] == Token.END) && (count == 0))) {
-                when{
-                    arrayToken[i] == Token.END -> count--
-                    arrayToken[i] == Token.BEGIN -> count++
+        if (memory[curMemoryIndex].toInt() == 0) {
+            while (!((arrayToken[tokenIndex] == Token.END) && (beginEndCounter == 0))) {
+                when {
+                    arrayToken[tokenIndex] == Token.END -> beginEndCounter--
+                    arrayToken[tokenIndex] == Token.BEGIN -> beginEndCounter++
                 }
-                if ((arrayToken[i] == Token.END) && (count == 0)) break
-                i++
+                if ((arrayToken[tokenIndex] == Token.END) && (beginEndCounter == 0)) break
+                tokenIndex++
 
             }
         }
     }
 
     /**
-     * Ends loop if array[current] = 0
+     * Ends loop if array[curMemoryIndex] = 0
      */
-
     private fun end(arrayToken: Array<Token>) {
-        if (array[current].toInt() != 0) {
-            while (!((arrayToken[i] == Token.BEGIN) && (count == 0))) {
-                when{
-                    arrayToken[i] == Token.END -> count++
-                    arrayToken[i] == Token.BEGIN -> count--
+        if (memory[curMemoryIndex].toInt() != 0) {
+            while (!((arrayToken[tokenIndex] == Token.BEGIN) && (beginEndCounter == 0))) {
+                when {
+                    arrayToken[tokenIndex] == Token.END -> beginEndCounter++
+                    arrayToken[tokenIndex] == Token.BEGIN -> beginEndCounter--
                 }
-                if ((arrayToken[i] == Token.BEGIN) && (count == 0)) break
-                i--
+                if ((arrayToken[tokenIndex] == Token.BEGIN) && (beginEndCounter == 0)) break
+                tokenIndex--
 
             }
         }

@@ -2,9 +2,9 @@ import org.junit.Test
 import java.io.File
 import kotlin.test.assertEquals
 
-class InterpreterTest { // FIXME: почему у вас тесты закомментированы? Не палитесь, что там всё сломано? Раскомментировать или удалить
+class InterpreterTest {
 
-/*
+
     @Test fun multiplyingTest() {
         val bf = BrainfuckTranslator()
         val testFile = File("test.txt")
@@ -44,13 +44,6 @@ class InterpreterTest { // FIXME: почему у вас тесты закомм
         interp.interpret(arrToken)
         assertEquals("Hello World!\n", write.sb.toString())
     }
-
-    *@Test fun emptyFileTest(){
-        val bf = BrainfuckTranslator()
-        val testFile = File("test.txt")
-        testFile.writeText("")
-        val arrToken = bf.translateToTokens("test.txt")
-        val write = MyPrintStream()}*/
 
     @Test fun emptyFileTest() {
         val bf = BrainfuckTranslator()
