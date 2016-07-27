@@ -16,6 +16,9 @@ class TokenCompiler {
     private val cw = ClassWriter(ClassWriter.COMPUTE_MAXS)
     private val functionsInfo = HashMap<String, Pair<String, Int>>()
 
+    /**
+     * Compiles code in 3 stages
+     */
     fun compile(tokens: Array<NewToken>, className: String): ByteArray? {
         if (!SourceVersion.isIdentifier(className) || SourceVersion.isKeyword(className)) {
             println("Your name of class is invalid.")
@@ -24,7 +27,7 @@ class TokenCompiler {
         val writer = File(className + ".class")
         cw.visit(V1_7, ACC_PUBLIC, className, null, "java/lang/Object", null)
 
-        // Write main method
+        // Writes main method
         val vmMain = cw.visitMethod(ACC_PUBLIC + ACC_STATIC, "main", "([Ljava/lang/String;)V", null, null)
         with(vmMain) {
             visitCode()
@@ -123,7 +126,7 @@ class TokenCompiler {
     }
 
     /**
-     * Add 1 to current element of array
+     * Adds 1 to current element of array
      */
     private fun MethodVisitor.sumCompile() {
         visitVarInsn(ALOAD, 0)
@@ -137,7 +140,7 @@ class TokenCompiler {
     }
 
     /**
-     * Sub 1 from current element of array
+     * Subs 1 from current element of array
      */
     private fun MethodVisitor.subCompile() {
         visitVarInsn(ALOAD, 0)
@@ -151,7 +154,7 @@ class TokenCompiler {
     }
 
     /**
-     * Move cursor left
+     * Moves cursor to the left
      */
     private fun MethodVisitor.leftCompile() {
         visitVarInsn(ILOAD, 1)
@@ -168,7 +171,7 @@ class TokenCompiler {
     }
 
     /**
-     * Move cursor right
+     * Moves cursor to the right
      */
     private fun MethodVisitor.rightCompile() {
         visitVarInsn(ILOAD, 1)
@@ -186,7 +189,7 @@ class TokenCompiler {
     }
 
     /**
-     * Read byte from input
+     * Reads byte from input
      */
     private fun MethodVisitor.readCompile() {
         visitVarInsn(ALOAD, 0)
@@ -198,7 +201,7 @@ class TokenCompiler {
     }
 
     /**
-     * Write char to output
+     * Writes char to output
      */
     private fun MethodVisitor.writeCompile() {
         visitFieldInsn(GETSTATIC, "java/lang/System", "out", "Ljava/io/PrintStream;")
@@ -210,7 +213,7 @@ class TokenCompiler {
     }
 
     /**
-     * Compiles beginning of loop and maybe going to end
+     * Compiles beginning of loop
      */
     private fun MethodVisitor.beginCompile() {
         beginLabelStack.push(Label())
@@ -224,7 +227,7 @@ class TokenCompiler {
     }
 
     /**
-     * Compiles exit from loop or going to beginningof loop
+     * Compiles exit from loop
      */
     private fun MethodVisitor.endCompile() {
         visitJumpInsn(GOTO, beginLabelStack.lastElement())
@@ -234,6 +237,11 @@ class TokenCompiler {
         endLabelStack.pop()
     }
 
+    /**
+     * Makes fun description
+     * @param paramsCount Number of parameters
+     * @return description of function
+     */
     private fun MethodVisitor.signatureBuild(paramsCount: Int): String {
         val sb = StringBuilder()
         sb.append("(")
@@ -243,6 +251,11 @@ class TokenCompiler {
         return sb.toString()
     }
 
+    /**
+     * Calls function
+     * @param name Name of function
+     * @param className Name of output class
+     */
     private fun MethodVisitor.funCallCompile(name: String, className: String) {
         visitIntInsn(SIPUSH, functionsInfo[name]!!.second)
         visitVarInsn(NEWARRAY, T_CHAR)
@@ -281,6 +294,9 @@ class TokenCompiler {
         visitInsn(CASTORE)
     }
 
+    /**
+     * Compiles end of function and returns result of function
+     */
     private fun MethodVisitor.funEndingCompile() {
         visitVarInsn(ALOAD, 0)
         visitVarInsn(ILOAD, 1)
