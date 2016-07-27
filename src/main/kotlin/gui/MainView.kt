@@ -1,11 +1,12 @@
 package gui
 
-//TODO Save,interprer,"chmok-chmok",window,scroll,DISABLE
+//TODO interprer,"chmok-chmok",window,DISABLE
 
 import BrainfuckTranslator
 import Interpreter
 import PetoohTranslator
 import TokenCompiler
+import com.sun.xml.internal.ws.org.objectweb.asm.Label
 import javafx.scene.control.TextArea
 import javafx.scene.control.TextField
 import javafx.scene.layout.VBox
@@ -26,6 +27,7 @@ class MainView : View() {
     val printStream = GuiIOStream.GuiConsoleStream(consoleTextArea)
     val buttonHBox = ButtonHBox(workTextArea, consoleTextArea,inputStream,printStream)
     init {
+
         // init UI elements
         with(workTextArea) {
             setPrefSize(400.0, 400.0)
@@ -78,6 +80,8 @@ class ClassNameDialog(private val doCompile: (String) -> Unit) : Fragment() {
         }
     }
 }
+
+
 
 
 

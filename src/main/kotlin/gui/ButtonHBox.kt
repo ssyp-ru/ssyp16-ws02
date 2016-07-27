@@ -8,6 +8,8 @@ import tornadofx.*
 import java.io.File
 import java.io.FileNotFoundException
 import Interpreter
+import javafx.scene.image.ImageView
+import javafx.scene.layout.VBox
 import netscape.security.UserDialogHelper
 import java.io.InputStream
 import java.io.PrintStream
@@ -85,7 +87,8 @@ class ButtonHBox(
             }
             button("Creators"){
                 setOnAction {
-
+                    var creat = Creators()
+                    (creat.openModal(stageStyle = StageStyle.UTILITY))
                 }
             }
         }
@@ -231,4 +234,19 @@ class ButtonHBox(
         }
     }
 
+}
+
+class Creators():Fragment(){
+    override val root = VBox()
+
+    init{
+
+        with(root){
+            setMinSize(380.00,380.00)
+            setMaxSize(380.00,380.00)
+            imageview("file:\\\\\\C:\\Users\\Vedrovski\\IdeaProjects\\ws02\\PetooKhan(square).jpg")
+
+        }
+
+    }
 }
