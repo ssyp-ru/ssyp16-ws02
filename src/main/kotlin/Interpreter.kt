@@ -1,4 +1,4 @@
-import java.io.InputStream
+/*import java.io.InputStream
 import java.io.PrintStream
 import java.util.*
 
@@ -16,7 +16,6 @@ class Interpreter(val read: InputStream = System.`in`, val write: PrintStream = 
     /**
      * Interprets tokens to Kotlin.
      */
-
     fun petoohTranslator(tokenString: String): ArrayList<NewToken> {
         var valid = 0
         var flagFunNameChecker = true
@@ -240,6 +239,7 @@ class Interpreter(val read: InputStream = System.`in`, val write: PrintStream = 
         }
     }
 }
+*/
 
 
 

@@ -78,4 +78,38 @@ class TokenCompilerTest {
     @Test fun testNaGovno() {
         testClass(arrayOf(InstructionToken(Token.READ), InstructionToken(Token.RIGHT), FunCallToken("plus25"), InstructionToken(Token.WRITE), FunDefToken("plus25", 1), FunCallToken("plus5"), InstructionToken(Token.RIGHT), FunCallToken("plus5"), InstructionToken(Token.RIGHT), FunCallToken("plus5"), InstructionToken(Token.RIGHT), FunCallToken("plus5"), InstructionToken(Token.RIGHT), FunCallToken("plus5"), InstructionToken(Token.ENDFUN), FunDefToken("plus5", 1), InstructionToken(Token.LEFT), InstructionToken(Token.PLUS), InstructionToken(Token.PLUS), InstructionToken(Token.PLUS), InstructionToken(Token.PLUS), InstructionToken(Token.PLUS), InstructionToken(Token.ENDFUN)), "a", "z")
     }
+
+    @Test fun testPetoohFun(){
+        val testFile = File("test.txt")
+        val parser = Parser()
+        testFile.writeText("""Morning sum KeKe
+                kudah kudah
+                Kud
+                kO Kudah
+                Ko kudah
+                kud
+                Kudah
+                Evening
+                Morning copy Ke
+                kudah
+                Evening
+                Morning fibonachi Ke
+                PAR copy kO Kudah
+                PAR copy kO kudah
+                Kud
+                kO
+                Kud
+                PAR fibonachi Kudah
+                PAR fibonachi Kudah
+                PAR sum kO
+                kud
+                Ko
+                kud
+                Ko
+                Evening
+                Kukarek Kudah
+
+        """)
+        testClass(parser.petoohTranslator(testFile.readText()).toArray((Array<NewToken>(0, { InstructionToken(Token.PLUS) }))), 5.toChar().toString(), 8.toChar().toString())
+    }
 }

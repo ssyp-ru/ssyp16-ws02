@@ -1,4 +1,4 @@
-import org.junit.Test
+/*import org.junit.Test
 import org.junit.Assert
 import java.util.*
 import kotlin.test.assertEquals
@@ -29,4 +29,4 @@ class translatorAndTokenTest {
         arr.interpret(array)
     }
 
-}
+}*/

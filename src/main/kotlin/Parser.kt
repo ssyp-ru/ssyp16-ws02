@@ -79,7 +79,7 @@ class Parser(val read: InputStream = System.`in`, val write: PrintStream = Syste
         }
         if (!flagFunNameChecker)
             tokenArray.clear()
-        return (tokenArray)
+        return tokenArray
     }
 
     /**
