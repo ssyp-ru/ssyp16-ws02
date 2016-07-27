@@ -10,10 +10,8 @@ class Parser(val read: InputStream = System.`in`, val write: PrintStream = Syste
     fun petoohTranslator(tokenString: String): List<NewToken> {
         var tokenStringIndex = 0
         var keCount = 0
-        var valid = 0
         val tokenArray = ArrayList<NewToken>()
         while (tokenStringIndex != tokenString.length) {
-            if ((valid == 0) || (valid == 1)) {
                 when {
                     tokenString.startsWith("Ko", tokenStringIndex) -> {
                         tokenArray.add(InstructionToken(Token.PLUS))
@@ -70,12 +68,12 @@ class Parser(val read: InputStream = System.`in`, val write: PrintStream = Syste
                                 }
                             }
                             tokenArray.add(FunDefToken(funName, keCount))
+                            keCount = 0
+                            tokenStringIndex--
                         }
-                        valid++
                     }
                     tokenString.startsWith("Evening", tokenStringIndex) -> {
                         tokenArray.add(InstructionToken(Token.ENDFUN))
-                        valid--
                         tokenStringIndex += 6
                     }
                     tokenString.startsWith("PAR", tokenStringIndex) -> {
@@ -94,11 +92,7 @@ class Parser(val read: InputStream = System.`in`, val write: PrintStream = Syste
                     }
                 }
                 tokenStringIndex++
-            } else {
-                println("impossible initialize function inside of other function")
-                return emptyList()
             }
-        }
         return (tokenArray)
     }
 
