@@ -93,22 +93,22 @@ class TokenCompilerTest {
                 Morning copy Ke
                 kudah
                 Evening
-                Morning fibonachi Ke
+                Morning fibonacci Ke
                 PAR copy kO Kudah
                 PAR copy kO kudah
                 Kud
                 kO
                 Kud
-                PAR fibonachi Kudah
-                PAR fibonachi Kudah
+                PAR fibonacci Kudah
+                PAR fibonacci Kudah
                 PAR sum kO
                 kud
                 Ko
                 kud
                 Ko
                 Evening
-                Kukarek Kudah
-
+                kukarek Kudah
+                PAR fibonacci Kukarek
         """)
         testClass(parser.petoohTranslator(testFile.readText()).toArray((Array<NewToken>(0, { InstructionToken(Token.PLUS) }))), 5.toChar().toString(), 8.toChar().toString())
     }
