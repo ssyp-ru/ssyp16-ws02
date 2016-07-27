@@ -3,85 +3,102 @@ import java.io.PrintStream
 import java.util.*
 
 class Parser(val read: InputStream = System.`in`, val write: PrintStream = System.out) {
-    private var tokenIndex = 0
-    private var keCount = 0
 
     /**
      * Interprets tokens to Kotlin.
      */
-    fun petoohTranslator(tokenString: String): ArrayList<NewToken> {
+    fun petoohTranslator(tokenString: String): List<NewToken> {
+        var tokenStringIndex = 0
+        var keCount = 0
         var valid = 0
-        var flagFunNameChecker = true
-        var tokenArray = ArrayList<NewToken>()
-        while (tokenIndex != tokenString.length) {
+        val tokenArray = ArrayList<NewToken>()
+        while (tokenStringIndex != tokenString.length) {
             if ((valid == 0) || (valid == 1)) {
                 when {
-                    tokenString.startsWith("Ko", tokenIndex) -> tokenArray.add(InstructionToken(Token.PLUS))
-                    tokenString.startsWith("kO", tokenIndex) -> tokenArray.add(InstructionToken(Token.MINUS))
-                    tokenString.startsWith("kudah", tokenIndex) -> tokenArray.add(InstructionToken(Token.LEFT))
-                    tokenString.startsWith("Kudah", tokenIndex) -> tokenArray.add(InstructionToken(Token.RIGHT))
-                    tokenString.startsWith("kud", tokenIndex) -> tokenArray.add(InstructionToken(Token.END))
-                    tokenString.startsWith("Kud", tokenIndex) -> tokenArray.add(InstructionToken(Token.BEGIN))
-                    tokenString.startsWith("Kukarek", tokenIndex) -> tokenArray.add(InstructionToken(Token.WRITE))
-                    tokenString.startsWith("kukarek", tokenIndex) -> tokenArray.add(InstructionToken(Token.READ))
-                    tokenString.startsWith("Morning", tokenIndex) -> {
-                        while (tokenString[tokenIndex] != ' ') {
-                            tokenIndex++
+                    tokenString.startsWith("Ko", tokenStringIndex) -> {
+                        tokenArray.add(InstructionToken(Token.PLUS))
+                        tokenStringIndex += 1
+                    }
+                    tokenString.startsWith("kO", tokenStringIndex) -> {
+                        tokenStringIndex += 1
+                        tokenArray.add(InstructionToken(Token.MINUS))
+                    }
+                    tokenString.startsWith("kudah", tokenStringIndex) -> {
+                        tokenStringIndex += 4
+                        tokenArray.add(InstructionToken(Token.LEFT))
+                    }
+                    tokenString.startsWith("Kudah", tokenStringIndex) -> {
+                        tokenStringIndex += 4
+                        tokenArray.add(InstructionToken(Token.RIGHT))
+                    }
+                    tokenString.startsWith("kud", tokenStringIndex) -> {
+                        tokenStringIndex += 2
+                        tokenArray.add(InstructionToken(Token.END))
+                    }
+                    tokenString.startsWith("Kud", tokenStringIndex) -> {
+                        tokenStringIndex += 2
+                        tokenArray.add(InstructionToken(Token.BEGIN))
+                    }
+                    tokenString.startsWith("Kukarek", tokenStringIndex) -> {
+                        tokenStringIndex += 6
+                        tokenArray.add(InstructionToken(Token.WRITE))
+                    }
+                    tokenString.startsWith("kukarek", tokenStringIndex) -> {
+                        tokenArray.add(InstructionToken(Token.READ))
+                        tokenStringIndex += 6
+                    }
+                    tokenString.startsWith("Morning", tokenStringIndex) -> {
+                        while (tokenString[tokenStringIndex] != ' ') {
+                            tokenStringIndex++
                         }
-                        if (tokenString[tokenIndex] == ' ') {
-                            var cursorSpace = tokenIndex + 1
+                        if (tokenString[tokenStringIndex] == ' ') {
+                            var cursorSpace = tokenStringIndex + 1
                             while (tokenString[cursorSpace] != ' ') {
                                 cursorSpace++
                             }
-                            val funName = tokenString.substring(tokenIndex + 1, cursorSpace)
-                            tokenIndex = cursorSpace + 1
+                            val funName = tokenString.substring(tokenStringIndex + 1, cursorSpace)
+                            tokenStringIndex = cursorSpace + 1
 
-                            flagFunNameChecker = checkFunName(funName)
-                            if (!flagFunNameChecker) {
+                            if (!checkFunName(funName)) {
                                 println("Name of function cannot contain key words")
+                                return emptyList<NewToken>()
                             }
-                            if (flagFunNameChecker) {
-                                tokenIndex++
-                                if (tokenString.startsWith("Ke", tokenIndex)) {
-                                    while (!(tokenString.startsWith("Ke", tokenIndex))) {
-                                        keCount++
-                                        tokenIndex += 2
-                                    }
+                            if (tokenString.startsWith("Ke", tokenStringIndex)) {
+                                while ((tokenString.startsWith("Ke", tokenStringIndex))) {
+                                    keCount++
+                                    tokenStringIndex += 2
                                 }
-                                tokenArray.add(FunDefToken(funName, keCount))
-                                tokenIndex = tokenString.indexOf(" ")
                             }
+                            tokenArray.add(FunDefToken(funName, keCount))
                         }
                         valid++
                     }
-                    tokenString.startsWith("Evening", tokenIndex) -> {
+                    tokenString.startsWith("Evening", tokenStringIndex) -> {
                         tokenArray.add(InstructionToken(Token.ENDFUN))
                         valid--
+                        tokenStringIndex += 6
                     }
-                    tokenString.startsWith("PAR", tokenIndex) -> {
-                        var cursorSpace = tokenIndex + 4
+                    tokenString.startsWith("PAR", tokenStringIndex) -> {
+                        var cursorSpace = tokenStringIndex + 4
                         while (tokenString[cursorSpace] != ' ') {
                             cursorSpace++
                         }
-                        val funName = tokenString.substring(tokenIndex + 4, cursorSpace)
-                        tokenIndex = cursorSpace
-                        flagFunNameChecker = checkFunName(funName)
-                        if (!flagFunNameChecker)
+                        val funName = tokenString.substring(tokenStringIndex + 4, cursorSpace)
+                        tokenStringIndex = cursorSpace
+                        if (!checkFunName(funName))
                             println("Name of function cannot be a key word")
-                        if (flagFunNameChecker) {
+                        if (checkFunName(funName)) {
                             tokenArray.add(FunCallToken(funName))
                         }
+                        tokenStringIndex += 2
                     }
                 }
-                tokenIndex++
+                tokenStringIndex++
             } else {
-                flagFunNameChecker = false
                 println("impossible initialize function inside of other function")
-                break
+                return emptyList()
             }
         }
-        if (!flagFunNameChecker)
-            tokenArray.clear()
         return (tokenArray)
     }
 
@@ -91,7 +108,7 @@ class Parser(val read: InputStream = System.`in`, val write: PrintStream = Syste
     private fun checkFunName(funName: String): Boolean {
         var flagFunNameChecker = false
         var nameIterator = 0
-        while(nameIterator != funName.length) {
+        while (nameIterator != funName.length) {
             when {
                 funName.startsWith("kO", nameIterator) -> nameIterator += 2
                 funName.startsWith("Ko", nameIterator) -> nameIterator += 2

@@ -40,7 +40,7 @@ class TokenCompiler {
             visitVarInsn(ISTORE, 1)
             var isFun = false
             for (token in tokens) {
-                if(token is FunDefToken){
+                if (token is FunDefToken) {
                     functionsInfo.put(token.name, Pair(signatureBuild(token.paramsCount), token.paramsCount))
                 }
             }

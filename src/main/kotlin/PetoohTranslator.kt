@@ -27,14 +27,14 @@ class PetoohTranslator {
         for (index in 0..strWithTokens.length) {
 
             when {
-                strWithTokens.startsWith("kO", index) -> tokenArray.add(Token.PLUS)
-                strWithTokens.startsWith("Ko", index) -> tokenArray.add(Token.MINUS)
+                strWithTokens.startsWith("Ko", index) -> tokenArray.add(Token.PLUS)
+                strWithTokens.startsWith("kO", index) -> tokenArray.add(Token.MINUS)
                 strWithTokens.startsWith("kudah", index) -> tokenArray.add(Token.LEFT)
                 strWithTokens.startsWith("Kudah", index) -> tokenArray.add(Token.RIGHT)
-                strWithTokens.startsWith("kud", index) -> tokenArray.add(Token.END)
                 strWithTokens.startsWith("Kud", index) -> tokenArray.add(Token.BEGIN)
-                strWithTokens.startsWith("kukarek", index) -> tokenArray.add(Token.WRITE)
-                strWithTokens.startsWith("Kukarek", index) -> tokenArray.add(Token.READ)
+                strWithTokens.startsWith("kud", index) -> tokenArray.add(Token.END)
+                strWithTokens.startsWith("Kukarek", index) -> tokenArray.add(Token.WRITE)
+                strWithTokens.startsWith("kukarek", index) -> tokenArray.add(Token.READ)
             }
         }
 
@@ -57,14 +57,14 @@ class PetoohTranslator {
 
         for (index in 0 until arrToken.size) {
             when (arrToken[index]) {
-                Token.PLUS -> timeStr.append("ko")
-                Token.MINUS -> timeStr.append("Ko")
-                Token.READ -> timeStr.append("Kukarek")
+                Token.PLUS -> timeStr.append("Ko")
+                Token.MINUS -> timeStr.append("kO")
+                Token.READ -> timeStr.append("kukarek")
                 Token.END -> timeStr.append("kud")
                 Token.BEGIN -> timeStr.append("Kud")
-                Token.LEFT -> timeStr.append("kudah")
-                Token.RIGHT -> timeStr.append("Kudah")
-                Token.WRITE -> timeStr.append("kukarek")
+                Token.LEFT -> timeStr.append("Kudah")
+                Token.RIGHT -> timeStr.append("kudah")
+                Token.WRITE -> timeStr.append("Kukarek")
 
             }
         }

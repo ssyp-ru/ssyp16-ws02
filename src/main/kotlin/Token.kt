@@ -7,8 +7,5 @@ enum class Token {
     READ,
     BEGIN,
     END,
-    KE,
-    BEGINFUN,
-    ENDFUN,
-    PAR
+    ENDFUN
 }
