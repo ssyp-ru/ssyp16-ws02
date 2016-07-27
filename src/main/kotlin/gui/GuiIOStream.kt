@@ -1,5 +1,9 @@
 package gui
 
+import javafx.beans.binding.StringBinding
+import javafx.scene.Cursor
+import javafx.scene.control.TextArea
+import javafx.scene.control.TextField
 import java.io.InputStream
 import java.io.OutputStream
 import java.io.PrintStream
@@ -10,20 +14,33 @@ class GuiIOStream {
         }
     }
 
-    class MyPrintStream() : PrintStream(EmptyStream()) {
+    class GuiConsoleStream(private val textArea: TextArea) : PrintStream(EmptyStream()) {
 
         override fun println(x: Char) {
-            lastTextArea.appendText(x.toString())
+            textArea.appendText(x.toString() + "\n")
+            textArea.selectAll()
+            textArea.selectEnd()
+            textArea.selectBackward()
+            textArea.nextWord()
+            //textArea.selectHome()
         }
+
     }
 
-    class MyInputStream(val str: String) : InputStream() {
-        private var count = 0
+    class MyInputStream(private val input:TextField) : InputStream() {
 
+        fun addChar(text:String){
+            inputString.append(text)
+        }
+
+
+        val inputString = StringBuilder()
 
         override fun read(): Int {
-            count++
-            return str[count - 1].toInt()
+
+            val readChar = inputString.get(0).toInt()
+            inputString.deleteCharAt(0)
+            return readChar
         }
     }
 }
