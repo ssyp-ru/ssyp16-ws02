@@ -78,4 +78,8 @@ class TokenCompilerTest {
     @Test fun testNaGovno() {
         testClass(arrayOf(InstructionToken(Token.READ), InstructionToken(Token.RIGHT), FunCallToken("plus25"), InstructionToken(Token.WRITE), FunDefToken("plus25", 1), FunCallToken("plus5"), InstructionToken(Token.RIGHT), FunCallToken("plus5"), InstructionToken(Token.RIGHT), FunCallToken("plus5"), InstructionToken(Token.RIGHT), FunCallToken("plus5"), InstructionToken(Token.RIGHT), FunCallToken("plus5"), InstructionToken(Token.ENDFUN), FunDefToken("plus5", 1), InstructionToken(Token.LEFT), InstructionToken(Token.PLUS), InstructionToken(Token.PLUS), InstructionToken(Token.PLUS), InstructionToken(Token.PLUS), InstructionToken(Token.PLUS), InstructionToken(Token.ENDFUN)), "a", "z")
     }
+
+    @Test fun fibonacciTest() {
+        
+    }
 }
