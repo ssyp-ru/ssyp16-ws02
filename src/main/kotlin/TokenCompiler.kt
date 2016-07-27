@@ -133,7 +133,7 @@ class TokenCompiler {
         visitVarInsn(ILOAD, 1)
         visitInsn(DUP2)
         visitInsn(CALOAD)
-        //visitIntInsn(BIPUSH, 1)
+        //visitIntInsn(BIPUSH, 1) // FIXME: закомментированного кода не должно быть, почистите
         visitInsn(ICONST_1)
         visitInsn(IADD)
         visitInsn(CASTORE)

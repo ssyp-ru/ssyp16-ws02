@@ -108,7 +108,7 @@ class Parser(val read: InputStream = System.`in`, val write: PrintStream = Syste
                     ++tokenStringIndex
             }
         }
-        val validator = ParserValidator()
+        val validator = ParserValidator() // FIXME: кто будет git add делать? не завезли вашего парсер валидатора.
         if (validator.validator(tokenArray))
             return (tokenArray)
         else

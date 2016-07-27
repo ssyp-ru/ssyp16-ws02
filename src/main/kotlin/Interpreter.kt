@@ -2,16 +2,17 @@ import java.io.InputStream
 import java.io.PrintStream
 import java.util.*
 
-class Interpreter(val read: InputStream = System.`in`, val write: PrintStream = System.out) {
+class Interpreter(val read: InputStream = System.`in`, val write: PrintStream = System.out) { // FIXME: тоже должны быть private val
     private val memorySize = 30000
-    private var workSpace = ByteArray (memorySize, { 0 })
-    private var memory = ByteArray (memorySize, { 0 })
-    private var flag = true
+    private var workSpace = ByteArray (memorySize, { 0 }) // FIXME: чем отличается от memory? переименовать
+    private var memory = ByteArray (memorySize, { 0 }) // FIXME: а если вызвать функцию внутри функции, что будет?
+    private var flag = true // FIXME: переименовать
     private var parIndex = 0
     private var workSpaceIndex = 0
     private var tokenIndex = 0
     private var beginEndcount = 0
     private var keCount = 0
+    // FIXME: откуда взялось столько полей-var-ов? Почему workSpace - var? Всё, что можно создавать как локальные переменные функции, создавать именно так
 
 
     /**
@@ -60,11 +61,11 @@ class Interpreter(val read: InputStream = System.`in`, val write: PrintStream = 
                         } else
                             funNameIndex++
                     }
-                    workSpace = memory
+                    workSpace = memory // FIXME: ад и погибель. Так делать нельзя. К тому же, у вас так не будет работать вызов функции внутри функции.
                     workSpaceIndex = parIndex
                     tokenIndex++
                 }
-                is FunCallToken -> {
+                is FunCallToken -> { // вот за это два чая, круто. Данный коммент уберите
                     flag = false
                     funName = tokenArray[tokenIndex]
                     funNameIndex = tokenIndex
