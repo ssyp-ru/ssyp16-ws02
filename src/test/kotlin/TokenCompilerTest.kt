@@ -108,7 +108,8 @@ Evening
 kukarek Kudah
 PAR sumAll Kukarek
         """)
-        testClass(parser.petoohTranslator(testFile.readText()).toTypedArray(), 5.toChar().toString(), 15.toChar().toString())
+        val tokens = parser.petoohTranslator(testFile.readText()).toTypedArray()
+        testClass(tokens, 5.toChar().toString(), 15.toChar().toString())
     }
 
     /*@Test fun testFibonacci() {
