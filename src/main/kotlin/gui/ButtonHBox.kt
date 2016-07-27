@@ -10,6 +10,7 @@ import java.io.FileNotFoundException
 import Interpreter
 import javafx.scene.image.ImageView
 import javafx.scene.layout.VBox
+import javafx.scene.text.Font
 import netscape.security.UserDialogHelper
 import java.io.InputStream
 import java.io.PrintStream
@@ -238,13 +239,15 @@ class ButtonHBox(
 
 class Creators():Fragment(){
     override val root = VBox()
-
     init{
-
         with(root){
             setMinSize(380.00,380.00)
             setMaxSize(380.00,380.00)
             imageview("file:\\\\\\C:\\Users\\Vedrovski\\IdeaProjects\\ws02\\PetooKhan(square).jpg")
+            label("Creators"){
+                font = Font.font("Coral")
+                font = Font(20.0)
+            }
 
         }
 

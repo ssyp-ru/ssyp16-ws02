@@ -26,12 +26,16 @@ class MainView : View() {
     val inputStream = GuiIOStream.MyInputStream(inputTextField)
     val printStream = GuiIOStream.GuiConsoleStream(consoleTextArea)
     val buttonHBox = ButtonHBox(workTextArea, consoleTextArea,inputStream,printStream)
+    val codeStr = StringBuilder()
     init {
 
         // init UI elements
         with(workTextArea) {
             setPrefSize(400.0, 400.0)
             font = Font.font("Verdana")
+            setOnKeyPressed {
+                
+            }
         }
         with(consoleTextArea) {
             setPrefSize(100.0, 100.0)
