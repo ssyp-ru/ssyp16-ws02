@@ -16,14 +16,14 @@ class Parser(val read: InputStream = System.`in`, val write: PrintStream = Syste
         while (tokenIndex != tokenString.length) {
             if ((valid == 0) || (valid == 1)) {
                 when {
-                    tokenString.startsWith("kO", tokenIndex) -> tokenArray.add(InstructionToken(Token.PLUS))
-                    tokenString.startsWith("Ko", tokenIndex) -> tokenArray.add(InstructionToken(Token.MINUS))
+                    tokenString.startsWith("Ko", tokenIndex) -> tokenArray.add(InstructionToken(Token.PLUS))
+                    tokenString.startsWith("kO", tokenIndex) -> tokenArray.add(InstructionToken(Token.MINUS))
                     tokenString.startsWith("kudah", tokenIndex) -> tokenArray.add(InstructionToken(Token.LEFT))
                     tokenString.startsWith("Kudah", tokenIndex) -> tokenArray.add(InstructionToken(Token.RIGHT))
                     tokenString.startsWith("kud", tokenIndex) -> tokenArray.add(InstructionToken(Token.END))
                     tokenString.startsWith("Kud", tokenIndex) -> tokenArray.add(InstructionToken(Token.BEGIN))
-                    tokenString.startsWith("kukarek", tokenIndex) -> tokenArray.add(InstructionToken(Token.WRITE))
-                    tokenString.startsWith("Kukarek", tokenIndex) -> tokenArray.add(InstructionToken(Token.READ))
+                    tokenString.startsWith("Kukarek", tokenIndex) -> tokenArray.add(InstructionToken(Token.WRITE))
+                    tokenString.startsWith("kukarek", tokenIndex) -> tokenArray.add(InstructionToken(Token.READ))
                     tokenString.startsWith("Morning", tokenIndex) -> {
                         while (tokenString[tokenIndex] != ' ') {
                             tokenIndex++
@@ -41,9 +41,12 @@ class Parser(val read: InputStream = System.`in`, val write: PrintStream = Syste
                                 println("Name of function cannot contain key words")
                             }
                             if (flagFunNameChecker) {
+                                tokenIndex++
                                 if (tokenString.startsWith("Ke", tokenIndex)) {
-                                    while (!(tokenString.startsWith("Ke", tokenIndex)))
+                                    while (!(tokenString.startsWith("Ke", tokenIndex))) {
                                         keCount++
+                                        tokenIndex += 2
+                                    }
                                 }
                                 tokenArray.add(FunDefToken(funName, keCount))
                                 tokenIndex = tokenString.indexOf(" ")
