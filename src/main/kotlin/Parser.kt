@@ -51,7 +51,9 @@ class Parser(val read: InputStream = System.`in`, val write: PrintStream = Syste
                         }
                         if (tokenString[tokenStringIndex] == ' ') {
                             var cursorSpace = tokenStringIndex + 1
-                            while (tokenString[cursorSpace] != ' ') {
+                            while(true) {
+                                if((tokenString[cursorSpace] != ' ')||(tokenString[cursorSpace] != '\t')||(tokenString[cursorSpace] != '\n'))
+                                    break
                                 cursorSpace++
                             }
                             val funName = tokenString.substring(tokenStringIndex + 1, cursorSpace)
