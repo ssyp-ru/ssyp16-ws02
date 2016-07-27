@@ -11,7 +11,7 @@ class Parser(val read: InputStream = System.`in`, val write: PrintStream = Syste
         var tokenStringIndex = 0
         var keCount = 0
         val tokenArray = ArrayList<NewToken>()
-        val validator : ParserValidator
+        //val validator : ParserValidator
         while (tokenStringIndex != tokenString.length) {
                 when {
                     tokenString.startsWith("Ko", tokenStringIndex) -> {

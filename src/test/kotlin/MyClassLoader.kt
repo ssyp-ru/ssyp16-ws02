@@ -25,7 +25,7 @@ class MyInputStream(val str: String) : InputStream() {
 class MyPrintStream() : PrintStream(EmptyStream()) {
     val sb = StringBuilder()
     override fun println(x: Char) {
-        sb.append(x)
+        sb.append(x.toInt())
     }
 }
 /**
