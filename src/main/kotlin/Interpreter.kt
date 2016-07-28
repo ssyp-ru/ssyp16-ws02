@@ -12,7 +12,6 @@ class Interpreter(val read: InputStream = System.`in`, val write: PrintStream = 
     private var tokenIndex = 0
     private var beginEndCounter = tokenIndex
 
-
     fun interpret(arrayToken: Array<Token>) {
         while (tokenIndex != arrayToken.size) {
             when (arrayToken[tokenIndex]) {
