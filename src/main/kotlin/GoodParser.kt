@@ -13,7 +13,7 @@ class GoodParser {
 
         val tokens = LinkedList<NewToken>()
         while(curPosition < code.length){
-            if((code[curPosition] == ' ') || (code[curPosition] == '\n') || (code[curPosition] == '\t'))
+            if((code[curPosition] == ' ') || (code[curPosition] == '\n') || (code[curPosition] == '\t') || (code[curPosition] == '\r'))
                 curPosition++
             else{
                 when{
@@ -55,17 +55,17 @@ class GoodParser {
                     }
                     checkSubStr(code, curPosition, "Morning") -> {
                         curPosition += 7
-                        while((code[curPosition] == ' ') || (code[curPosition] == '\t') || (code[curPosition] == '\n')){
+                        while((code[curPosition] == ' ') || (code[curPosition] == '\t') || (code[curPosition] == '\n') || (code[curPosition] == '\r')){
                             curPosition++
                         }
                         var endIndex = curPosition
-                        while((code[endIndex] != ' ') && (code[endIndex] != '\t') && (code[endIndex] != '\n')){
+                        while((code[endIndex] != ' ') && (code[endIndex] != '\t') && (code[endIndex] != '\n') && (code[endIndex] != '\r')){
                             endIndex++
                         }
                         val funName = code.substring(curPosition, endIndex)
                         var paramsCount = 0
                         curPosition = endIndex
-                        while((code[curPosition] == ' ') || (code[curPosition] == '\t') || (code[curPosition] == '\n')){
+                        while((code[curPosition] == ' ') || (code[curPosition] == '\t') || (code[curPosition] == '\n') || (code[curPosition] == '\r')){
                             curPosition++
                         }
                         while(checkSubStr(code, curPosition, "Ke")){
@@ -76,11 +76,11 @@ class GoodParser {
                     }
                     checkSubStr(code, curPosition, "PAR") -> {
                         curPosition += 3
-                        while((code[curPosition] == ' ') || (code[curPosition] == '\t') || (code[curPosition] == '\n')){
+                        while((code[curPosition] == ' ') || (code[curPosition] == '\t') || (code[curPosition] == '\n') || (code[curPosition] == '\r')){
                             curPosition++
                         }
                         var endIndex = curPosition
-                        while((code[endIndex] != ' ') && (code[endIndex] != '\t') && (code[endIndex] != '\n')){
+                        while((code[endIndex] != ' ') && (code[endIndex] != '\t') && (code[endIndex] != '\n') && (code[endIndex] != '\r')){
                             endIndex++
                         }
                         val funName = code.substring(curPosition, endIndex)

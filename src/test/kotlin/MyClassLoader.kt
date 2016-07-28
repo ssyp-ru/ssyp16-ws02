@@ -40,11 +40,11 @@ class EmptyStream() : OutputStream() {
 /**
  * Compiles, loads and runs byte-code, tests it
  */
-fun testClass(code: Array<NewToken>, input: String, output: String) {
+fun testClass(input: String, output: String) {
     val tokenCompiler = TokenCompiler()
     val classLoader = MyClassLoader()
 
-    val myClass = classLoader.loadClass("MyClass", tokenCompiler.compile(code,"MyClass"))
+    val myClass = classLoader.loadClass("MyClass", tokenCompiler.compile("test.koko","MyClass"))
     val methods = myClass?.methods
     System.setIn(MyInputStream(input))
     val str = MyPrintStream()

@@ -3,6 +3,7 @@ import org.objectweb.asm.Label
 import org.objectweb.asm.MethodVisitor
 import org.objectweb.asm.Opcodes.*
 import java.io.File
+import java.io.FileNotFoundException
 import java.util.*
 import javax.lang.model.SourceVersion
 
@@ -19,11 +20,20 @@ class TokenCompiler {
     /**
      * Compiles code in 3 stages
      */
-    fun compile(tokens: Array<NewToken>, className: String): ByteArray? {
+    fun compile(inputFileName: String, className: String): ByteArray? {
         if (!SourceVersion.isIdentifier(className) || SourceVersion.isKeyword(className)) {
-            println("Your name of class is invalid.")
+            println("Name of class is invalid.")
             return null
         }
+        val parser = GoodParser()
+        try{
+            File(inputFileName)
+        }
+        catch(e: FileNotFoundException){
+            println("File no found.")
+            return null
+        }
+        val tokens = parser.parse(File(inputFileName).readText())
         val writer = File(className + ".class")
         cw.visit(V1_7, ACC_PUBLIC, className, null, "java/lang/Object", null)
 

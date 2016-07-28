@@ -68,7 +68,7 @@ class TokenCompilerTest {
         testFile.writeText("+>,+>,<[<+>>[<<->>->+>]>[<<+>>[<+>-]]<<<<[<]>>-]<-.")
         testClass(BrainfuckTranslator().translateToTokens("test.txt"), 6.toChar().toString() + 2.toChar().toString(), 3.toChar().toString())
     }*/
-
+/*
     @Test fun testDiv() {
         //testClass(arrayOf(InstructionToken(Token.RIGHT), InstructionToken(Token.READ), InstructionToken(Token.RIGHT), InstructionToken(Token.READ), InstructionToken(Token.RIGHT), FunDefToken("div", 2), InstructionToken(Token.LEFT), InstructionToken(Token.LEFT), InstructionToken(Token.LEFT), InstructionToken(Token.PLUS), InstructionToken(Token.RIGHT), InstructionToken(Token.PLUS), InstructionToken(Token.BEGIN), InstructionToken(Token.LEFT), InstructionToken(Token.PLUS), InstructionToken(Token.RIGHT), InstructionToken(Token.RIGHT), InstructionToken(Token.BEGIN), InstructionToken(Token.LEFT), InstructionToken(Token.LEFT), InstructionToken(Token.MINUS), InstructionToken(Token.RIGHT), InstructionToken(Token.RIGHT), InstructionToken(Token.MINUS), InstructionToken(Token.RIGHT), InstructionToken(Token.PLUS), InstructionToken(Token.RIGHT), InstructionToken(Token.END), InstructionToken(Token.RIGHT), InstructionToken(Token.BEGIN), InstructionToken(Token.LEFT), InstructionToken(Token.LEFT), InstructionToken(Token.PLUS), InstructionToken(Token.RIGHT), InstructionToken(Token.RIGHT), InstructionToken(Token.BEGIN), InstructionToken(Token.LEFT), InstructionToken(Token.PLUS), InstructionToken(Token.RIGHT), InstructionToken(Token.MINUS), InstructionToken(Token.END), InstructionToken(Token.END), InstructionToken(Token.LEFT), InstructionToken(Token.LEFT), InstructionToken(Token.LEFT), InstructionToken(Token.LEFT), InstructionToken(Token.BEGIN), InstructionToken(Token.LEFT), InstructionToken(Token.END), InstructionToken(Token.RIGHT), InstructionToken(Token.RIGHT), InstructionToken(Token.MINUS), InstructionToken(Token.END), InstructionToken(Token.LEFT), InstructionToken(Token.MINUS), InstructionToken(Token.ENDFUN), FunCallToken("div"), InstructionToken(Token.WRITE)), 80.toChar().toString() + 10.toChar().toString(), 8.toChar().toString())
 //        testClass(arrayOf(InstructionToken(Token.PLUS)), "", "")
@@ -78,10 +78,9 @@ class TokenCompilerTest {
     @Test fun testNaGovno() {
         testClass(arrayOf(InstructionToken(Token.READ), InstructionToken(Token.RIGHT), FunCallToken("plus25"), InstructionToken(Token.WRITE), FunDefToken("plus25", 1), FunCallToken("plus5"), InstructionToken(Token.RIGHT), FunCallToken("plus5"), InstructionToken(Token.RIGHT), FunCallToken("plus5"), InstructionToken(Token.RIGHT), FunCallToken("plus5"), InstructionToken(Token.RIGHT), FunCallToken("plus5"), InstructionToken(Token.ENDFUN), FunDefToken("plus5", 1), InstructionToken(Token.LEFT), InstructionToken(Token.PLUS), InstructionToken(Token.PLUS), InstructionToken(Token.PLUS), InstructionToken(Token.PLUS), InstructionToken(Token.PLUS), InstructionToken(Token.ENDFUN)), "a", "z")
     }
-
+*/
     @Test fun testPetoohFun() {
-        val testFile = File("test.txt")
-        val parser = GoodParser()
+        val testFile = File("test.koko")
         testFile.writeText("""Morning sum KeKe
     kudah kudah
         Kud
@@ -106,7 +105,6 @@ Evening
 kukarek Kudah
 PAR sumAll Kukarek
 """)
-        val tokens = parser.parse(testFile.readText())
-        testClass(tokens, 20.toChar().toString(), 210.toChar().toString())
+        testClass(20.toChar().toString(), 210.toChar().toString())
     }
 }
