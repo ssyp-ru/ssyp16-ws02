@@ -21,7 +21,7 @@ class Interpreter(val read: InputStream = System.`in`, val write: PrintStream = 
                 Token.MINUS -> array[current]--
                 Token.PLUS -> array[current]++
                 Token.READ -> array[current] = read.read().toByte()
-                Token.WRITE -> write.println(array[current].toChar())
+                Token.WRITE -> write.print(array[current].toChar())
                 Token.BEGIN -> begin(arrayToken)
                 Token.END -> end(arrayToken)
             }

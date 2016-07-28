@@ -16,8 +16,8 @@ class GuiIOStream {
 
     class GuiConsoleStream(private val textArea: TextArea) : PrintStream(EmptyStream()) {
 
-        override fun println(x: Char) {
-            textArea.appendText(x.toString() + "\n")
+        override fun print(x: Char) {
+            textArea.appendText(x.toString()) // FIXME: with(textArea)
             textArea.selectAll()
             textArea.selectEnd()
             textArea.selectBackward()
