@@ -1,7 +1,6 @@
 package gui
 
 import BrainfuckTranslator
-import Interpreter
 import PetoohTranslator
 import TokenCompiler
 

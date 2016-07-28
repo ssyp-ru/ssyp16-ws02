@@ -20,7 +20,7 @@ class GuiIOStream {
             }
         }
 
-        override fun println(s : String) {
+        override fun println(s: String) {
             with(textArea) {
                 appendText("$s\n")
                 positionCaret(textArea.length - 1)

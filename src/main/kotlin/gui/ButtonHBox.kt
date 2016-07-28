@@ -4,6 +4,7 @@ import Interpreter
 import javafx.geometry.Pos
 import javafx.scene.control.TextArea
 import javafx.scene.control.TextField
+import javafx.scene.image.Image
 import javafx.scene.layout.HBox
 import javafx.scene.paint.Color
 import javafx.stage.FileChooser
@@ -54,7 +55,6 @@ class ButtonHBox(
                     }
                 }
                 button("Save") {
-                    style =("file:///C:/Users/Vedrovski/IdeaProjects/ws02/Save.png")
                     setOnAction {
                         saveCurFile()
                     }
@@ -82,6 +82,7 @@ class ButtonHBox(
                 }
                 button("Petooh -> BF") {
                     setOnAction {
+                        translateToBF()
                     }
                 }
 
@@ -130,19 +131,7 @@ class ButtonHBox(
             val fileName = files[0].toString()
             val file = files[0]
             curFile = fileName
-            if (fileName.endsWith(".koko")) {
-                isPetooh = true
-                lastTextArea.appendText("PETOOH file \n")
-            } else {
-                isPetooh = false
-                lastTextArea.appendText("BF file \n")
-            }
-            workTextArea.clear()
-            val listText = file.readLines()
-            for (i in 0 until listText.size) {
-                workTextArea.appendText(listText[i])
-                workTextArea.appendText("\r\n")
-            }
+            readFile(file)
         } catch (exc: IndexOutOfBoundsException) {
         } catch (exc: FileNotFoundException) {
             lastTextArea.appendText("File not found \n")
@@ -186,8 +175,39 @@ class ButtonHBox(
             try {
                 val saveFile = chooseFile("Save file", arrChoser, mode = FileChooserMode.Save)
                 val fileName = saveFile[0].toString()
+                val file = saveFile[0]
                 val tokens = CoreUtils.brainfuck.translateToTokens(curFile)
                 CoreUtils.petooh.translateToKoko(tokens, fileName)
+                lastTextArea.appendText("$fileName saved\n")
+                readFile(file)
+                isPetooh = true
+
+            } catch(exc: IndexOutOfBoundsException) {
+            }
+        }
+    }
+
+    fun translateToBF() {
+        if (curFile == "") {
+            val isSaved = saveCurFile()
+            if (!isSaved) {
+                return
+            }
+        }
+        if (!isPetooh)
+            lastTextArea.appendText("You already have BF code \n")
+        else {
+            File(curFile).writeText(workTextArea.text)
+            val arrChoser = arrayOf(FileChooser.ExtensionFilter("BF file", "*.bf"))
+            try {
+                val saveFile = chooseFile("Save file", arrChoser, mode = FileChooserMode.Save)
+                val fileName = saveFile[0].toString()
+                val file = saveFile[0]
+                val tokens = CoreUtils.petooh.translateToToken(curFile)
+                CoreUtils.brainfuck.translateToBrainfuck(tokens, fileName)
+                lastTextArea.appendText("$fileName saved\n")
+                readFile(file)
+                isPetooh = false
             } catch(exc: IndexOutOfBoundsException) {
             }
         }
@@ -227,6 +247,22 @@ class ButtonHBox(
         // clear input stream
         if (input is GuiIOStream.MyInputStream)
             input.clear()
+    }
+
+    fun readFile(file: File) {
+        if (file.toString().endsWith(".koko")) {
+            isPetooh = true
+            lastTextArea.appendText("PETOOH file \n")
+        } else {
+            isPetooh = false
+            lastTextArea.appendText("BF file \n")
+        }
+        workTextArea.clear()
+        val listText = file.readLines()
+        for (i in 0 until listText.size) {
+            workTextArea.appendText(listText[i])
+            workTextArea.appendText("\r\n")
+        }
     }
 
 }
