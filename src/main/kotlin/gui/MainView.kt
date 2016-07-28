@@ -27,9 +27,10 @@ class MainView : View() {
     val inputStream = GuiIOStream.MyInputStream(inputTextField)
     val printStream = GuiIOStream.GuiConsoleStream(consoleTextArea)
     val buttonHBox = ButtonHBox(workTextArea, consoleTextArea, inputStream, printStream, inputTextField)
-    val codeStr = StringBuilder()
 
     init {
+        System.setOut(printStream)
+
         title = "Petooh Khan"
         primaryStage.isResizable = false
         // init UI elements
@@ -49,7 +50,6 @@ class MainView : View() {
             textProperty()
             font = Font.font("Verdana")
             style {
-
                 fontWeight = FontWeight.EXTRA_BOLD
                 textFill = Color.GREEN
             }

@@ -15,15 +15,24 @@ class GuiIOStream {
     }
 
     class GuiConsoleStream(private val textArea: TextArea) : PrintStream(EmptyStream()) {
+        override fun println() {
+            with(textArea) {
+                appendText("\n")
+                positionCaret(textArea.length - 1)
+            }
+        }
+
+        override fun println(s : String) {
+            with(textArea) {
+                appendText("$s\n")
+                positionCaret(textArea.length - 1)
+            }
+        }
 
         override fun print(x: Char) {
             with(textArea) {
                 appendText(x.toString())
-                selectAll()
-                selectEnd()
-                selectBackward()
-                nextWord()
-                //textArea.selectHome()
+                positionCaret(textArea.length - 1)
             }
         }
     }
