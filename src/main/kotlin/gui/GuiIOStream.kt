@@ -52,7 +52,7 @@ class GuiIOStream {
         }
 
         override fun read(): Int {
-            val readChar = inputString.get(0).toInt()
+            val readChar = inputString[0].toInt()
             inputString.deleteCharAt(0)
             return readChar
         }

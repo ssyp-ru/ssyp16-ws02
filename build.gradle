@@ -1,5 +1,5 @@
 group 'ssyp.ws02'
-version '0.1'
+version '1.0'
 
 
 buildscript {
@@ -21,22 +21,44 @@ mainClassName = 'MainKt'
 //noinspection GroovyUnusedAssignment
 sourceCompatibility = 1.7
 
-// create a single Jar with all dependencies
+task wrapper(type: Wrapper) {
+    gradleVersion = "2.14"
+    distributionUrl = "https://services.gradle.org/distributions/gradle-$gradleVersion-all.zip"
+}
+
+// create a single Jar for CLI with all dependencies
 task fatJar(type: Jar) {
     manifest {
         //noinspection GroovyAssignabilityCheck
         attributes(
-                "Implementation-Title": "PETOO Khan",
-                "Implementation-Version": "0.1",
+                "Implementation-Title": "PETOOH Khan",
+                "Implementation-Version": "1.0",
                 "Main-Class": "MainKt"
         )
     }
     baseName = project.name
     from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
+    //noinspection GroovyAssignabilityCheck
     with jar
 }
 
-defaultTasks 'test', 'fatJar'
+// create a single Jar for GUI with all dependencies
+task fatJarGui(type: Jar) {
+    manifest {
+        //noinspection GroovyAssignabilityCheck
+        attributes(
+                "Implementation-Title": "PETOOH Khan GUI",
+                "Implementation-Version": "1.0",
+                "Main-Class": "gui.GUIApp"
+        )
+    }
+    baseName = project.name + "-gui"
+    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
+    //noinspection GroovyAssignabilityCheck
+    with jar
+}
+
+defaultTasks 'test', 'fatJar', 'fatJarGui'
 
 repositories {
     mavenCentral()
