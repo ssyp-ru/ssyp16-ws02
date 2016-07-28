@@ -51,12 +51,12 @@ class Parser(val read: InputStream = System.`in`, val write: PrintStream = Syste
                             tokenStringIndex++
                         }
                         if (tokenString[tokenStringIndex] == ' ') {
-                            var cursorSpace = tokenStringIndex + 1
+                            var cursorSpace = tokenStringIndex + 2
                             while(true) {
-                                cursorSpace++
                                 if((tokenString[cursorSpace] == ' ')||(tokenString[cursorSpace] == '\t')||(tokenString[cursorSpace] == '\n')) {
                                     break
                                 }
+                                cursorSpace++
                             }
                             val funName = tokenString.substring(tokenStringIndex + 1, cursorSpace)
                             tokenStringIndex = cursorSpace + 1
@@ -97,7 +97,13 @@ class Parser(val read: InputStream = System.`in`, val write: PrintStream = Syste
                 }
                 tokenStringIndex++
             }
-        return (tokenArray)
+        /*val validator = ParserValidator()
+        if(validator.validator(tokenArray))
+            return (tokenArray)
+        else
+            return emptyList()
+            */
+        return tokenArray
     }
 
     /**
@@ -126,6 +132,7 @@ class Parser(val read: InputStream = System.`in`, val write: PrintStream = Syste
             }
 
         }
+
         return flagFunNameChecker
     }
 }
