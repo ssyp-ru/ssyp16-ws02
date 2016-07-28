@@ -17,27 +17,34 @@ class GuiIOStream {
     class GuiConsoleStream(private val textArea: TextArea) : PrintStream(EmptyStream()) {
 
         override fun print(x: Char) {
-            textArea.appendText(x.toString()) // FIXME: with(textArea)
-            textArea.selectAll()
-            textArea.selectEnd()
-            textArea.selectBackward()
-            textArea.nextWord()
-            //textArea.selectHome()
+            with(textArea) {
+                appendText(x.toString())
+                selectAll()
+                selectEnd()
+                selectBackward()
+                nextWord()
+                //textArea.selectHome()
+            }
         }
-
     }
 
-    class MyInputStream(private val input:TextField) : InputStream() {
+    class MyInputStream(private val input: TextField) : InputStream() {
+        val inputString = StringBuilder()
 
-        fun addChar(text:String){
+        fun addToStream(text: String) {
             inputString.append(text)
         }
 
+        fun readFromTextField() {
+            inputString.append(input.text)
+        }
 
-        val inputString = StringBuilder()
+        fun clear() {
+            if (inputString.isNotEmpty())
+                inputString.removeRange(0, inputString.length - 1)
+        }
 
         override fun read(): Int {
-
             val readChar = inputString.get(0).toInt()
             inputString.deleteCharAt(0)
             return readChar

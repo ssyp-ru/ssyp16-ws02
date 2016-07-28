@@ -8,6 +8,8 @@ import tornadofx.*
 import java.io.File
 import java.io.FileNotFoundException
 import Interpreter
+import javafx.geometry.Pos
+import javafx.scene.control.TextField
 import javafx.scene.image.ImageView
 import javafx.scene.layout.VBox
 import javafx.scene.text.Font
@@ -23,74 +25,86 @@ class ButtonHBox(
         private val workTextArea: TextArea,
         private val lastTextArea: TextArea,
         private val input: InputStream,
-        private val output: PrintStream
+        private val output: PrintStream,
+        private val inputTextField: TextField
 ) : View() {
     override val root = HBox()
-    var ifFileCreate = false
     var curFile = ""
     var isPetooh = true
+    var isCreate = false
 
 
     init {
         with(root) {
-            button("Create BF file") {
-                setOnAction {
-                    createFile(false)
-                }
-            }
-            button("Create PETOOH file") {
-                setOnAction {
-                    createFile(true)
-                }
-            }
-            button("Open file") {
-                setOnAction {
-                    openFile()
-                    ifFileCreate = true
-                }
-            }
-            button("Save") {
-
-                setOnAction {
-                    saveCurFile()
-                }
-            }
             hbox() {
-                hboxConstraints {
-                    marginLeftRight(10.0)
-                    marginTopBottom(10.0)
+                alignment = Pos.BASELINE_LEFT
+                button("Create BF file") {
+                    setOnAction {
+                        createFile(false)
+                        isPetooh = false
+                        isCreate = true
+                    }
+                }
+                button("Create PETOOH file") {
+                    setOnAction {
+                        createFile(true)
+                        isPetooh = true
+                        isCreate = true
+                    }
+                }
+                button("Open file") {
+                    setOnAction {
+                        openFile()
+                        isCreate = true
+                    }
+                }
+                button("Save") {
+                    setOnAction {
+                        saveCurFile()
+                    }
                 }
             }
-            spacing = 20.0
-            val buttonCompile = button("Compile") {
-                setOnAction {
-                    val fragmentCompile = ClassNameDialog { compile(it) }
-                    fragmentCompile.openModal(stageStyle = StageStyle.UTILITY)
-                }
-            }
+            spacing = 50.0
+//            hbox() {
+//                hboxConstraints {
+//                    marginLeftRight(10.0)
+//                    marginTopBottom(10.0)
+//                }
+//            }
+            hbox() {
+                alignment = Pos.BASELINE_RIGHT
 
-            button("BF -> Petooh") {
-                setOnAction {
-                    translateToPetooh()
+                button("Compile") {
+                    setOnAction {
+                        val fragmentCompile = ClassNameDialog { compile(it) }
+                        fragmentCompile.openModal(stageStyle = StageStyle.UTILITY)
+                    }
                 }
-            }
 
-            button("Petooh -> BF") {
-                setOnAction {
-                    translateToBF()
+                button("Run") {
+                    setOnAction {
+                        runFile()
+                    }
                 }
-            }
 
-            button("Run") {
-                setOnAction {
-                    runFile()
+                button("BF -> Petooh") {
+                    setOnAction {
+                        translateToPetooh()
+                    }
                 }
-            }
-            button("Creators"){
+
+                button("Petooh -> BF") {
+                    setOnAction {
+                        translateToBF()
+                    }
+                }
+
+                /*button("Creators"){
                 setOnAction {
                     var creat = Creators()
                     (creat.openModal(stageStyle = StageStyle.UTILITY))
                 }
+            }*/
             }
         }
     }
@@ -108,7 +122,6 @@ class ButtonHBox(
             lastTextArea.appendText("Create PETOOH file \n")
         }
         workTextArea.clear()
-        ifFileCreate = true
     }
 
     fun compile(className: String) {
@@ -121,16 +134,17 @@ class ButtonHBox(
         if (isPetooh) {
             val tokens = CoreUtils.petooh.translateToToken(curFile)
             CoreUtils.compiler.compile(tokens, className)
-            lastTextArea.appendText(className + " Class compiled! \n")
+            lastTextArea.appendText(className + " compiled! \n")
         } else {
             val tokens = CoreUtils.brainfuck.translateToTokens(curFile)
             CoreUtils.compiler.compile(tokens, className)
-            lastTextArea.appendText(className + " Class compiled! \n")
+            lastTextArea.appendText(className + " compiled! \n")
         }
     }
 
     fun openFile() {
-        val arrChoser = arrayOf(FileChooser.ExtensionFilter("Koko file", "*.koko"), FileChooser.ExtensionFilter("Brainfuck file", "*.bf")) // FIXME: слишком длинная строка, разбей
+        val arrChoser = arrayOf(FileChooser.ExtensionFilter("Koko file", "*.koko"),
+                FileChooser.ExtensionFilter("Brainfuck file", "*.bf"))
         try {
             val files = chooseFile("Choose file", arrChoser, mode = FileChooserMode.Single)
             val fileName = files[0].toString()
@@ -159,13 +173,20 @@ class ButtonHBox(
 
     fun saveCurFile(): Boolean {
         if (curFile == "") {
-            val fileTypeFilters =
-                    arrayOf(FileChooser.ExtensionFilter("Koko file", "*.koko"),FileChooser.ExtensionFilter("BF file", "*.bf"))
+            var fileTypeFilters = if (isPetooh) arrayOf(FileChooser.ExtensionFilter("Koko file", "*.koko"))
+            else
+                arrayOf(FileChooser.ExtensionFilter("BF file", "*.bf"))
+            if (!isCreate)
+                fileTypeFilters = arrayOf(FileChooser.ExtensionFilter("BF file", "*.bf"), FileChooser.ExtensionFilter("Koko file", "*.koko"))
 
             val chosenFiles = chooseFile("Save new file", fileTypeFilters, mode = FileChooserMode.Save)
             if (chosenFiles.isEmpty())
                 return false
             curFile = chosenFiles[0].toString()
+            if (curFile.endsWith(".koko"))
+                isPetooh = true
+            else
+                isPetooh = false
         }
         File(curFile).writeText(workTextArea.text)
         lastTextArea.appendText(curFile + " saved\n")
@@ -205,15 +226,11 @@ class ButtonHBox(
         if (isPetooh) {
             File(curFile).writeText(workTextArea.text)
             val arrChoser = arrayOf(FileChooser.ExtensionFilter("Brainfuck file", "*.bf"))
-            try {
-                val saveFile = chooseFile("Save file", arrChoser, mode = FileChooserMode.Save)
-                val fileName = saveFile[0].toString()
-                val tokens = CoreUtils.petooh.translateToToken(curFile)
-                CoreUtils.brainfuck.translateToBrainfuck(tokens, fileName)
-            } catch(exc: IndexOutOfBoundsException) { // FIXME: не надо забивать на исключения. Или обрабатывай, или убери
-            } catch (exc: PrivilegedActionException) {
-            } catch(exc: FileNotFoundException) {
-            }
+            val saveFile = chooseFile("Save file", arrChoser, mode = FileChooserMode.Save)
+            val fileName = saveFile[0].toString()
+            val tokens = CoreUtils.petooh.translateToToken(curFile)
+            CoreUtils.brainfuck.translateToBrainfuck(tokens, fileName)
+
         } else
             lastTextArea.appendText("You already have BF code \n")
     }
@@ -225,19 +242,32 @@ class ButtonHBox(
                 return
             }
         }
+        // read input from text field
+        if (input is GuiIOStream.MyInputStream)
+            input.readFromTextField()
         val interp = Interpreter(read = input, write = output)
-        if (isPetooh) {
-            val tokens = CoreUtils.petooh.translateToToken(curFile)
-            interp.interpret(tokens) // FIXME: вынести из if-а эту строку, val tokens присваивать через тернарник
+        File(curFile).writeText(workTextArea.text)
+        lastTextArea.appendText("Run \n")
+        val tokens = if (isPetooh) {
+            CoreUtils.petooh.translateToToken(curFile)
         } else {
-            val tokens = CoreUtils.brainfuck.translateToTokens(curFile)
-            interp.interpret(tokens)
+            CoreUtils.brainfuck.translateToTokens(curFile)
         }
+        try {
+            interp.interpret(tokens)
+        } catch(exc: IndexOutOfBoundsException) {
+            lastTextArea.appendText("\n No input found. Please write something \n")
+            inputTextField.requestFocus()
+        }
+        lastTextArea.appendText("\nFinished\n")
+        // clear input stream
+        if (input is GuiIOStream.MyInputStream)
+            input.clear()
     }
 
 }
 
-class Creators():Fragment(){
+/*class Creators():Fragment(){
     override val root = VBox()
     init{
         with(root){
@@ -252,4 +282,6 @@ class Creators():Fragment(){
         }
 
     }
-}
+}*/
+
+

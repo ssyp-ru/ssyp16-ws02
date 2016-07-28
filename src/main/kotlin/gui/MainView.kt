@@ -11,6 +11,7 @@ import javafx.scene.control.TextArea
 import javafx.scene.control.TextField
 import javafx.scene.control.TextFormatter
 import javafx.scene.layout.VBox
+import javafx.scene.paint.Color
 import javafx.scene.text.Font
 import javafx.scene.text.FontWeight
 import tornadofx.*
@@ -20,20 +21,21 @@ import tornadofx.*
  */
 class MainView : View() {
     override val root = VBox()
-    val codeControl: CodeController by inject() // FIXME: не используется же. Или удали, или используй
     val workTextArea = TextArea()
     val consoleTextArea = TextArea()
     val inputTextField = TextField()
     val inputStream = GuiIOStream.MyInputStream(inputTextField)
     val printStream = GuiIOStream.GuiConsoleStream(consoleTextArea)
-    val buttonHBox = ButtonHBox(workTextArea, consoleTextArea,inputStream,printStream)
+    val buttonHBox = ButtonHBox(workTextArea, consoleTextArea, inputStream, printStream, inputTextField)
     val codeStr = StringBuilder()
-            init {
 
+    init {
+        title = "Petooh Khan"
+        primaryStage.isResizable = false
         // init UI elements
         with(workTextArea) {
             setPrefSize(400.0, 400.0)
-            font = Font.font("Verdana")
+            font = Font.font("Courier New")
             setOnKeyReleased {
                 //textFormatter.filter.andThen(,)
             }
@@ -41,19 +43,24 @@ class MainView : View() {
         with(consoleTextArea) {
             isMouseTransparent = false
             isWrapText = true
+            isEditable = false
+            setOnKeyPressed { }
             setPrefSize(100.0, 100.0)
             textProperty()
             font = Font.font("Verdana")
             style {
+
                 fontWeight = FontWeight.EXTRA_BOLD
+                textFill = Color.RED
             }
         }
         with(inputTextField) {
             setPrefSize(100.0, 1.0)
             font = Font.font("Verdana")
-            setOnAction {
-                inputStream.addChar(text)
+            setOnMouseClicked {
+                inputStream.addToStream(text)
             }
+
         }
 
         // add all UI elements to root
@@ -66,27 +73,8 @@ class MainView : View() {
     }
 
 
-
 }
 
-class ClassNameDialog(private val doCompile: (String) -> Unit) : Fragment() { // FIXME: вынеси в отдельный файл
-    override val root = VBox()
-
-    init {
-        root.setMaxSize(300.0, 60.0)
-        root.setMinSize(300.0, 60.0)
-        with(root) {
-            label("Enter a name of class")
-            textfield {
-                setOnAction {
-                    val className = text
-                    doCompile(className)
-
-                }
-            }
-        }
-    }
-}
 
 
 
