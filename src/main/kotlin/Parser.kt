@@ -1,4 +1,4 @@
-/*import java.io.InputStream
+import java.io.InputStream
 import java.io.PrintStream
 import java.util.*
 
@@ -12,7 +12,6 @@ class Parser(val read: InputStream = System.`in`, val write: PrintStream = Syste
         var tokenStringIndex = 0
 //        var keCount = 0
         val tokenArray = ArrayList<NewToken>()
-        //val validator : ParserValidator
         while (tokenStringIndex != tokenString.length) {
             when {
                 tokenString.startsWith("Ko", tokenStringIndex) -> {
@@ -108,19 +107,12 @@ class Parser(val read: InputStream = System.`in`, val write: PrintStream = Syste
                 tokenString[tokenStringIndex] in whitespaces ->
                     ++tokenStringIndex
             }
-<<<<<<< HEAD
-        /*val validator = ParserValidator()
-        if(validator.validator(tokenArray))
-=======
         }
-        val validator = ParserValidator() // FIXME: кто будет git add делать? не завезли вашего парсер валидатора.
+        val validator = ParserValidator()
         if (validator.validator(tokenArray))
->>>>>>> 347b0ed8cd987e8de79d037918ba87d1c790451c
             return (tokenArray)
         else
             return emptyList()
-            */
-        return tokenArray
     }
 
     /**
@@ -152,4 +144,4 @@ class Parser(val read: InputStream = System.`in`, val write: PrintStream = Syste
 
         return flagFunNameChecker
     }
-}*/
+}

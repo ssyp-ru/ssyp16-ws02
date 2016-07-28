@@ -25,7 +25,7 @@ class TokenCompiler {
             println("Name of class is invalid.")
             return null
         }
-        val parser = GoodParser()
+        val parser = Parser()
         try{
             File(inputFileName)
         }
@@ -33,7 +33,7 @@ class TokenCompiler {
             println("File no found.")
             return null
         }
-        val tokens = parser.parse(File(inputFileName).readText())
+        val tokens = parser.petoohTranslator(File(inputFileName).readText())
         val writer = File(className + ".class")
         cw.visit(V1_7, ACC_PUBLIC, className, null, "java/lang/Object", null)
 
