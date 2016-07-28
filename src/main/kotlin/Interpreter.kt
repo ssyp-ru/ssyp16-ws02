@@ -1,17 +1,18 @@
 import java.io.InputStream
 import java.io.PrintStream
 
+/**
+ * Interprets tokenized Brainfuck/PETOOH code.
+ * @author Danil Koval, Kyunney Gatapova
+ */
 class Interpreter(val read: InputStream = System.`in`, val write: PrintStream = System.out) {
     private val memorySize = 30000
-    private var memory = ByteArray (memorySize, { 0 })
+    private var memory = ByteArray(memorySize, { 0 })
     private var curMemoryIndex = 0
     private var tokenIndex = 0
     private var beginEndCounter = tokenIndex
 
 
-    /**
-     * Interprets tokens to Kotlin.
-     */
     fun interpret(arrayToken: Array<Token>) {
         while (tokenIndex != arrayToken.size) {
             when (arrayToken[tokenIndex]) {

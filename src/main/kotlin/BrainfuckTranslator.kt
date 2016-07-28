@@ -4,6 +4,7 @@ import java.util.ArrayList
 
 /**
  * Translate Brainfuck to Tokens and vice versa.
+ * @author Tatyana Nikolaeva
  */
 class BrainfuckTranslator {
     /**

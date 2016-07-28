@@ -4,7 +4,7 @@ import kotlin.test.assertFalse
 class ValidatorTest {
     private val validator = Validator()
 
-    @Test fun validatorTestT() { // FIXME: переименовать загадочные имена тестов
+    @Test fun validatorTestT() {
         val testTokens = arrayOf(Token.PLUS, Token.MINUS, Token.RIGHT, Token.LEFT, Token.WRITE, Token.READ, Token.BEGIN, Token.END)
         assert(validator.check(testTokens))
     }

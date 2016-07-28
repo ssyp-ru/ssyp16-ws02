@@ -26,24 +26,26 @@ class MyPrintStream() : PrintStream(EmptyStream()) {
     override fun println(x: Char) {
         sb.append(x)
     }
-} // FIXME: разделяйте классы одной пустой строкой
+}
+
 /**
  * Makes EmptyStream which helps MyPrintStream
  * with interface PrintStream and goes like
- * parameter(unusable) // FIXME: что я только что прочитал?
+ * parameter(unusable)
  */
 class EmptyStream() : OutputStream() {
     override fun write(b: Int) {
     }
 }
+
 /**
- * Compiles, loads and runs byte-code, tests it // FIXME: bytecode - слитно
+ * Compiles, loads and runs bytecode, tests it
  */
 fun testClass(code: Array<Token>, input: String, output: String) {
     val tokenCompiler = TokenCompiler()
     val classLoader = MyClassLoader()
 
-    val myClass = classLoader.loadClass("MyClass", tokenCompiler.compile(code,"MyClass")) // FIXME: Ctrl+Alt+L надо нажимать перед коммитом
+    val myClass = classLoader.loadClass("MyClass", tokenCompiler.compile(code, "MyClass"))
     val methods = myClass?.methods
     System.setIn(MyInputStream(input))
     val str = MyPrintStream()

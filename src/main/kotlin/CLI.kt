@@ -1,3 +1,7 @@
+/**
+ * Command-line interface for PetoohKhan.
+ * @author Maxim Usoltsev
+ */
 class CLI {
     private val brainfuckTranslator = BrainfuckTranslator()
     private val petoohTranslator = PetoohTranslator()

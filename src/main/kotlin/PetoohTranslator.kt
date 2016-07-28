@@ -3,7 +3,8 @@ import java.io.FileNotFoundException
 import java.util.*
 
 /**
- * Class PetoohTranslator has two methods: translateToToken and translateToKoko
+ * Translates PETOOH code to tokens and vice versa.
+ * @author Maxim Usoltsev
  */
 class PetoohTranslator {
     /**
@@ -36,6 +37,7 @@ class PetoohTranslator {
         }
         return tokenArray.toTypedArray()
     }
+
     /**
      *Takes an array of Tokens and writes PETOOH code to output file.
      *If file not found, creates a new file.

@@ -6,6 +6,10 @@ import java.io.File
 import java.util.*
 import javax.lang.model.SourceVersion
 
+/**
+ * Translates tokenized Brainfuck/PETOOOH code to JVM bytecode.
+ * @author Kirill Fedoseev, Ivan Reznik
+ */
 class TokenCompiler {
     /**
      * Compiles tokensArray
@@ -22,7 +26,7 @@ class TokenCompiler {
             println("Your name of class is invalid.")
             return null
         }
-        this.tokens = tokens // FIXME: написать по-котлиновски (использовать val в конструкторе)
+        this.tokens = tokens
         val writer = File(output + ".class")
         val cw = ClassWriter(0)
         cw.visit(V1_7, ACC_PUBLIC, output, null, "java/lang/Object", null)

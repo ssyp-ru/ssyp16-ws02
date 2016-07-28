@@ -1,3 +1,7 @@
+/**
+ * Validates tokenized Brainfuck/PETOOH code.
+ * @author Tatyana Nikolaeva
+ */
 class Validator {
     fun check(tokens: Array<Token>): Boolean {
         var counter = 0
