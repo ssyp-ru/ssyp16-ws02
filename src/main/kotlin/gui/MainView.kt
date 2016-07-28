@@ -51,7 +51,7 @@ class MainView : View() {
             style {
 
                 fontWeight = FontWeight.EXTRA_BOLD
-                textFill = Color.RED
+                textFill = Color.GREEN
             }
         }
         with(inputTextField) {

@@ -12,6 +12,7 @@ import javafx.geometry.Pos
 import javafx.scene.control.TextField
 import javafx.scene.image.ImageView
 import javafx.scene.layout.VBox
+import javafx.scene.paint.Color
 import javafx.scene.text.Font
 import netscape.security.UserDialogHelper
 import java.io.InputStream
@@ -143,7 +144,7 @@ class ButtonHBox(
     }
 
     fun openFile() {
-        val arrChoser = arrayOf(FileChooser.ExtensionFilter("Koko file", "*.koko"),
+        val arrChoser = arrayOf(FileChooser.ExtensionFilter("PETOOH file", "*.koko"),
                 FileChooser.ExtensionFilter("Brainfuck file", "*.bf"))
         try {
             val files = chooseFile("Choose file", arrChoser, mode = FileChooserMode.Single)
@@ -173,7 +174,7 @@ class ButtonHBox(
 
     fun saveCurFile(): Boolean {
         if (curFile == "") {
-            var fileTypeFilters = if (isPetooh) arrayOf(FileChooser.ExtensionFilter("Koko file", "*.koko"))
+            var fileTypeFilters = if (isPetooh) arrayOf(FileChooser.ExtensionFilter("PETOOH file", "*.koko"))
             else
                 arrayOf(FileChooser.ExtensionFilter("BF file", "*.bf"))
             if (!isCreate)
@@ -256,7 +257,13 @@ class ButtonHBox(
         try {
             interp.interpret(tokens)
         } catch(exc: IndexOutOfBoundsException) {
+            lastTextArea.style{
+                textFill = Color.RED
+            }
             lastTextArea.appendText("\n No input found. Please write something \n")
+            lastTextArea.style{
+                textFill = Color.GREEN
+            }
             inputTextField.requestFocus()
         }
         lastTextArea.appendText("\nFinished\n")
