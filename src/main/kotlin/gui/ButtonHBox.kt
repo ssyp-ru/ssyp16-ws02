@@ -54,6 +54,7 @@ class ButtonHBox(
                     }
                 }
                 button("Save") {
+                    style =("file:///C:/Users/Vedrovski/IdeaProjects/ws02/Save.png")
                     setOnAction {
                         saveCurFile()
                     }
@@ -218,7 +219,7 @@ class ButtonHBox(
             }
             lastTextArea.appendText("\n No input found. Please write something \n")
             lastTextArea.style {
-                textFill = Color.GREEN
+                //textFill = Color.GREEN
             }
             inputTextField.requestFocus()
         }

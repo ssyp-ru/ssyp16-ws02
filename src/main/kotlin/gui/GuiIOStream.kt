@@ -36,19 +36,19 @@ class GuiIOStream {
     }
 
     class MyInputStream(private val input: TextField) : InputStream() {
-        val inputString = StringBuilder()
+        var inputString = StringBuilder()
 
         fun addToStream(text: String) {
             inputString.append(text)
         }
 
         fun readFromTextField() {
+            inputString = StringBuilder()
             inputString.append(input.text)
         }
 
         fun clear() {
-            if (inputString.isNotEmpty())
-                inputString.removeRange(0, inputString.length - 1)
+            inputString = StringBuilder()
         }
 
         override fun read(): Int {

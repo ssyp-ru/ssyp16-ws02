@@ -8,11 +8,9 @@ class Interpreter(val read: InputStream = System.`in`, val write: PrintStream = 
     private var i = 0
     private var count = i
 
-
     /**
      * This fun interprets tokens to Kotlin.
      */
-
     fun interpret(arrayToken: Array<Token>) {
         while (i != arrayToken.size) {
             when (arrayToken[i]) {
@@ -32,7 +30,6 @@ class Interpreter(val read: InputStream = System.`in`, val write: PrintStream = 
     /**
      * Moves cursor left.
      */
-
     fun left() {
         if (current != 0) {
             current--
@@ -43,7 +40,6 @@ class Interpreter(val read: InputStream = System.`in`, val write: PrintStream = 
     /**
      * Moves cursor right
      */
-
     fun right() {
         if (current != const - 1) {
             current++
@@ -54,7 +50,6 @@ class Interpreter(val read: InputStream = System.`in`, val write: PrintStream = 
     /**
      * Starts loop if array[current] = 0
      */
-
     private fun begin(arrayToken: Array<Token>) {
         if (array[current].toInt() == 0) {
             while (!((arrayToken[i] == Token.END) && (count == 0))) {
@@ -72,7 +67,6 @@ class Interpreter(val read: InputStream = System.`in`, val write: PrintStream = 
     /**
      * Ends loop if array[current] = 0
      */
-
     private fun end(arrayToken: Array<Token>) {
         if (array[current].toInt() != 0) {
             while (!((arrayToken[i] == Token.BEGIN) && (count == 0))) {
