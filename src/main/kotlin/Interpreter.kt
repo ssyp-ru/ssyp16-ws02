@@ -2,88 +2,81 @@ import java.io.InputStream
 import java.io.PrintStream
 import java.util.*
 
-class Interpreter(val read: InputStream = System.`in`, val write: PrintStream = System.out) { // FIXME: тоже должны быть private val
+class Interpreter(private val read: InputStream = System.`in`, private val write: PrintStream = System.out) {
     private val memorySize = 30000
-    private var workSpace = ByteArray (memorySize, { 0 }) // FIXME: чем отличается от memory? переименовать
-    private var memory = ByteArray (memorySize, { 0 }) // FIXME: а если вызвать функцию внутри функции, что будет?
-    private var flag = true // FIXME: переименовать
-    private var parIndex = 0
-    private var workSpaceIndex = 0
+    private var workSpace = ByteArray (memorySize, { 0 })
     private var tokenIndex = 0
-    private var beginEndcount = 0
-    private var keCount = 0
-    // FIXME: откуда взялось столько полей-var-ов? Почему workSpace - var? Всё, что можно создавать как локальные переменные функции, создавать именно так
-
+    private var beginEndcounter = 0
+    private var workSpaceIndex = 0
 
     /**
      * Interprets tokens to kotlin.
      */
-    fun interpret(tokenArray: List<NewToken>) {
+    fun interpret(tokenArray: Array<NewToken>) {
+        val functionWorkSpaces = ArrayList<ByteArray>()
+        var funcFinder = true //ExFlag
+        var parIndex = 0
+        var keCount = 0
         var funName = tokenArray[0]
         var funNameIndex = 0
         tokenIndex = 0
         while (tokenIndex != tokenArray.size) {
-            if (!flag) {
-                memory = workSpace
-                workSpace = ByteArray (memorySize, { 0 })
+            if (!funcFinder) {
                 for (i in 1..keCount) {
-                    workSpace[i - 1] = memory[workSpaceIndex - keCount]
+                    functionWorkSpaces[functionWorkSpaces.size - 1][i-1] = workSpace[workSpaceIndex - i]
                 }
                 parIndex = workSpaceIndex
-                workSpaceIndex = 0
+                workSpaceIndex = keCount
+                funcFinder = true
             }
             when (tokenArray[tokenIndex]) {
-                InstructionToken(Token.BEGIN) -> begin(tokenArray.toTypedArray())
-                InstructionToken(Token.END) -> end(tokenArray.toTypedArray())
-                InstructionToken(Token.MINUS) -> workSpaceIndex--
-                InstructionToken(Token.PLUS) -> workSpaceIndex++
+                InstructionToken(Token.BEGIN) -> begin(tokenArray)
+                InstructionToken(Token.END) -> end(tokenArray)
+                InstructionToken(Token.MINUS) -> workSpace[workSpaceIndex]--
+                InstructionToken(Token.PLUS) -> workSpace[workSpaceIndex]++
                 InstructionToken(Token.RIGHT) -> right()
                 InstructionToken(Token.LEFT) -> left()
-                InstructionToken(Token.WRITE) -> {
-                    write.print(workSpace[workSpaceIndex])
-                }
+                InstructionToken(Token.WRITE) ->
+                    write.println(workSpace[workSpaceIndex])
                 InstructionToken(Token.READ) -> workSpace[workSpaceIndex] = read.read().toByte()
                 is FunDefToken -> {
                     while (tokenArray[tokenIndex] != InstructionToken(Token.ENDFUN))
                         tokenIndex++
-                    tokenIndex++
                 }
                 InstructionToken(Token.ENDFUN) -> {
-                    flag = true
-                    memory[parIndex] = workSpace[workSpaceIndex]
+                    workSpace[workSpaceIndex] = functionWorkSpaces[functionWorkSpaces.size-1][parIndex]
                     while (true) {
-                        if (tokenArray[funNameIndex] is FunCallToken) {
-                            if ((tokenArray[funNameIndex] as FunCallToken).name != (funName as FunCallToken).name) {
-                                funNameIndex++
-                                tokenIndex = funNameIndex
+                        if (tokenArray[tokenIndex] is FunCallToken) {
+                            if ((tokenArray[tokenIndex] as FunCallToken).name == (funName as FunCallToken).name) {
                                 break
                             }
                         } else
-                            funNameIndex++
+                            tokenIndex++
                     }
-                    workSpace = memory // FIXME: ад и погибель. Так делать нельзя. К тому же, у вас так не будет работать вызов функции внутри функции.
                     workSpaceIndex = parIndex
-                    tokenIndex++
                 }
-                is FunCallToken -> { // вот за это два чая, круто. Данный коммент уберите
-                    flag = false
+                is FunCallToken -> {
+                    funcFinder = false
+                    functionWorkSpaces.add(ByteArray(memorySize, { 0 }))
                     funName = tokenArray[tokenIndex]
                     funNameIndex = tokenIndex
                     while (true) {
                         if (tokenArray[funNameIndex] is FunDefToken) {
-                            if ((tokenArray[funNameIndex] as FunDefToken).name != (funName as FunCallToken).name) {
-                                funNameIndex--
+                            if ((tokenArray[funNameIndex] as FunDefToken).name == (funName as FunCallToken).name) {
                                 tokenIndex = funNameIndex
                                 break
                             }
                         } else
                             funNameIndex--
-                        if (funNameIndex == 0) {
-                            println("function must be initialised before calling")
-                            break
+                        if (funNameIndex == -1) {
+                            funNameIndex = tokenArray.size - 1
+                        }
+                        if(funNameIndex == tokenIndex){
+                            println("function must be initialized")
+                            return
                         }
                     }
-                    funNameIndex++
+                    keCount = (tokenArray[funNameIndex] as FunDefToken).paramsCount
                 }
             }
             tokenIndex++
@@ -115,12 +108,12 @@ class Interpreter(val read: InputStream = System.`in`, val write: PrintStream = 
      */
     private fun begin(arrayToken: Array<NewToken>) {
         if (workSpace[workSpaceIndex].toInt() == 0) {
-            while (!((arrayToken[tokenIndex] == InstructionToken(Token.END)) && (beginEndcount == 0))) {
+            while (!((arrayToken[tokenIndex] == InstructionToken(Token.END)) && (beginEndcounter == 0))) {
                 when {
-                    arrayToken[tokenIndex] == InstructionToken(Token.END) -> beginEndcount--
-                    arrayToken[tokenIndex] == InstructionToken(Token.BEGIN) -> beginEndcount++
+                    arrayToken[tokenIndex] == InstructionToken(Token.END) -> beginEndcounter--
+                    arrayToken[tokenIndex] == InstructionToken(Token.BEGIN) -> beginEndcounter++
                 }
-                if ((arrayToken[tokenIndex] == InstructionToken(Token.END) && (beginEndcount == 0)))
+                if ((arrayToken[tokenIndex] == InstructionToken(Token.END) && (beginEndcounter == 0)))
                     break
                 tokenIndex++
             }
@@ -132,12 +125,12 @@ class Interpreter(val read: InputStream = System.`in`, val write: PrintStream = 
      */
     private fun end(arrayToken: Array<NewToken>) {
         if (workSpace[workSpaceIndex].toInt() != 0) {
-            while (!(arrayToken[tokenIndex] == InstructionToken(Token.BEGIN) && (beginEndcount == 0))) {
+            while (!(arrayToken[tokenIndex] == InstructionToken(Token.BEGIN) && (beginEndcounter == 0))) {
                 when {
-                    arrayToken[tokenIndex] == InstructionToken(Token.END) -> beginEndcount++
-                    arrayToken[tokenIndex] == InstructionToken(Token.BEGIN) -> beginEndcount--
+                    arrayToken[tokenIndex] == InstructionToken(Token.END) -> beginEndcounter++
+                    arrayToken[tokenIndex] == InstructionToken(Token.BEGIN) -> beginEndcounter--
                 }
-                if ((arrayToken[tokenIndex] == InstructionToken(Token.BEGIN) && (beginEndcount == 0)))
+                if ((arrayToken[tokenIndex] == InstructionToken(Token.BEGIN) && (beginEndcounter == 0)))
                     break
                 tokenIndex--
 
