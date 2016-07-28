@@ -1,23 +1,18 @@
 package gui
 
+import Interpreter
+import javafx.geometry.Pos
 import javafx.scene.control.TextArea
+import javafx.scene.control.TextField
 import javafx.scene.layout.HBox
+import javafx.scene.paint.Color
 import javafx.stage.FileChooser
 import javafx.stage.StageStyle
 import tornadofx.*
 import java.io.File
 import java.io.FileNotFoundException
-import Interpreter
-import javafx.geometry.Pos
-import javafx.scene.control.TextField
-import javafx.scene.image.ImageView
-import javafx.scene.layout.VBox
-import javafx.scene.paint.Color
-import javafx.scene.text.Font
-import netscape.security.UserDialogHelper
 import java.io.InputStream
 import java.io.PrintStream
-import java.security.PrivilegedActionException
 
 /**
  * Top panel with buttons.
@@ -33,7 +28,6 @@ class ButtonHBox(
     var curFile = ""
     var isPetooh = true
     var isCreate = false
-
 
     init {
         with(root) {
@@ -66,12 +60,6 @@ class ButtonHBox(
                 }
             }
             spacing = 50.0
-//            hbox() {
-//                hboxConstraints {
-//                    marginLeftRight(10.0)
-//                    marginTopBottom(10.0)
-//                }
-//            }
             hbox() {
                 alignment = Pos.BASELINE_RIGHT
 
@@ -81,31 +69,21 @@ class ButtonHBox(
                         fragmentCompile.openModal(stageStyle = StageStyle.UTILITY)
                     }
                 }
-
                 button("Run") {
                     setOnAction {
                         runFile()
                     }
                 }
-
                 button("BF -> Petooh") {
                     setOnAction {
                         translateToPetooh()
                     }
                 }
-
                 button("Petooh -> BF") {
                     setOnAction {
-                        translateToBF()
                     }
                 }
 
-                /*button("Creators"){
-                setOnAction {
-                    var creat = Creators()
-                    (creat.openModal(stageStyle = StageStyle.UTILITY))
-                }
-            }*/
             }
         }
     }
@@ -158,7 +136,6 @@ class ButtonHBox(
                 isPetooh = false
                 lastTextArea.appendText("BF file \n")
             }
-
             workTextArea.clear()
             val listText = file.readLines()
             for (i in 0 until listText.size) {
@@ -170,7 +147,6 @@ class ButtonHBox(
             lastTextArea.appendText("File not found \n")
         }
     }
-
 
     fun saveCurFile(): Boolean {
         if (curFile == "") {
@@ -216,26 +192,6 @@ class ButtonHBox(
         }
     }
 
-    fun translateToBF() {
-        if (curFile == "") {
-            val isSaved = saveCurFile()
-            if (!isSaved) {
-                return
-            }
-        }
-
-        if (isPetooh) {
-            File(curFile).writeText(workTextArea.text)
-            val arrChoser = arrayOf(FileChooser.ExtensionFilter("Brainfuck file", "*.bf"))
-            val saveFile = chooseFile("Save file", arrChoser, mode = FileChooserMode.Save)
-            val fileName = saveFile[0].toString()
-            val tokens = CoreUtils.petooh.translateToToken(curFile)
-            CoreUtils.brainfuck.translateToBrainfuck(tokens, fileName)
-
-        } else
-            lastTextArea.appendText("You already have BF code \n")
-    }
-
     fun runFile() {
         if (curFile == "") {
             val isSaved = saveCurFile()
@@ -257,11 +213,11 @@ class ButtonHBox(
         try {
             interp.interpret(tokens)
         } catch(exc: IndexOutOfBoundsException) {
-            lastTextArea.style{
+            lastTextArea.style {
                 textFill = Color.RED
             }
             lastTextArea.appendText("\n No input found. Please write something \n")
-            lastTextArea.style{
+            lastTextArea.style {
                 textFill = Color.GREEN
             }
             inputTextField.requestFocus()
@@ -274,21 +230,6 @@ class ButtonHBox(
 
 }
 
-/*class Creators():Fragment(){
-    override val root = VBox()
-    init{
-        with(root){
-            setMinSize(380.00,380.00)
-            setMaxSize(380.00,380.00)
-            imageview("file:\\\\\\C:\\Users\\Vedrovski\\IdeaProjects\\ws02\\PetooKhan(square).jpg")
-            label("Creators"){
-                font = Font.font("Coral")
-                font = Font(20.0)
-            }
 
-        }
-
-    }
-}*/
 
 

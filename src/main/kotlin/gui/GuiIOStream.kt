@@ -1,7 +1,5 @@
 package gui
 
-import javafx.beans.binding.StringBinding
-import javafx.scene.Cursor
 import javafx.scene.control.TextArea
 import javafx.scene.control.TextField
 import java.io.InputStream

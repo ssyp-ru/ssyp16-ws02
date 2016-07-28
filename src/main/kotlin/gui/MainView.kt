@@ -2,19 +2,15 @@ package gui
 
 //TODO interprer,"chmok-chmok",window,DISABLE
 
-import BrainfuckTranslator
-import Interpreter
-import PetoohTranslator
-import TokenCompiler
-import com.sun.xml.internal.ws.org.objectweb.asm.Label
 import javafx.scene.control.TextArea
 import javafx.scene.control.TextField
-import javafx.scene.control.TextFormatter
 import javafx.scene.layout.VBox
 import javafx.scene.paint.Color
 import javafx.scene.text.Font
 import javafx.scene.text.FontWeight
-import tornadofx.*
+import tornadofx.View
+import tornadofx.plusAssign
+import tornadofx.style
 
 /**
  * Main window.
@@ -38,7 +34,6 @@ class MainView : View() {
             setPrefSize(400.0, 400.0)
             font = Font.font("Courier New")
             setOnKeyReleased {
-                //textFormatter.filter.andThen(,)
             }
         }
         with(consoleTextArea) {
@@ -62,7 +57,6 @@ class MainView : View() {
             }
 
         }
-
         // add all UI elements to root
         with(root) {
             this += buttonHBox
