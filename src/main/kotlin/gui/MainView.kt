@@ -9,6 +9,7 @@ import TokenCompiler
 import com.sun.xml.internal.ws.org.objectweb.asm.Label
 import javafx.scene.control.TextArea
 import javafx.scene.control.TextField
+import javafx.scene.control.TextFormatter
 import javafx.scene.layout.VBox
 import javafx.scene.text.Font
 import javafx.scene.text.FontWeight
@@ -27,17 +28,19 @@ class MainView : View() {
     val printStream = GuiIOStream.GuiConsoleStream(consoleTextArea)
     val buttonHBox = ButtonHBox(workTextArea, consoleTextArea,inputStream,printStream)
     val codeStr = StringBuilder()
-    init {
+            init {
 
         // init UI elements
         with(workTextArea) {
             setPrefSize(400.0, 400.0)
             font = Font.font("Verdana")
-            setOnKeyPressed {
-                
+            setOnKeyReleased {
+                //textFormatter.filter.andThen(,)
             }
         }
         with(consoleTextArea) {
+            isMouseTransparent = false
+            isWrapText = true
             setPrefSize(100.0, 100.0)
             textProperty()
             font = Font.font("Verdana")
