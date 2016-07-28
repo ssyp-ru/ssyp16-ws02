@@ -1,104 +1,121 @@
-import java.io.InputStream
+/*import java.io.InputStream
 import java.io.PrintStream
 import java.util.*
 
 class Parser(val read: InputStream = System.`in`, val write: PrintStream = System.out) {
+    private val whitespaces = listOf<Char>(' ', '\t', '\n')
 
     /**
-     * Interprets tokens to Kotlin.
+     * Translate petooh to tokens.
      */
     fun petoohTranslator(tokenString: String): List<NewToken> {
         var tokenStringIndex = 0
-        var keCount = 0
+//        var keCount = 0
         val tokenArray = ArrayList<NewToken>()
         //val validator : ParserValidator
         while (tokenStringIndex != tokenString.length) {
-                when {
-                    tokenString.startsWith("Ko", tokenStringIndex) -> {
-                        tokenArray.add(InstructionToken(Token.PLUS))
-                        tokenStringIndex += 1
-                    }
-                    tokenString.startsWith("kO", tokenStringIndex) -> {
-                        tokenStringIndex += 1
-                        tokenArray.add(InstructionToken(Token.MINUS))
-                    }
-                    tokenString.startsWith("kudah", tokenStringIndex) -> {
-                        tokenStringIndex += 4
-                        tokenArray.add(InstructionToken(Token.LEFT))
-                    }
-                    tokenString.startsWith("Kudah", tokenStringIndex) -> {
-                        tokenStringIndex += 4
-                        tokenArray.add(InstructionToken(Token.RIGHT))
-                    }
-                    tokenString.startsWith("kud", tokenStringIndex) -> {
-                        tokenStringIndex += 2
-                        tokenArray.add(InstructionToken(Token.END))
-                    }
-                    tokenString.startsWith("Kud", tokenStringIndex) -> {
-                        tokenStringIndex += 2
-                        tokenArray.add(InstructionToken(Token.BEGIN))
-                    }
-                    tokenString.startsWith("Kukarek", tokenStringIndex) -> {
-                        tokenStringIndex += 6
-                        tokenArray.add(InstructionToken(Token.WRITE))
-                    }
-                    tokenString.startsWith("kukarek", tokenStringIndex) -> {
-                        tokenArray.add(InstructionToken(Token.READ))
-                        tokenStringIndex += 6
-                    }
-                    tokenString.startsWith("Morning", tokenStringIndex) -> {
-                        while (tokenString[tokenStringIndex] != ' ') {
-                            tokenStringIndex++
-                        }
-                        if (tokenString[tokenStringIndex] == ' ') {
-                            var cursorSpace = tokenStringIndex + 2
-                            while(true) {
-                                if((tokenString[cursorSpace] == ' ')||(tokenString[cursorSpace] == '\t')||(tokenString[cursorSpace] == '\n')) {
-                                    break
-                                }
-                                cursorSpace++
-                            }
-                            val funName = tokenString.substring(tokenStringIndex + 1, cursorSpace)
-                            tokenStringIndex = cursorSpace + 1
-
-                            if (!checkFunName(funName)) {
-                                println("Name of function cannot contain key words")
-                                return emptyList<NewToken>()
-                            }
-                            if (tokenString.startsWith("Ke", tokenStringIndex)) {
-                                while ((tokenString.startsWith("Ke", tokenStringIndex))) {
-                                    keCount++
-                                    tokenStringIndex += 2
-                                }
-                            }
-                            tokenArray.add(FunDefToken(funName, keCount))
-                            keCount = 0
-                            tokenStringIndex--
-                        }
-                    }
-                    tokenString.startsWith("Evening", tokenStringIndex) -> {
-                        tokenArray.add(InstructionToken(Token.ENDFUN))
-                        tokenStringIndex += 6
-                    }
-                    tokenString.startsWith("PAR", tokenStringIndex) -> {
-                        var cursorSpace = tokenStringIndex + 4
-                        while (tokenString[cursorSpace] != ' ') {
-                            cursorSpace++
-                        }
-                        val funName = tokenString.substring(tokenStringIndex + 4, cursorSpace)
-                        tokenStringIndex = cursorSpace
-                        if (!checkFunName(funName))
-                            println("Name of function cannot be a key word")
-                        if (checkFunName(funName)) {
-                            tokenArray.add(FunCallToken(funName))
-                        }
-                        tokenStringIndex += 2
-                    }
+            when {
+                tokenString.startsWith("Ko", tokenStringIndex) -> {
+                    tokenArray.add(InstructionToken(Token.PLUS))
+                    tokenStringIndex += 2
                 }
-                tokenStringIndex++
+                tokenString.startsWith("kO", tokenStringIndex) -> {
+                    tokenStringIndex += 2
+                    tokenArray.add(InstructionToken(Token.MINUS))
+                }
+                tokenString.startsWith("kudah", tokenStringIndex) -> {
+                    tokenStringIndex += 5
+                    tokenArray.add(InstructionToken(Token.LEFT))
+                }
+                tokenString.startsWith("Kudah", tokenStringIndex) -> {
+                    tokenStringIndex += 5
+                    tokenArray.add(InstructionToken(Token.RIGHT))
+                }
+                tokenString.startsWith("kud", tokenStringIndex) -> {
+                    tokenStringIndex += 3
+                    tokenArray.add(InstructionToken(Token.END))
+                }
+                tokenString.startsWith("Kud", tokenStringIndex) -> {
+                    tokenStringIndex += 3
+                    tokenArray.add(InstructionToken(Token.BEGIN))
+                }
+                tokenString.startsWith("Kukarek", tokenStringIndex) -> {
+                    tokenStringIndex += 7
+                    tokenArray.add(InstructionToken(Token.WRITE))
+                }
+                tokenString.startsWith("kukarek", tokenStringIndex) -> {
+                    tokenArray.add(InstructionToken(Token.READ))
+                    tokenStringIndex += 7
+                }
+                tokenString.startsWith("Morning", tokenStringIndex) -> {
+                    tokenStringIndex += 7
+                    while (tokenStringIndex < tokenString.length && tokenString[tokenStringIndex] in whitespaces) {
+                        tokenStringIndex++
+                    }
+                    // we are now on the next symbol after ' '
+                    if (tokenStringIndex >= tokenString.length) {
+                        println("Syntax error")
+                        return emptyList()
+                    }
+                    // extract function name
+                    var nextWhitespaceIndex = tokenStringIndex
+                    do {
+                        nextWhitespaceIndex++
+                    } while (tokenString[nextWhitespaceIndex] !in whitespaces)
+                    val funName = tokenString.substring(tokenStringIndex, nextWhitespaceIndex)
+                    // move tokenStringIndex the symbol after the next whitespace
+                    tokenStringIndex = nextWhitespaceIndex + 1
+
+                    if (!checkFunName(funName)) {
+                        println("Name of function cannot contain key words")
+                        return emptyList<NewToken>()
+                    }
+
+                    var keCount = 0
+                    while (tokenString.startsWith("Ke", tokenStringIndex)) {
+                        keCount++
+                        tokenStringIndex += 2
+                    }
+                    tokenArray.add(FunDefToken(funName, keCount))
+                }
+                tokenString.startsWith("Evening", tokenStringIndex) -> {
+                    tokenArray.add(InstructionToken(Token.ENDFUN))
+                    tokenStringIndex += 7
+                }
+                tokenString.startsWith("PAR", tokenStringIndex) -> {
+                    tokenStringIndex += 3
+                    while (tokenStringIndex < tokenString.length && tokenString[tokenStringIndex] in whitespaces) {
+                        tokenStringIndex++
+                    }
+                    // we are now on the next symbol after ' '
+                    if (tokenStringIndex >= tokenString.length) {
+                        println("Syntax error")
+                        return emptyList()
+                    }
+                    // extract function name
+                    var nextWhitespaceIndex = tokenStringIndex
+                    do {
+                        nextWhitespaceIndex++
+                    } while (tokenString[nextWhitespaceIndex] !in whitespaces)
+                    val funName = tokenString.substring(tokenStringIndex, nextWhitespaceIndex)
+                    tokenStringIndex = nextWhitespaceIndex + 1
+                    if (!checkFunName(funName)) {
+                        println("Name of function cannot be a key word")
+                        return emptyList()
+                    }
+                    tokenArray.add(FunCallToken(funName))
+                }
+                tokenString[tokenStringIndex] in whitespaces ->
+                    ++tokenStringIndex
             }
+<<<<<<< HEAD
         /*val validator = ParserValidator()
         if(validator.validator(tokenArray))
+=======
+        }
+        val validator = ParserValidator() // FIXME: кто будет git add делать? не завезли вашего парсер валидатора.
+        if (validator.validator(tokenArray))
+>>>>>>> 347b0ed8cd987e8de79d037918ba87d1c790451c
             return (tokenArray)
         else
             return emptyList()
@@ -135,4 +152,4 @@ class Parser(val read: InputStream = System.`in`, val write: PrintStream = Syste
 
         return flagFunNameChecker
     }
-}
+}*/

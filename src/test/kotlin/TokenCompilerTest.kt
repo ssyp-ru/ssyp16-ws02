@@ -81,7 +81,7 @@ class TokenCompilerTest {
 
     @Test fun testPetoohFun() {
         val testFile = File("test.txt")
-        val parser = Parser()
+        val parser = GoodParser()
         testFile.writeText("""Morning sum KeKe
     kudah kudah
         Kud
@@ -89,30 +89,24 @@ class TokenCompilerTest {
             Ko kudah
         kud
         Kudah
-Evening 2
+Evening
 Morning copy Ke
     kudah
 Evening
 Morning sumAll Ke
-    PAR copy
-    kO
+    kudah kO
     Kud
-	kudah kO Kudah
+	Kudah
 	PAR sumAll
-	kudah Ko Kudah
-    kud
-    Ko
-    Kudah
-    PAR sum
+	Kudah
+	PAR sum
+	Kudah
+    kud kudah Ko
 Evening
 kukarek Kudah
 PAR sumAll Kukarek
-        """)
-        val tokens = parser.petoohTranslator(testFile.readText()).toTypedArray()
-        testClass(tokens, 5.toChar().toString(), 15.toChar().toString())
+""")
+        val tokens = parser.parse(testFile.readText())
+        testClass(tokens, 20.toChar().toString(), 210.toChar().toString())
     }
-
-    /*@Test fun testFibonacci() {
-        testClass(arrayOf(FunDefToken("sum", 2), InstructionToken(Token.LEFT), InstructionToken(Token.LEFT), InstructionToken(Token.BEGIN), InstructionToken(Token.MINUS), InstructionToken(Token.RIGHT), InstructionToken(Token.PLUS), InstructionToken(Token.LEFT), InstructionToken(Token.END), InstructionToken(Token.RIGHT), InstructionToken(Token.ENDFUN), FunDefToken("copy", 1), InstructionToken(Token.LEFT), InstructionToken(Token.ENDFUN), FunDefToken("fibonacci", 1), FunCallToken("copy"), InstructionToken(Token.MINUS), InstructionToken(Token.RIGHT), FunCallToken("copy"), InstructionToken(Token.MINUS), InstructionToken(Token.LEFT), InstructionToken(Token.BEGIN), InstructionToken(Token.MINUS), InstructionToken(Token.BEGIN), FunCallToken("fibonacci"), InstructionToken(Token.RIGHT), FunCallToken("fibonacci"), InstructionToken(Token.RIGHT), FunCallToken("sum"), InstructionToken(Token.MINUS), InstructionToken(Token.END), InstructionToken(Token.PLUS), InstructionToken(Token.END), InstructionToken(Token.PLUS), InstructionToken(Token.ENDFUN), InstructionToken(Token.READ), InstructionToken(Token.RIGHT), FunCallToken("fibonacci"), InstructionToken(Token.WRITE)), 5.toChar().toString(), 8.toChar().toString())
-    }*/
 }

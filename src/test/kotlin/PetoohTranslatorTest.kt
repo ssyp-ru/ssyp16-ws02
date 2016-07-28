@@ -4,7 +4,7 @@ import org.junit.Test
 import java.io.File
 import kotlin.test.assertEquals
 
-class PetoohTranslatorTest {
+/*class PetoohTranslatorTest {
     private val testObj = PetoohTranslator()
     private val fileKo = "Petooh.txt"
     private val fileOut = "output.txt"
@@ -61,4 +61,4 @@ class PetoohTranslatorTest {
         val retStr = File("output2.txt").readText()
         assertEquals("", retStr)
     }
-}
+}*/
