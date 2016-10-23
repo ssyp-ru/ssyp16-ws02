@@ -1,8 +1,8 @@
 # PETOOH Khan
 
-PETOOH and Brainfuck interpreter and translator.
+[PETOOH](https://github.com/Ky6uk/PETOOH) and Brainfuck interpreter and translator.
 
-Made in workshop 02 "Kotlin & PETOOH" at Summer School of Young Programmers, 2016.
+Made in workshop 02 "Kotlin & PETOOH" at [Summer School of Young Programmers](http://school.iis.nsk.su/info), 2016.
 
 ## Features
 * Translate Brainfuck to PETOOH and vice versa
